@@ -10,7 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.evangelidis.t_tmoviesseries.MainActivity;
+import com.evangelidis.t_tmoviesseries.view.MainActivity;
 import com.evangelidis.t_tmoviesseries.R;
 import com.evangelidis.t_tmoviesseries.databinding.ActivityLoginBinding;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,7 +20,7 @@ import es.dmoral.prefs.Prefs;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
-import static com.evangelidis.t_tmoviesseries.Constants.IS_LOGIN_SKIPPED;
+import static com.evangelidis.t_tmoviesseries.utils.Constants.IS_LOGIN_SKIPPED;
 import static com.evangelidis.t_tmoviesseries.login.FlexibleFrameLayout.ORDER_LOGIN_STATE;
 import static com.evangelidis.t_tmoviesseries.login.FlexibleFrameLayout.ORDER_SIGN_UP_STATE;
 

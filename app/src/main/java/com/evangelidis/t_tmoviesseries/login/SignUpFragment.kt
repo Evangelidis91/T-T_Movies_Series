@@ -10,9 +10,9 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
-import com.evangelidis.t_tmoviesseries.Constants.IS_LOGGEDIN
-import com.evangelidis.t_tmoviesseries.Constants.IS_LOGIN_SKIPPED
-import com.evangelidis.t_tmoviesseries.MainActivity
+import com.evangelidis.t_tmoviesseries.utils.Constants.IS_LOGGEDIN
+import com.evangelidis.t_tmoviesseries.utils.Constants.IS_LOGIN_SKIPPED
+import com.evangelidis.t_tmoviesseries.view.MainActivity
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.login.LoginRegisterMethods.arePasswordsEquals
 import com.evangelidis.t_tmoviesseries.login.LoginRegisterMethods.isEmailValid

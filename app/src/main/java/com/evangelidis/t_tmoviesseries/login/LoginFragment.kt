@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
-import com.evangelidis.t_tmoviesseries.MainActivity
+import com.evangelidis.t_tmoviesseries.view.MainActivity
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.login.LoginRegisterMethods.isEmailValid
 import com.evangelidis.t_tmoviesseries.login.LoginRegisterMethods.isPasswordValid
