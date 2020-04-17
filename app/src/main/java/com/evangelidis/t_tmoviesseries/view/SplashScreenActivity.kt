@@ -1,11 +1,12 @@
-package com.evangelidis.t_tmoviesseries
+package com.evangelidis.t_tmoviesseries.view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import com.evangelidis.t_tmoviesseries.Constants.SPLASHSCREEN_TIME
+import com.evangelidis.t_tmoviesseries.utils.Constants.SPLASHSCREEN_TIME
+import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.login.LoginActivity
 
 class SplashScreenActivity : AppCompatActivity() {

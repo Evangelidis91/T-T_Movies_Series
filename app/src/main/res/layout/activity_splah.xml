@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/side_nav_bar_menu_gradient"
-    tools:context=".SplashScreenActivity">
+    tools:context=".view.SplashScreenActivity">
 
     <ImageView
         android:id="@+id/img"
