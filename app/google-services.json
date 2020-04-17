@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1081760566360",
+    "firebase_url": "https://t-t-movies-and-series.firebaseio.com",
+    "project_id": "t-t-movies-and-series",
+    "storage_bucket": "t-t-movies-and-series.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1081760566360:android:376c83230c652dfb54ce2d",
+        "android_client_info": {
+          "package_name": "com.evangelidis.t_tmoviesseries"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1081760566360-97o8hc5d4b9th1jb544iu1jq57mockaa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.evangelidis.t_tmoviesseries",
+            "certificate_hash": "57f2f85afee565ef9f54693463d6cc4f666c4af3"
+          }
+        },
+        {
+          "client_id": "1081760566360-e4c5te3kr5q9pgi48j2l5auaku4v3oil.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4GZ8Jl4vCV6bwCXmmPbLdpoxm7aLU6Fc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1081760566360-e4c5te3kr5q9pgi48j2l5auaku4v3oil.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
