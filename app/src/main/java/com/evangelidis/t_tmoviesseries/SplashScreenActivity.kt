@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import com.evangelidis.t_tmoviesseries.Constants.SPLASHSCREEN_TIME
+import com.evangelidis.t_tmoviesseries.login.LoginActivity
 
 class SplashScreenActivity : AppCompatActivity() {
 
@@ -22,7 +23,7 @@ class SplashScreenActivity : AppCompatActivity() {
 
         val handler = Handler()
         handler.postDelayed({
-            val intent = Intent(this@SplashScreenActivity, MainActivity::class.java)
+            val intent = Intent(this@SplashScreenActivity, LoginActivity::class.java)
             startActivity(intent)
             finish()
         }, SPLASHSCREEN_TIME)
