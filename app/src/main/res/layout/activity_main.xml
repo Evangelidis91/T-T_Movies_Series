@@ -16,4 +16,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/list_error"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@string/error_for_data"
+        android:textColor="@color/white"
+        android:fontFamily="@font/montserrat_extra_bold"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="8dp"/>
+
+    <com.tuyenmonkey.mkloader.MKLoader
+        android:id="@+id/loading_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyle"
+        app:mk_color="@color/deepSkyBlue"
+        app:mk_type="TwinFishesSpinner"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="8dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

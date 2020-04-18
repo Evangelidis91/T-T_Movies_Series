@@ -18,8 +18,6 @@ class ListViewModel : ViewModel() {
     lateinit var tmdbService: TMDBService
 
     private val disposable = CompositeDisposable()
-    private var genres: GenresResponse? = null
-
 
     val genresData = MutableLiveData<GenresResponse>()
     val moviesList = MutableLiveData<MoviesListResponse>()
@@ -46,10 +44,11 @@ class ListViewModel : ViewModel() {
                 .subscribeWith(object : DisposableSingleObserver<GenresResponse>() {
                     override fun onSuccess(t: GenresResponse) {
                         genresData.value = t
+                        loadError.value = false
+                        loading.value = false
                     }
 
-                    override fun onError(e: Throwable) {
-                    }
+                    override fun onError(e: Throwable) { }
                 })
         )
     }
@@ -62,10 +61,12 @@ class ListViewModel : ViewModel() {
                 .subscribeWith(object : DisposableSingleObserver<MoviesListResponse>() {
                     override fun onSuccess(t: MoviesListResponse) {
                         moviesList.value = t
+                        loadError.value = false
+                        loading.value = false
                     }
 
                     override fun onError(e: Throwable) {
-                        println(e.message)
+                        loadError.value = true
                     }
                 })
         )

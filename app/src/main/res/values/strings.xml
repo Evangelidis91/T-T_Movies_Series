@@ -15,5 +15,7 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="skip">Skip this step</string>
 
+    <string name="error_for_data">An error occurred while loading Data</string>
+
 
 </resources>

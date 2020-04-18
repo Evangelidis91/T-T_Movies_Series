@@ -26,11 +26,11 @@ class MoviesListAdapter(
         notifyDataSetChanged()
     }
 
-    fun appendGenres(genres: ArrayList<Genre>){
+    fun appendGenres(genres: ArrayList<Genre>) {
         genresList.addAll(genres)
     }
 
-    fun appendMovies(newData: MutableList<Movie>){
+    fun appendMovies(newData: MutableList<Movie>) {
         moviesListData.addAll(newData)
         notifyDataSetChanged()
     }
@@ -71,7 +71,6 @@ class MoviesListAdapter(
                 .dontAnimate()
                 .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
                 .into(poster)
-
         }
 
         private fun getGenres(genreIds: List<Int>): String {
