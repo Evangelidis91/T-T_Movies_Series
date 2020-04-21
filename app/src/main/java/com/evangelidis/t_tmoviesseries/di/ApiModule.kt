@@ -26,5 +26,4 @@ class ApiModule {
     fun provideTMDBService(): TMDBService {
         return TMDBService()
     }
-
 }
