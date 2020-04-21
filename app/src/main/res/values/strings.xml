@@ -1,5 +1,21 @@
 <resources>
     <string name="app_name">T-T Movies &amp; Series</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="movies">Movies</string>
+    <string name="popular_movies">Popular movies</string>
+    <string name="playing_now_movies">Playing now movies</string>
+    <string name="top_rated_movies">Top rated movies</string>
+    <string name="upcoming_movies">Upcoming movies</string>
+    <string name="tv">TV</string>
+    <string name="popular_tv_shows">Popular TV shows</string>
+    <string name="top_rated_tv_shows">Top rated TV shows</string>
+    <string name="on_the_air_tv_shows">On the air TV shows</string>
+    <string name="airing_today_tv_shows">Airing today TV shows</string>
+    <string name="communicate">Communicate</string>
+    <string name="send_message">Send message</string>
 
     <string name="login">Login</string>
     <string name="sign_up">Sign up</string>

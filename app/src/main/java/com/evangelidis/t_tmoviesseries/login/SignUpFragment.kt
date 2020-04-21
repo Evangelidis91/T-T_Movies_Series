@@ -10,7 +10,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
-import com.evangelidis.t_tmoviesseries.utils.Constants.IS_LOGGEDIN
+import com.evangelidis.t_tmoviesseries.utils.Constants.IS_LOGGED_IN
 import com.evangelidis.t_tmoviesseries.utils.Constants.IS_LOGIN_SKIPPED
 import com.evangelidis.t_tmoviesseries.view.MainActivity
 import com.evangelidis.t_tmoviesseries.R
@@ -106,7 +106,7 @@ class SignUpFragment : Fragment() {
     ) {
         val username: String = usernameFromEmail(email)
         writeNewUser(user?.uid, username, email)
-        Prefs.with(fragmentContext).writeBoolean(IS_LOGGEDIN, true)
+        Prefs.with(fragmentContext).writeBoolean(IS_LOGGED_IN, true)
         startActivity(Intent(fragmentContext, MainActivity::class.java))
         activity?.finish()
     }

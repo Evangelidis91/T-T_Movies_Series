@@ -11,18 +11,16 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.model.Genre
-import com.evangelidis.t_tmoviesseries.model.Movie
+import com.evangelidis.t_tmoviesseries.model.TvShow
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_BASE_URL
 
-class MoviesListAdapter(
-    var moviesListData: MutableList<Movie>
-) : RecyclerView.Adapter<MoviesListAdapter.MoviesViewHolder>() {
+class TvShowAdapter( var tvShowListData: MutableList<TvShow>) : RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
 
     private var genresList: ArrayList<Genre> = arrayListOf()
 
-    fun updateData(newData: MutableList<Movie>) {
-        moviesListData.clear()
-        moviesListData.addAll(newData)
+    fun updateData(newData: MutableList<TvShow>) {
+        tvShowListData.clear()
+        tvShowListData.addAll(newData)
         notifyDataSetChanged()
     }
 
@@ -30,25 +28,26 @@ class MoviesListAdapter(
         genresList.addAll(genres)
     }
 
-    fun appendData(newData: MutableList<Movie>) {
-        moviesListData.addAll(newData)
+    fun appendData(newData: MutableList<TvShow>) {
+        tvShowListData.addAll(newData)
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ) = MoviesViewHolder(
-        LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
+    ) = TvShowViewHolder(
+        LayoutInflater.from(parent.context).inflate(R.layout.item_tv, parent, false)
     )
 
-    override fun getItemCount() = moviesListData.size
+    override fun getItemCount() = tvShowListData.size
 
-    override fun onBindViewHolder(holder: MoviesListAdapter.MoviesViewHolder, position: Int) {
-        holder.bind(moviesListData[position])
+    override fun onBindViewHolder(holder: TvShowAdapter.TvShowViewHolder, position: Int) {
+        holder.bind(tvShowListData[position])
     }
 
-    inner class MoviesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+    inner class TvShowViewHolder(view : View) : RecyclerView.ViewHolder(view){
 
         var releaseDate: TextView = itemView.findViewById(R.id.item_movie_release_date)
         var title: TextView = itemView.findViewById(R.id.item_movie_title)
@@ -57,33 +56,32 @@ class MoviesListAdapter(
         var poster: ImageView = itemView.findViewById(R.id.item_movie_poster)
         var addToWishList: ImageView = itemView.findViewById(R.id.item_movie_wishlist)
 
-        fun bind(movie: Movie) {
-            releaseDate.text =
-                movie.releaseDate.split("-".toRegex()).dropLastWhile { it.isEmpty() }
-                    .toTypedArray()[0]
-            title.text = movie.title
-            rating.text = movie.voteAverage.toString()
-            genres.text = getGenres(movie.genreIds)
+        fun bind(tv: TvShow) {
+            releaseDate.text = tv.firstAirDate.split("-")[0]
+            title.text = tv.name
+            rating.text = tv.voteAverage.toString()
+            genres.text = ""
+            genres.text = getGenres(tv.genreIds)
             addToWishList.setImageResource(R.drawable.ic_disable_wishlist)
 
-            Glide.with(itemView.context)
-                .load(IMAGE_BASE_URL + movie.posterPath)
-                .dontAnimate()
+            Glide.with(itemView)
+                .load(IMAGE_BASE_URL + tv.posterPath)
                 .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
                 .into(poster)
+
         }
 
         private fun getGenres(genreIds: List<Int>): String {
-            val movieGenres: MutableList<String> = arrayListOf()
+            val tvGenres = java.util.ArrayList<String>()
             for (genreId in genreIds) {
-                for ((id, name) in genresList) {
-                    if (id == genreId) {
-                        movieGenres.add(name)
+                for (genre in genresList) {
+                    if (genre.id == genreId) {
+                        tvGenres.add(genre.name)
                         break
                     }
                 }
             }
-            return TextUtils.join(", ", movieGenres)
+            return TextUtils.join(", ", tvGenres)
         }
     }
 }
