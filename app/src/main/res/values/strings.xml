@@ -32,6 +32,25 @@
     <string name="skip">Skip this step</string>
 
     <string name="error_for_data">An error occurred while loading Data</string>
+    <string name="no_internet">It looks like you\'re offline. Please check your internet connection.</string>
+
+    <string name="reviews"><u>Reviews</u></string>
+    <string name="summary">Summary</string>
+    <string name="directors">Directors</string>
+    <string name="budget">Budget</string>
+    <string name="box_office">Box Office</string>
+    <string name="actors">Actors</string>
+    <string name="trailers">Trailers</string>
+    <string name="videos">Videos</string>
+    <string name="similar_movies">Similar Movies</string>
+    <string name="recommendations">Recommendations</string>
+
+    <string name="hour_format">{hour}h\u0020</string>
+    <string name="minutes_format">{min}min</string>
+    <string name="percent_number_up">+{PERCENT_VALUE}%</string>
+    <string name="percent_number_down">{PERCENT_VALUE}%</string>
+    <string name="multi_directors">{dir1} and {dir2}</string>
+    <string name="movie_rate">({MOVIE_RATE})</string>
 
 
 </resources>

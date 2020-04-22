@@ -1,11 +1,13 @@
 package com.evangelidis.t_tmoviesseries.view
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
@@ -14,9 +16,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.evangelidis.t_tmoviesseries.OnMoviesClickCallback
 import com.evangelidis.t_tmoviesseries.R
-import com.evangelidis.t_tmoviesseries.model.Genre
+import com.evangelidis.t_tmoviesseries.model.Movie
 import com.evangelidis.t_tmoviesseries.utils.Constants.AIRING_TODAY_TV
+import com.evangelidis.t_tmoviesseries.utils.Constants.MOVIE_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.ON_THE_AIR_TV
 import com.evangelidis.t_tmoviesseries.utils.Constants.PLAYING_NOW_MOVIES
 import com.evangelidis.t_tmoviesseries.utils.Constants.POPULAR_MOVIES
@@ -24,6 +28,7 @@ import com.evangelidis.t_tmoviesseries.utils.Constants.POPULAR_TV
 import com.evangelidis.t_tmoviesseries.utils.Constants.TOP_RATED_MOVIES
 import com.evangelidis.t_tmoviesseries.utils.Constants.TOP_RATED_TV
 import com.evangelidis.t_tmoviesseries.utils.Constants.UPCOMING_MOVIES
+import com.evangelidis.t_tmoviesseries.utils.InternetStatus
 import com.evangelidis.t_tmoviesseries.viewmodel.ListViewModel
 import com.evangelidis.tantintoast.TanTinToast
 import com.google.android.material.navigation.NavigationView
@@ -33,12 +38,25 @@ import kotlinx.android.synthetic.main.navigation_drawer.*
 
 class MainActivity : AppCompatActivity() {
 
+    private var movieCallback: OnMoviesClickCallback = object :
+        OnMoviesClickCallback {
+        override fun onClick(movie: Movie) {
+            if (InternetStatus.getInstance(applicationContext).isOnline) {
+                val intent = Intent(this@MainActivity, MovieActivity::class.java)
+                intent.putExtra(MOVIE_ID, movie.id)
+                startActivity(intent)
+            } else {
+                TanTinToast.Warning(this@MainActivity).text(getString(R.string.no_internet))
+                    .time(Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
     lateinit var viewModel: ListViewModel
-    private val moviesListAdapter = MoviesListAdapter(arrayListOf())
+    private val moviesListAdapter = MoviesListAdapter(arrayListOf(), movieCallback)
     private val tvShowAdapter = TvShowAdapter(arrayListOf())
     private var sortBy = POPULAR_MOVIES
 
-    var currentPage = 1
     var listOfRetrievedPages = arrayListOf(1)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,7 +71,8 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProviders.of(this).get(ListViewModel::class.java)
         viewModel.getMoviesGenres()
-        viewModel.getPopularMovies(currentPage)
+        viewModel.getTvShowGenres()
+        viewModel.getPopularMovies(1)
 
         moviesList.apply {
             layoutManager = LinearLayoutManager(context)
@@ -267,7 +286,6 @@ class MainActivity : AppCompatActivity() {
         viewModel.genresMovieData.observe(this, Observer { data ->
             data?.let {
                 moviesListAdapter.appendGenres(data.genres)
-                //genresList.addAll(data.genres)
             }
         })
 

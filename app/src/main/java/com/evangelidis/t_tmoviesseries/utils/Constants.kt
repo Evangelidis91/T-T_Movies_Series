@@ -19,8 +19,14 @@ object Constants {
     const val POPULAR_TV = "popular_tv"
 
     const val IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
+    const val ACTOR_IMAGE_URL = "https://image.tmdb.org/t/p/w185"
+    const val YOUTUBE_VIDEO_URL = "https://www.youtube.com/watch?v=%s"
+    const val YOUTUBE_THUMBNAIL_URL = "https://img.youtube.com/vi/%s/0.jpg"
 
     const val IS_LOGGED_IN = "isLogged"
     const val IS_LOGIN_SKIPPED = "isLoginSkipped"
+
+    const val MOVIE_ID = "movie_id"
+    const val PERSON_ID = "person_id"
 
 }

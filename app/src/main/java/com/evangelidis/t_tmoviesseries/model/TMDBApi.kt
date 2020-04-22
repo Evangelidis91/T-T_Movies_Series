@@ -1,7 +1,9 @@
 package com.evangelidis.t_tmoviesseries.model
 
 import io.reactivex.Single
+import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface TMDBApi {
@@ -71,4 +73,39 @@ interface TMDBApi {
         @Query("language") language: String,
         @Query("page") page: Int
     ): Single<TvShowListResponse>
+
+    @GET("movie/{movie_id}")
+    fun getMovieDetails(
+        @Path("movie_id") id: Int,
+        @Query("api_key") apiKEy: String,
+        @Query("language") language: String
+    ): Single<MovieDetailsResponse>
+
+    @GET("movie/{movie_id}/credits")
+    fun getMovieCredits(
+        @Path("movie_id") id: Int,
+        @Query("api_key") apiKEy: String,
+        @Query("language") language: String
+    ): Single<MovieCredits>
+
+    @GET("movie/{movie_id}/videos")
+    fun getMovieVideos(
+        @Path("movie_id") id: Int,
+        @Query("api_key") apiKEy: String,
+        @Query("language") language: String
+    ): Single<MovieVideos>
+
+    @GET("movie/{movie_id}/similar")
+    fun getMovieSimilar(
+        @Path("movie_id") id: Int,
+        @Query("api_key") apiKEy: String,
+        @Query("language") language: String
+    ): Single<MoviesListResponse>
+
+    @GET("movie/{movie_id}/recommendations")
+    fun getMovieRecommendations(
+        @Path("movie_id") id: Int,
+        @Query("api_key") apiKEy: String,
+        @Query("language") language: String
+    ): Single<MoviesListResponse>
 }

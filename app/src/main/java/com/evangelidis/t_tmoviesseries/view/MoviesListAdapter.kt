@@ -9,13 +9,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.evangelidis.t_tmoviesseries.OnMoviesClickCallback
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.model.Genre
 import com.evangelidis.t_tmoviesseries.model.Movie
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_BASE_URL
 
 class MoviesListAdapter(
-    var moviesListData: MutableList<Movie>
+    var moviesListData: MutableList<Movie>,
+    var movieCallback: OnMoviesClickCallback
 ) : RecyclerView.Adapter<MoviesListAdapter.MoviesViewHolder>() {
 
     private var genresList: ArrayList<Genre> = arrayListOf()
@@ -71,6 +73,9 @@ class MoviesListAdapter(
                 .dontAnimate()
                 .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
                 .into(poster)
+
+            itemView.setOnClickListener { movieCallback.onClick(movie) }
+
         }
 
         private fun getGenres(genreIds: List<Int>): String {
