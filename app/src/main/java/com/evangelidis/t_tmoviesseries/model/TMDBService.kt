@@ -39,7 +39,7 @@ class TMDBService {
         return api.getUpcomingMovies(API_KEY, LANGUAGE, i)
     }
 
-    fun getPopularTvSeries(i: Int) :Single<TvShowListResponse> {
+    fun getPopularTvSeries(i: Int): Single<TvShowListResponse> {
         return api.getPopularTvSeries(API_KEY, LANGUAGE, i)
     }
 
@@ -53,6 +53,26 @@ class TMDBService {
 
     fun getAiringTodayTvSeries(i: Int): Single<TvShowListResponse> {
         return api.getAiringTodayTvSeries(API_KEY, LANGUAGE, i)
+    }
+
+    fun getMovieDetails(id: Int): Single<MovieDetailsResponse> {
+        return api.getMovieDetails(id, API_KEY, LANGUAGE)
+    }
+
+    fun getMovieCredits(id: Int): Single<MovieCredits> {
+        return api.getMovieCredits(id, API_KEY, LANGUAGE)
+    }
+
+    fun getMovieVideos(id: Int): Single<MovieVideos> {
+        return api.getMovieVideos(id, API_KEY, LANGUAGE)
+    }
+
+    fun getMovieSimilar(id: Int): Single<MoviesListResponse> {
+        return api.getMovieSimilar(id, API_KEY, LANGUAGE)
+    }
+
+    fun getMovieRecommendations(id: Int): Single<MoviesListResponse> {
+        return api.getMovieRecommendations(id, API_KEY, LANGUAGE)
     }
 
 }
