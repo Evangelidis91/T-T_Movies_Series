@@ -29,6 +29,7 @@ import com.evangelidis.t_tmoviesseries.utils.Constants.TOP_RATED_MOVIES
 import com.evangelidis.t_tmoviesseries.utils.Constants.TOP_RATED_TV
 import com.evangelidis.t_tmoviesseries.utils.Constants.UPCOMING_MOVIES
 import com.evangelidis.t_tmoviesseries.utils.InternetStatus
+import com.evangelidis.t_tmoviesseries.utils.Tracking
 import com.evangelidis.t_tmoviesseries.viewmodel.ListViewModel
 import com.evangelidis.tantintoast.TanTinToast
 import com.google.android.material.navigation.NavigationView
@@ -105,7 +106,7 @@ class MainActivity : AppCompatActivity() {
         nav_communicate.setOnClickListener { expandCommunicateLayout() }
 
         nav_popular_movies.setOnClickListener {
-            Log.i("Menu Option", "POPULAR_MOVIES")
+            Tracking.trackListCategory(this, getString(R.string.popular_movies))
             toolbar_title.text = getString(R.string.popular_movies)
             if (sortBy != POPULAR_MOVIES) {
                 sortBy = POPULAR_MOVIES
@@ -116,7 +117,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         nav_playing_now_movies.setOnClickListener {
-            Log.i("Menu Option", "PLAYING_NOW_MOVIES")
+            Tracking.trackListCategory(this, getString(R.string.playing_now_movies))
             toolbar_title.text = getString(R.string.playing_now_movies)
             if (sortBy != PLAYING_NOW_MOVIES) {
                 sortBy = PLAYING_NOW_MOVIES
@@ -127,7 +128,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         nav_top_rated_movies.setOnClickListener {
-            Log.i("Menu Option", "TOP_RATED_MOVIES")
+            Tracking.trackListCategory(this, getString(R.string.top_rated_movies))
             toolbar_title.text = getString(R.string.top_rated_movies)
             if (sortBy != TOP_RATED_MOVIES) {
                 sortBy = TOP_RATED_MOVIES
@@ -138,7 +139,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         nav_upcoming_movies.setOnClickListener {
-            Log.i("Menu Option", "UPCOMING_MOVIES")
+            Tracking.trackListCategory(this, getString(R.string.upcoming_movies))
             toolbar_title.text = getString(R.string.upcoming_movies)
             if (sortBy != UPCOMING_MOVIES) {
                 sortBy = UPCOMING_MOVIES
@@ -150,7 +151,7 @@ class MainActivity : AppCompatActivity() {
 
 
         nav_popular_tv_shows.setOnClickListener {
-            Log.i("Menu Option", "POPULAR_TV")
+            Tracking.trackListCategory(this, getString(R.string.popular_tv_shows))
             toolbar_title.text = getString(R.string.popular_tv_shows)
             if (sortBy != POPULAR_TV) {
                 sortBy = POPULAR_TV
@@ -161,7 +162,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         nav_top_rated_tv_shows.setOnClickListener {
-            Log.i("Menu Option", "TOP_RATED_TV")
+            Tracking.trackListCategory(this, getString(R.string.top_rated_tv_shows))
             toolbar_title.text = getString(R.string.top_rated_tv_shows)
             if (sortBy != TOP_RATED_TV) {
                 sortBy = TOP_RATED_TV
@@ -172,7 +173,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         nav_on_air_tv_shows.setOnClickListener {
-            Log.i("Menu Option", "nav_on_air_tv_shows")
+            Tracking.trackListCategory(this, getString(R.string.on_the_air_tv_shows))
             toolbar_title.text = getString(R.string.on_the_air_tv_shows)
             if (sortBy != ON_THE_AIR_TV) {
                 sortBy = ON_THE_AIR_TV
@@ -183,7 +184,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         nav_airing_today_tv_shows.setOnClickListener {
-            Log.i("Menu Option", "nav_airing_today_tv_shows")
+            Tracking.trackListCategory(this, getString(R.string.airing_today_tv_shows))
             toolbar_title.text = getString(R.string.airing_today_tv_shows)
             if (sortBy != AIRING_TODAY_TV) {
                 sortBy = AIRING_TODAY_TV
