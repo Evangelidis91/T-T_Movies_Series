@@ -30,7 +30,6 @@ class MovieActivity : AppCompatActivity() {
 
     private var movieId = 0
     lateinit var viewModel: ListViewModel
-    private var genres: GenresResponse? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +44,6 @@ class MovieActivity : AppCompatActivity() {
 
         viewModel = ViewModelProviders.of(this).get(ListViewModel::class.java)
 
-        viewModel.getMoviesGenres()
         viewModel.getMovieDetails(movieId)
         viewModel.getMovieCredits(movieId)
         viewModel.getMovieVideos(movieId)
@@ -57,15 +55,10 @@ class MovieActivity : AppCompatActivity() {
 
     private fun observeViewModel() {
 
-        viewModel.genresMovieData.observe(this, Observer { data ->
-            data?.let {
-                genres = data
-            }
-        })
-
         viewModel.movieDetails.observe(this, Observer { data ->
             data?.let {
                 setUpUI(data)
+                setUpGenres(data.genres)
                 progressBar.visibility = View.GONE
             }
         })
@@ -291,8 +284,6 @@ class MovieActivity : AppCompatActivity() {
                 }
             }
         }
-
-        setUpGenres(data.genres)
     }
 
     private fun formatHoursAndMinutes(totalMinutes: Int): String {
