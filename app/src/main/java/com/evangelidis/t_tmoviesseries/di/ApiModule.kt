@@ -1,7 +1,7 @@
 package com.evangelidis.t_tmoviesseries.di
 
-import com.evangelidis.t_tmoviesseries.model.TMDBApi
-import com.evangelidis.t_tmoviesseries.model.TMDBService
+import com.evangelidis.t_tmoviesseries.model.api.TMDBApi
+import com.evangelidis.t_tmoviesseries.model.api.TMDBService
 import com.evangelidis.t_tmoviesseries.utils.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides

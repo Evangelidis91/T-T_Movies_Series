@@ -1,7 +1,7 @@
-package com.evangelidis.t_tmoviesseries.model
+package com.evangelidis.t_tmoviesseries.model.api
 
+import com.evangelidis.t_tmoviesseries.model.*
 import io.reactivex.Single
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -93,7 +93,7 @@ interface TMDBApi {
         @Path("movie_id") id: Int,
         @Query("api_key") apiKEy: String,
         @Query("language") language: String
-    ): Single<MovieVideos>
+    ): Single<VideosResponse>
 
     @GET("movie/{movie_id}/similar")
     fun getMovieSimilar(
@@ -108,4 +108,47 @@ interface TMDBApi {
         @Query("api_key") apiKEy: String,
         @Query("language") language: String
     ): Single<MoviesListResponse>
+
+    @GET("tv/{tv_show_id}")
+    fun getTvShowDetails(
+        @Path("tv_show_id") id: Int,
+        @Query("api_key") apiKEy: String,
+        @Query("language") language: String
+    ): Single<TvShowDetailsResponse>
+
+    @GET("tv/{tv_show_id}/credits")
+    fun getTvShowCredits(
+        @Path("tv_show_id") id: Int,
+        @Query("api_key") apiKEy: String,
+        @Query("language") language: String
+    ): Single<TvShowCreditsResponse>
+
+    @GET("tv/{tv_show_id}/videos")
+    fun getTvShowTrailers(
+        @Path("tv_show_id") id: Int,
+        @Query("api_key") apiKEy: String,
+        @Query("language") language: String
+    ): Single<VideosResponse>
+
+    @GET("tv/{tv_show_id}/similar")
+    fun getTvShowSimilar(
+        @Path("tv_show_id") id: Int,
+        @Query("api_key") apiKEy: String,
+        @Query("language") language: String
+    ): Single<TvShowListResponse>
+
+    @GET("tv/{tv_show_id}/recommendations")
+    fun getTvShowRecommendations(
+        @Path("tv_show_id") id: Int,
+        @Query("api_key") apiKEy: String,
+        @Query("language") language: String
+    ): Single<TvShowListResponse>
+
+    @GET("tv/{tv_show_id}/season/{season_number}")
+    fun getTvShowSeasonDetails(
+        @Path("tv_show_id") id: Int,
+        @Path("season_number") seasonNumber: Int,
+        @Query("api_key") apiKEy: String,
+        @Query("language") language: String
+    ): Single<TvShowSeasonResponse>
 }

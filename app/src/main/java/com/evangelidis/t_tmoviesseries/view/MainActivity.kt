@@ -17,8 +17,10 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.evangelidis.t_tmoviesseries.OnMoviesClickCallback
+import com.evangelidis.t_tmoviesseries.OnTvShowClickCallback
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.model.Movie
+import com.evangelidis.t_tmoviesseries.model.TvShow
 import com.evangelidis.t_tmoviesseries.utils.Constants.AIRING_TODAY_TV
 import com.evangelidis.t_tmoviesseries.utils.Constants.MOVIE_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.ON_THE_AIR_TV
@@ -27,6 +29,7 @@ import com.evangelidis.t_tmoviesseries.utils.Constants.POPULAR_MOVIES
 import com.evangelidis.t_tmoviesseries.utils.Constants.POPULAR_TV
 import com.evangelidis.t_tmoviesseries.utils.Constants.TOP_RATED_MOVIES
 import com.evangelidis.t_tmoviesseries.utils.Constants.TOP_RATED_TV
+import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.UPCOMING_MOVIES
 import com.evangelidis.t_tmoviesseries.utils.InternetStatus
 import com.evangelidis.t_tmoviesseries.utils.Tracking
@@ -53,9 +56,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private var tvShowCallback: OnTvShowClickCallback = object :
+        OnTvShowClickCallback {
+        override fun onClick(tvShow: TvShow) {
+            if (InternetStatus.getInstance(applicationContext).isOnline) {
+                val intent = Intent(this@MainActivity, TvShowActivity::class.java)
+                intent.putExtra(TV_SHOW_ID, tvShow.id)
+                startActivity(intent)
+            } else {
+                TanTinToast.Warning(this@MainActivity).text(getString(R.string.no_internet))
+                    .time(Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
     lateinit var viewModel: ListViewModel
     private val moviesListAdapter = MoviesListAdapter(arrayListOf(), movieCallback)
-    private val tvShowAdapter = TvShowAdapter(arrayListOf())
+    private val tvShowAdapter = TvShowAdapter(arrayListOf(), tvShowCallback)
     private var sortBy = POPULAR_MOVIES
 
     var listOfRetrievedPages = arrayListOf(1)
@@ -285,37 +302,37 @@ class MainActivity : AppCompatActivity() {
 
     private fun observeViewModel() {
         viewModel.genresMovieData.observe(this, Observer { data ->
-            data?.let {
-                moviesListAdapter.appendGenres(data.genres)
+            data.genres?.let {
+                moviesListAdapter.appendGenres(it)
             }
         })
 
         viewModel.genresTvShowData.observe(this, Observer { data ->
-            data?.let {
-                tvShowAdapter.appendGenres(data.genres)
+            data.genres?.let {
+                tvShowAdapter.appendGenres(it)
             }
         })
 
         viewModel.moviesList.observe(this, Observer { data ->
-            data?.let {
+            data.results?.let {
                 moviesList.visibility = View.VISIBLE
                 tvshowList.visibility = View.GONE
                 if (listOfRetrievedPages.size == 1) {
-                    moviesListAdapter.updateData(it.results)
+                    moviesListAdapter.updateData(it)
                 } else {
-                    moviesListAdapter.appendData(it.results)
+                    moviesListAdapter.appendData(it)
                 }
             }
         })
 
         viewModel.tvShowsList.observe(this, Observer { data ->
-            data?.let {
+            data.results?.let {
                 moviesList.visibility = View.GONE
                 tvshowList.visibility = View.VISIBLE
                 if (listOfRetrievedPages.size == 1) {
-                    tvShowAdapter.updateData(it.results)
+                    tvShowAdapter.updateData(it)
                 } else {
-                    tvShowAdapter.appendData(it.results)
+                    tvShowAdapter.appendData(it)
                 }
             }
         })

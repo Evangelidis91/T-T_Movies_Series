@@ -4,6 +4,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_desc">Navigation header</string>
 
+    <string name="tab">\u0009\u0009\u0009\u0009</string>
+
     <string name="movies">Movies</string>
     <string name="popular_movies">Popular movies</string>
     <string name="playing_now_movies">Playing now movies</string>
@@ -45,12 +47,22 @@
     <string name="similar_movies">Similar Movies</string>
     <string name="recommendations">Recommendations</string>
 
+    <string name="tv_show">TV Show</string>
+    <string name="similar_tv_shows">Similar Tv Shows</string>
+    <string name="reviews_number">({REVIEWS_NUMBER})</string>
+
     <string name="hour_format">{hour}h\u0020</string>
     <string name="minutes_format">{min}min</string>
     <string name="percent_number_up">+{PERCENT_VALUE}%</string>
     <string name="percent_number_down">{PERCENT_VALUE}%</string>
     <string name="multi_directors">{dir1} and {dir2}</string>
     <string name="movie_rate">({MOVIE_RATE})</string>
+
+    <string name="tv_show_release_date_format1">{year} -</string>
+    <string name="tv_show_release_date_format2">{year1} - {year2}</string>
+    <string name="one_season_text">1 season</string>
+    <string name="season_number">{x} seasons</string>
+    <string name="tv_show_rate">({TV_SHOW_RATE})</string>
 
 
 </resources>

@@ -3,18 +3,16 @@ package com.evangelidis.t_tmoviesseries.model
 
 import com.google.gson.annotations.SerializedName
 
-data class MovieCredits(
+data class TvShowCreditsResponse(
     @SerializedName("cast")
-    val cast: List<MovieCast>?,
+    val cast: List<TvShowCast>?,
     @SerializedName("crew")
-    val crew: List<MovieCrew>?,
+    val crew: List<TvShowCrew>?,
     @SerializedName("id")
     val id: Int?
 )
 
-data class MovieCast(
-    @SerializedName("cast_id")
-    val castId: Int?,
+data class TvShowCast(
     @SerializedName("character")
     val character: String?,
     @SerializedName("credit_id")
@@ -31,7 +29,8 @@ data class MovieCast(
     val profilePath: String?
 )
 
-data class MovieCrew(
+
+data class TvShowCrew(
     @SerializedName("credit_id")
     val creditId: String?,
     @SerializedName("department")

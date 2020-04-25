@@ -4,12 +4,12 @@ import com.google.gson.annotations.SerializedName
 
 data class GenresResponse(
     @SerializedName("genres")
-    val genres: ArrayList<Genre>
+    val genres: ArrayList<Genre>?
 )
 
 data class Genre(
     @SerializedName("id")
-    val id: Int,
+    val id: Int?,
     @SerializedName("name")
-    val name: String
+    val name: String?
 )

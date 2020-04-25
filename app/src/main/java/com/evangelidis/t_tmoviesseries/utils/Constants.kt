@@ -27,6 +27,7 @@ object Constants {
     const val IS_LOGIN_SKIPPED = "isLoginSkipped"
 
     const val MOVIE_ID = "movie_id"
+    const val TV_SHOW_ID = "tv_show_id"
     const val PERSON_ID = "person_id"
 
 }

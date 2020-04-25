@@ -1,6 +1,6 @@
 package com.evangelidis.t_tmoviesseries.di
 
-import com.evangelidis.t_tmoviesseries.model.TMDBService
+import com.evangelidis.t_tmoviesseries.model.api.TMDBService
 import com.evangelidis.t_tmoviesseries.viewmodel.ListViewModel
 import dagger.Component
 

@@ -61,11 +61,15 @@ class MoviesListAdapter(
 
         fun bind(movie: Movie) {
             releaseDate.text =
-                movie.releaseDate.split("-".toRegex()).dropLastWhile { it.isEmpty() }
+                movie.releaseDate?.let {
+                    it.split("-".toRegex()).dropLastWhile { it.isEmpty() }
                     .toTypedArray()[0]
+                }
             title.text = movie.title
             rating.text = movie.voteAverage.toString()
-            genres.text = getGenres(movie.genreIds)
+            movie.genreIds?.let {
+                genres.text = getGenres(it)
+            }
             addToWishList.setImageResource(R.drawable.ic_disable_wishlist)
 
             Glide.with(itemView.context)
@@ -83,7 +87,9 @@ class MoviesListAdapter(
             for (genreId in genreIds) {
                 for ((id, name) in genresList) {
                     if (id == genreId) {
-                        movieGenres.add(name)
+                        name?.let {
+                            movieGenres.add(name)
+                        }
                         break
                     }
                 }
