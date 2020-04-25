@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.evangelidis.t_tmoviesseries.di.DaggerApiComponent
 import com.evangelidis.t_tmoviesseries.model.*
+import com.evangelidis.t_tmoviesseries.model.api.TMDBService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -23,9 +24,15 @@ class ListViewModel : ViewModel() {
     val tvShowsList = MutableLiveData<TvShowListResponse>()
     val movieDetails = MutableLiveData<MovieDetailsResponse>()
     val movieCredits = MutableLiveData<MovieCredits>()
-    val movieVideos = MutableLiveData<MovieVideos>()
+    val movieVideos = MutableLiveData<VideosResponse>()
     val movieSimilar = MutableLiveData<MoviesListResponse>()
     val movieRecommendation = MutableLiveData<MoviesListResponse>()
+    val tvShowDetails = MutableLiveData<TvShowDetailsResponse>()
+    val tvShowCredits = MutableLiveData<TvShowCreditsResponse>()
+    val tvShowVideos = MutableLiveData<VideosResponse>()
+    val tvShowSimilar = MutableLiveData<TvShowListResponse>()
+    val tvShowRecommendation = MutableLiveData<TvShowListResponse>()
+    val tvShowSeasonDetails = MutableLiveData<TvShowSeasonResponse>()
     val loadError = MutableLiveData<Boolean>()
     val loading = MutableLiveData<Boolean>()
 
@@ -91,6 +98,30 @@ class ListViewModel : ViewModel() {
 
     fun getMovieRecommendation(id: Int) {
         fetchMovieRecommendation(id)
+    }
+
+    fun getTvShowDetails(id: Int) {
+        fetchTvShowDetails(id)
+    }
+
+    fun getTvShowCredits(id: Int) {
+        fetchTvShowCredits(id)
+    }
+
+    fun getTvShowVideos(id: Int) {
+        fetchTvShowVideos(id)
+    }
+
+    fun getTvShowSimilar(id: Int) {
+        fetchTvShowSimilar(id)
+    }
+
+    fun getTvShowRecommendation(id: Int) {
+        fetchTvShowRecommendation(id)
+    }
+
+    fun getTvShowSeasonDetails(id: Int, season: Int) {
+        fetchTvShowSeasonDetails(id, season)
     }
 
     private fun fetchMovieGenres() {
@@ -325,8 +356,8 @@ class ListViewModel : ViewModel() {
             tmdbService.getMovieVideos(id)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<MovieVideos>() {
-                    override fun onSuccess(t: MovieVideos) {
+                .subscribeWith(object : DisposableSingleObserver<VideosResponse>() {
+                    override fun onSuccess(t: VideosResponse) {
                         movieVideos.value = t
                     }
 
@@ -364,6 +395,114 @@ class ListViewModel : ViewModel() {
                 .subscribeWith(object : DisposableSingleObserver<MoviesListResponse>() {
                     override fun onSuccess(t: MoviesListResponse) {
                         movieRecommendation.value = t
+                    }
+
+                    override fun onError(e: Throwable) {
+                        loadError.value = true
+                    }
+
+                })
+        )
+    }
+
+    private fun fetchTvShowDetails(id: Int) {
+        disposable.add(
+            tmdbService.getTvShowDetails(id)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<TvShowDetailsResponse>() {
+                    override fun onSuccess(t: TvShowDetailsResponse) {
+                        tvShowDetails.value = t
+                    }
+
+                    override fun onError(e: Throwable) {
+                        loadError.value = true
+                    }
+
+                })
+        )
+    }
+
+    private fun fetchTvShowCredits(id: Int) {
+        disposable.add(
+            tmdbService.getTvShowCredits(id)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<TvShowCreditsResponse>() {
+                    override fun onSuccess(t: TvShowCreditsResponse) {
+                        tvShowCredits.value = t
+                    }
+
+                    override fun onError(e: Throwable) {
+                        loadError.value = true
+                    }
+
+                })
+        )
+    }
+
+    private fun fetchTvShowVideos(id: Int) {
+        disposable.add(
+            tmdbService.getTvShowVideos(id)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<VideosResponse>() {
+                    override fun onSuccess(t: VideosResponse) {
+                        tvShowVideos.value = t
+                    }
+
+                    override fun onError(e: Throwable) {
+                        loadError.value = true
+                    }
+
+                })
+        )
+    }
+
+    private fun fetchTvShowSimilar(id: Int) {
+        disposable.add(
+            tmdbService.getTvShowSimilar(id)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<TvShowListResponse>() {
+                    override fun onSuccess(t: TvShowListResponse) {
+                        tvShowSimilar.value = t
+                    }
+
+                    override fun onError(e: Throwable) {
+                        loadError.value = true
+                    }
+
+                })
+        )
+    }
+
+    private fun fetchTvShowRecommendation(id: Int) {
+        disposable.add(
+            tmdbService.getTvShowRecommendations(id)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<TvShowListResponse>() {
+                    override fun onSuccess(t: TvShowListResponse) {
+                        tvShowRecommendation.value = t
+                    }
+
+                    override fun onError(e: Throwable) {
+                        loadError.value = true
+                    }
+
+                })
+        )
+    }
+
+    private fun fetchTvShowSeasonDetails(id: Int, season: Int) {
+        disposable.add(
+            tmdbService.getTvShowSeasonDetails(id, season)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<TvShowSeasonResponse>() {
+                    override fun onSuccess(t: TvShowSeasonResponse) {
+                        tvShowSeasonDetails.value = t
                     }
 
                     override fun onError(e: Throwable) {

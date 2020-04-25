@@ -58,7 +58,10 @@ class MovieActivity : AppCompatActivity() {
         viewModel.movieDetails.observe(this, Observer { data ->
             data?.let {
                 setUpUI(data)
-                setUpGenres(data.genres)
+
+                data.genres?.let {
+                    setUpGenres(it)
+                }
                 progressBar.visibility = View.GONE
             }
         })
@@ -92,7 +95,7 @@ class MovieActivity : AppCompatActivity() {
     private fun setUpRecommendationMoviesUI(data: MoviesListResponse) {
 
         movieRecommendations.removeAllViews()
-        if (!data.results.isNullOrEmpty()){
+        if (!data.results.isNullOrEmpty()) {
             recommendationsMoviesContainer.visibility = View.VISIBLE
             for (result in data.results) {
                 val parent = layoutInflater.inflate(
@@ -125,7 +128,7 @@ class MovieActivity : AppCompatActivity() {
     private fun setUpSimilarMoviesUI(data: MoviesListResponse) {
 
         movieSimilar.removeAllViews()
-        if (!data.results.isNullOrEmpty()){
+        if (!data.results.isNullOrEmpty()) {
             similarMoviesContainer.visibility = View.VISIBLE
             for (similarResult in data.results) {
                 val parent =
@@ -153,9 +156,9 @@ class MovieActivity : AppCompatActivity() {
 
     }
 
-    private fun setUpVideosUI(videos: List<Video>) {
+    private fun setUpVideosUI(videos: List<Video>?) {
         movieVideos.removeAllViews()
-        if (!videos.isNullOrEmpty()){
+        if (!videos.isNullOrEmpty()) {
             videosContainer.visibility = View.VISIBLE
             for (video in videos) {
                 val parent =
@@ -183,10 +186,10 @@ class MovieActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun setUpActors(casts: List<Cast>) {
+    private fun setUpActors(casts: List<MovieCast>?) {
+        actorsContainer.visibility = View.VISIBLE
         movieActors.removeAllViews()
         if (!casts.isNullOrEmpty()) {
-            movieActors.visibility = View.VISIBLE
             for (cast in casts) {
                 val parent =
                     layoutInflater.inflate(R.layout.thumbnail_actors_list, movieActors, false)
@@ -212,14 +215,21 @@ class MovieActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpDirectors(crew: List<Crew>) {
+    private fun setUpDirectors(crew: List<MovieCrew>?) {
 
         val directorsList = ArrayList<String>()
-        for (x in crew.indices) {
-            if (crew[x].job == "Director" && crew[x].name.isNotEmpty()) {
-                directorsList.add(crew[x].name)
+
+        crew?.let { it ->
+            for (x in it.indices) {
+                if (it[x].job == "Director") {
+                    it[x].name?.let {
+                        directorsList.add(it)
+                    }
+                }
             }
         }
+
+
         if (!directorsList.isNullOrEmpty()) {
             directorsContainer.visibility = View.VISIBLE
             when (directorsList.size) {
@@ -248,14 +258,14 @@ class MovieActivity : AppCompatActivity() {
 
     private fun setUpUI(data: MovieDetailsResponse) {
 
-        if (data.backdropPath.isNotEmpty()) {
+        if (!data.backdropPath.isNullOrEmpty()) {
             Glide.with(this)
                 .load(IMAGE_BASE_URL + data.backdropPath)
                 .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
                 .into(movieImage)
         }
 
-        if (data.title.isNotEmpty()) {
+        if (!data.title.isNullOrEmpty()) {
             movieTitle.visibility = View.VISIBLE
             movieTitle.text = data.title
             toolbar_title.text = data.title
@@ -264,23 +274,29 @@ class MovieActivity : AppCompatActivity() {
         movieRating.text = data.voteAverage.toString()
         totalVotes.text = data.voteCount.toString()
         movieReleaseDate.text = data.releaseDate
-        movieDuration.text = formatHoursAndMinutes(data.runtime)
 
-        if (data.overview.isNotEmpty()) {
+        data.runtime?.let {
+            movieDuration.text = formatHoursAndMinutes(it)
+        }
+
+
+        if (!data.overview.isNullOrEmpty()) {
             summaryContainer.visibility = View.VISIBLE
             movieDetailsOverview.text = data.overview
         }
 
-        if (data.budget.toString().isNotEmpty() || data.budget.toString().isNotEmpty()) {
+        data.budget?.let {
             movieGrow.visibility = View.VISIBLE
             if (data.budget > 0.0) {
                 budgetContainer.visibility = View.VISIBLE
                 movieBudget.text = convertToRealNumber(data.budget)
-                if (data.revenue > 0.0) {
-                    boxofficeContainer.visibility = View.VISIBLE
-                    movieBoxOffice.text = convertToRealNumber(data.revenue)
-                    movieBoxOfficePercent.text =
-                        calculatePercentBoxOffice(data.budget, data.revenue)
+                data.revenue?.let {
+                    if (data.revenue > 0.0) {
+                        boxofficeContainer.visibility = View.VISIBLE
+                        movieBoxOffice.text = convertToRealNumber(data.revenue)
+                        movieBoxOfficePercent.text =
+                            calculatePercentBoxOffice(data.budget, data.revenue)
+                    }
                 }
             }
         }
@@ -304,7 +320,7 @@ class MovieActivity : AppCompatActivity() {
         movieGenres.text = currentGenres.substring(0, currentGenres.length - 2)
     }
 
-    private fun convertToRealNumber(budget: Double): String {
+    private fun convertToRealNumber(budget: Double?): String {
         val df = DecimalFormat(",###", DecimalFormatSymbols.getInstance(Locale.US))
         df.maximumFractionDigits = 340
         return df.format(budget) + " $"

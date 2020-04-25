@@ -1,6 +1,7 @@
-package com.evangelidis.t_tmoviesseries.model
+package com.evangelidis.t_tmoviesseries.model.api
 
 import com.evangelidis.t_tmoviesseries.di.DaggerApiComponent
+import com.evangelidis.t_tmoviesseries.model.*
 import com.evangelidis.t_tmoviesseries.utils.Constants.API_KEY
 import com.evangelidis.t_tmoviesseries.utils.Constants.LANGUAGE
 import io.reactivex.Single
@@ -63,7 +64,7 @@ class TMDBService {
         return api.getMovieCredits(id, API_KEY, LANGUAGE)
     }
 
-    fun getMovieVideos(id: Int): Single<MovieVideos> {
+    fun getMovieVideos(id: Int): Single<VideosResponse> {
         return api.getMovieVideos(id, API_KEY, LANGUAGE)
     }
 
@@ -75,4 +76,27 @@ class TMDBService {
         return api.getMovieRecommendations(id, API_KEY, LANGUAGE)
     }
 
+    fun getTvShowDetails(id: Int): Single<TvShowDetailsResponse> {
+        return api.getTvShowDetails(id, API_KEY, LANGUAGE)
+    }
+
+    fun getTvShowCredits(id: Int): Single<TvShowCreditsResponse> {
+        return api.getTvShowCredits(id, API_KEY, LANGUAGE)
+    }
+
+    fun getTvShowVideos(id: Int): Single<VideosResponse> {
+        return api.getTvShowTrailers(id, API_KEY, LANGUAGE)
+    }
+
+    fun getTvShowSimilar(id: Int): Single<TvShowListResponse> {
+        return api.getTvShowSimilar(id, API_KEY, LANGUAGE)
+    }
+
+    fun getTvShowRecommendations(id: Int): Single<TvShowListResponse> {
+        return api.getTvShowRecommendations(id, API_KEY, LANGUAGE)
+    }
+
+    fun getTvShowSeasonDetails(id: Int, season: Int): Single<TvShowSeasonResponse> {
+        return api.getTvShowSeasonDetails(id, season, API_KEY, LANGUAGE)
+    }
 }

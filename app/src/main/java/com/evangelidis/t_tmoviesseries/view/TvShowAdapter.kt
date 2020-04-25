@@ -9,12 +9,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.evangelidis.t_tmoviesseries.OnTvShowClickCallback
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.model.Genre
 import com.evangelidis.t_tmoviesseries.model.TvShow
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_BASE_URL
 
-class TvShowAdapter( var tvShowListData: MutableList<TvShow>) : RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
+class TvShowAdapter(
+    var tvShowListData: MutableList<TvShow>,
+    var tvShowCallback: OnTvShowClickCallback
+) : RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
 
     private var genresList: ArrayList<Genre> = arrayListOf()
 
@@ -47,7 +51,7 @@ class TvShowAdapter( var tvShowListData: MutableList<TvShow>) : RecyclerView.Ada
     }
 
 
-    inner class TvShowViewHolder(view : View) : RecyclerView.ViewHolder(view){
+    inner class TvShowViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         var releaseDate: TextView = itemView.findViewById(R.id.item_movie_release_date)
         var title: TextView = itemView.findViewById(R.id.item_movie_title)
@@ -57,11 +61,17 @@ class TvShowAdapter( var tvShowListData: MutableList<TvShow>) : RecyclerView.Ada
         var addToWishList: ImageView = itemView.findViewById(R.id.item_movie_wishlist)
 
         fun bind(tv: TvShow) {
-            releaseDate.text = tv.firstAirDate.split("-")[0]
+            tv.firstAirDate?.let {
+                releaseDate.text = it.split("-")[0]
+            }
+
             title.text = tv.name
             rating.text = tv.voteAverage.toString()
             genres.text = ""
-            genres.text = getGenres(tv.genreIds)
+            tv.genreIds?.let {
+                genres.text = getGenres(it)
+            }
+
             addToWishList.setImageResource(R.drawable.ic_disable_wishlist)
 
             Glide.with(itemView)
@@ -69,6 +79,7 @@ class TvShowAdapter( var tvShowListData: MutableList<TvShow>) : RecyclerView.Ada
                 .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
                 .into(poster)
 
+            itemView.setOnClickListener { tvShowCallback.onClick(tv) }
         }
 
         private fun getGenres(genreIds: List<Int>): String {
@@ -76,7 +87,9 @@ class TvShowAdapter( var tvShowListData: MutableList<TvShow>) : RecyclerView.Ada
             for (genreId in genreIds) {
                 for (genre in genresList) {
                     if (genre.id == genreId) {
-                        tvGenres.add(genre.name)
+                        genre.name?.let {
+                            tvGenres.add(it)
+                        }
                         break
                     }
                 }
