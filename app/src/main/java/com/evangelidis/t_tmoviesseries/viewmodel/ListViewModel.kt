@@ -33,6 +33,8 @@ class ListViewModel : ViewModel() {
     val tvShowSimilar = MutableLiveData<TvShowListResponse>()
     val tvShowRecommendation = MutableLiveData<TvShowListResponse>()
     val tvShowSeasonDetails = MutableLiveData<TvShowSeasonResponse>()
+    val personDetails = MutableLiveData<PersonDetailsResponse>()
+    val personCombinedCredits = MutableLiveData<PersonCombinedResponse>()
     val loadError = MutableLiveData<Boolean>()
     val loading = MutableLiveData<Boolean>()
 
@@ -122,6 +124,14 @@ class ListViewModel : ViewModel() {
 
     fun getTvShowSeasonDetails(id: Int, season: Int) {
         fetchTvShowSeasonDetails(id, season)
+    }
+
+    fun getPersonDetails(id: Int) {
+        fetchPersonDetails(id)
+    }
+
+    fun getPersonCombinedCredits(id: Int) {
+        fetchPersonCombinedCredits(id)
     }
 
     private fun fetchMovieGenres() {
@@ -503,6 +513,42 @@ class ListViewModel : ViewModel() {
                 .subscribeWith(object : DisposableSingleObserver<TvShowSeasonResponse>() {
                     override fun onSuccess(t: TvShowSeasonResponse) {
                         tvShowSeasonDetails.value = t
+                    }
+
+                    override fun onError(e: Throwable) {
+                        loadError.value = true
+                    }
+
+                })
+        )
+    }
+
+    private fun fetchPersonDetails(id: Int) {
+        disposable.add(
+            tmdbService.getPersonInfo(id)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<PersonDetailsResponse>() {
+                    override fun onSuccess(t: PersonDetailsResponse) {
+                        personDetails.value = t
+                    }
+
+                    override fun onError(e: Throwable) {
+                        loadError.value = true
+                    }
+
+                })
+        )
+    }
+
+    private fun fetchPersonCombinedCredits(id: Int) {
+        disposable.add(
+            tmdbService.getPersonCombinedCredits(id)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<PersonCombinedResponse>() {
+                    override fun onSuccess(t: PersonCombinedResponse) {
+                        personCombinedCredits.value = t
                     }
 
                     override fun onError(e: Throwable) {

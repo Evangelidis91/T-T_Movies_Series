@@ -11,7 +11,7 @@ object Tracking {
     fun trackListCategory(context: Context, category: String) {
         firebaseAnalytics = FirebaseAnalytics.getInstance(context)
         val bundle = Bundle()
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, category)
+        bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, category)
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM_LIST, bundle)
     }
 }

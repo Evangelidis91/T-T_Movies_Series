@@ -15,6 +15,7 @@ import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.model.*
 import com.evangelidis.t_tmoviesseries.utils.Constants
 import com.evangelidis.t_tmoviesseries.utils.Constants.ACTOR_IMAGE_URL
+import com.evangelidis.t_tmoviesseries.utils.Constants.PERSON_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.YOUTUBE_THUMBNAIL_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.YOUTUBE_VIDEO_URL
@@ -186,9 +187,9 @@ class TvShowActivity : AppCompatActivity() {
                 textView1.text = cast.character
                 thumbnail.requestLayout()
                 thumbnail.setOnClickListener {
-//                    val intent = Intent(this@TvShowActivity, PersonActivity::class.java)
-//                    intent.putExtra(PERSON_ID, cast.id)
-//                    startActivity(intent)
+                    val intent = Intent(this@TvShowActivity, PersonActivity::class.java)
+                    intent.putExtra(PERSON_ID, cast.id)
+                    startActivity(intent)
                 }
 
                 Glide.with(this@TvShowActivity)
