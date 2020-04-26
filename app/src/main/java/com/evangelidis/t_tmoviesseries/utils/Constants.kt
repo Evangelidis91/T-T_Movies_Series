@@ -3,6 +3,7 @@ package com.evangelidis.t_tmoviesseries.utils
 object Constants {
 
     const val SPLASHSCREEN_TIME = 2500L
+    const val DATE_FORMAT = "yyyy-MM-dd"
 
     const val BASE_URL = "https://api.themoviedb.org/3/"
     const val LANGUAGE = "en-US"

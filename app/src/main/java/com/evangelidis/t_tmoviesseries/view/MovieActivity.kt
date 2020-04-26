@@ -74,7 +74,7 @@ class MovieActivity : AppCompatActivity() {
         })
 
         viewModel.movieVideos.observe(this, Observer { data ->
-            data?.let {
+            data.results?.let {
                 setUpVideosUI(data.results)
             }
         })
@@ -93,11 +93,9 @@ class MovieActivity : AppCompatActivity() {
     }
 
     private fun setUpRecommendationMoviesUI(data: MoviesListResponse) {
-
         movieRecommendations.removeAllViews()
-        if (!data.results.isNullOrEmpty()) {
-            recommendationsMoviesContainer.visibility = View.VISIBLE
-            for (result in data.results) {
+        data.results?.let {
+            for (result in it) {
                 val parent = layoutInflater.inflate(
                     R.layout.thumbnail_movie,
                     movieRecommendations,
@@ -110,29 +108,28 @@ class MovieActivity : AppCompatActivity() {
                 movieRate.text = resources.getString(R.string.movie_rate)
                     .replace("{MOVIE_RATE}", result.voteAverage.toString())
 
+                Glide.with(this)
+                    .load(ACTOR_IMAGE_URL + result.posterPath)
+                    .apply(RequestOptions.placeholderOf(R.color.mainBackground))
+                    .into(thumbnail)
+
                 thumbnail.setOnClickListener {
                     val intent = Intent(this, MovieActivity::class.java)
                     intent.putExtra(Constants.MOVIE_ID, result.id)
                     startActivity(intent)
                 }
-                Glide.with(this)
-                    .load(ACTOR_IMAGE_URL + result.posterPath)
-                    .apply(RequestOptions.placeholderOf(R.color.mainBackground))
-                    .into(thumbnail)
+
                 movieRecommendations.addView(parent)
             }
+            recommendationsMoviesContainer.visibility = View.VISIBLE
         }
-
     }
 
     private fun setUpSimilarMoviesUI(data: MoviesListResponse) {
-
         movieSimilar.removeAllViews()
-        if (!data.results.isNullOrEmpty()) {
-            similarMoviesContainer.visibility = View.VISIBLE
-            for (similarResult in data.results) {
-                val parent =
-                    layoutInflater.inflate(R.layout.thumbnail_movie, movieSimilar, false)
+        data.results?.let {
+            for (similarResult in it) {
+                val parent = layoutInflater.inflate(R.layout.thumbnail_movie, movieSimilar, false)
                 val thumbnail = parent.findViewById<ImageView>(R.id.thumbnail)
                 val movieName = parent.findViewById<TextView>(R.id.movie_name)
                 val movieRate = parent.findViewById<TextView>(R.id.movie_rate)
@@ -140,44 +137,42 @@ class MovieActivity : AppCompatActivity() {
                 movieRate.text = resources.getString(R.string.movie_rate)
                     .replace("{MOVIE_RATE}", similarResult.voteAverage.toString())
 
+                Glide.with(this)
+                    .load(ACTOR_IMAGE_URL + similarResult.posterPath)
+                    .apply(RequestOptions.placeholderOf(R.color.mainBackground))
+                    .into(thumbnail)
+
                 thumbnail.setOnClickListener {
                     val intent = Intent(this, MovieActivity::class.java)
                     intent.putExtra(Constants.MOVIE_ID, similarResult.id)
                     startActivity(intent)
                 }
 
-                Glide.with(this)
-                    .load(ACTOR_IMAGE_URL + similarResult.posterPath)
-                    .apply(RequestOptions.placeholderOf(R.color.mainBackground))
-                    .into(thumbnail)
                 movieSimilar.addView(parent)
             }
+            similarMoviesContainer.visibility = View.VISIBLE
         }
-
     }
 
-    private fun setUpVideosUI(videos: List<Video>?) {
+    private fun setUpVideosUI(videos: List<Video>) {
         movieVideos.removeAllViews()
-        if (!videos.isNullOrEmpty()) {
-            videosContainer.visibility = View.VISIBLE
-            for (video in videos) {
-                val parent =
-                    layoutInflater.inflate(R.layout.thumbnail_trailer, movieVideos, false)
+        videos.let {
+            for (video in it) {
+                val parent = layoutInflater.inflate(R.layout.thumbnail_trailer, movieVideos, false)
                 val thumbnail = parent.findViewById<ImageView>(R.id.thumbnail)
-                thumbnail.requestLayout()
-                thumbnail.setOnClickListener {
-                    showTrailer(
-                        String.format(YOUTUBE_VIDEO_URL, video.key)
-                    )
-                }
+
                 Glide.with(this)
                     .load(String.format(YOUTUBE_THUMBNAIL_URL, video.key))
-                    .apply(
-                        RequestOptions.placeholderOf(R.color.mainBackground).centerCrop()
-                    )
+                    .apply(RequestOptions.placeholderOf(R.color.mainBackground))
                     .into(thumbnail)
+
+                thumbnail.setOnClickListener {
+                    showTrailer(String.format(YOUTUBE_VIDEO_URL, video.key))
+                }
+
                 movieVideos.addView(parent)
             }
+            videosContainer.visibility = View.VISIBLE
         }
     }
 
@@ -187,10 +182,9 @@ class MovieActivity : AppCompatActivity() {
     }
 
     private fun setUpActors(casts: List<MovieCast>?) {
-        actorsContainer.visibility = View.VISIBLE
         movieActors.removeAllViews()
-        if (!casts.isNullOrEmpty()) {
-            for (cast in casts) {
+        casts?.let {
+            for (cast in it) {
                 val parent =
                     layoutInflater.inflate(R.layout.thumbnail_actors_list, movieActors, false)
                 val thumbnail = parent.findViewById<ImageView>(R.id.thumbnail)
@@ -198,27 +192,26 @@ class MovieActivity : AppCompatActivity() {
                 val textView1 = parent.findViewById<TextView>(R.id.actor_character)
                 textView.text = cast.name
                 textView1.text = cast.character
-                thumbnail.requestLayout()
-                thumbnail.setOnClickListener {
-                    val intent = Intent(this@MovieActivity, PersonActivity::class.java)
-                    intent.putExtra(Constants.PERSON_ID, cast.id)
-                    startActivity(intent)
-                }
 
                 Glide.with(this)
                     .load(ACTOR_IMAGE_URL + cast.profilePath)
                     .apply(RequestOptions.placeholderOf(R.color.mainBackground))
                     .into(thumbnail)
 
+                thumbnail.setOnClickListener {
+                    val intent = Intent(this@MovieActivity, PersonActivity::class.java)
+                    intent.putExtra(Constants.PERSON_ID, cast.id)
+                    startActivity(intent)
+                }
+
                 movieActors.addView(parent)
             }
+            actorsContainer.visibility = View.VISIBLE
         }
     }
 
     private fun setUpDirectors(crew: List<MovieCrew>?) {
-
         val directorsList = ArrayList<String>()
-
         crew?.let { it ->
             for (x in it.indices) {
                 if (it[x].job == "Director") {
@@ -228,10 +221,7 @@ class MovieActivity : AppCompatActivity() {
                 }
             }
         }
-
-
-        if (!directorsList.isNullOrEmpty()) {
-            directorsContainer.visibility = View.VISIBLE
+        if (directorsList.isNotEmpty()) {
             when (directorsList.size) {
                 1 -> {
                     movieDirectors.text = directorsList[0]
@@ -251,13 +241,11 @@ class MovieActivity : AppCompatActivity() {
                     movieDirectors.text = directorsString
                 }
             }
+            directorsContainer.visibility = View.VISIBLE
         }
-
-
     }
 
     private fun setUpUI(data: MovieDetailsResponse) {
-
         if (!data.backdropPath.isNullOrEmpty()) {
             Glide.with(this)
                 .load(IMAGE_BASE_URL + data.backdropPath)
@@ -266,9 +254,9 @@ class MovieActivity : AppCompatActivity() {
         }
 
         if (!data.title.isNullOrEmpty()) {
-            movieTitle.visibility = View.VISIBLE
-            movieTitle.text = data.title
             toolbar_title.text = data.title
+            movieTitle.text = data.title
+            movieTitle.visibility = View.VISIBLE
         }
 
         movieRating.text = data.voteAverage.toString()
@@ -279,23 +267,22 @@ class MovieActivity : AppCompatActivity() {
             movieDuration.text = formatHoursAndMinutes(it)
         }
 
-
-        if (!data.overview.isNullOrEmpty()) {
+        data.overview?.let {
+            movieDetailsOverview.text = it
             summaryContainer.visibility = View.VISIBLE
-            movieDetailsOverview.text = data.overview
         }
 
         data.budget?.let {
             movieGrow.visibility = View.VISIBLE
-            if (data.budget > 0.0) {
+            if (it > 0.0) {
                 budgetContainer.visibility = View.VISIBLE
-                movieBudget.text = convertToRealNumber(data.budget)
+                movieBudget.text = convertToRealNumber(it)
                 data.revenue?.let {
                     if (data.revenue > 0.0) {
                         boxofficeContainer.visibility = View.VISIBLE
-                        movieBoxOffice.text = convertToRealNumber(data.revenue)
+                        movieBoxOffice.text = convertToRealNumber(it)
                         movieBoxOfficePercent.text =
-                            calculatePercentBoxOffice(data.budget, data.revenue)
+                            calculatePercentBoxOffice(data.budget, it)
                     }
                 }
             }
@@ -305,10 +292,10 @@ class MovieActivity : AppCompatActivity() {
     private fun formatHoursAndMinutes(totalMinutes: Int): String {
         val hours = (totalMinutes / 60).toString()
         val minutes = (totalMinutes % 60).toString()
-        return resources.getString(R.string.hour_format).replace(
-            "{hour}",
-            (hours)
-        ) + resources.getString(R.string.minutes_format).replace("{min}", minutes)
+        return resources.getString(R.string.hour_format)
+            .replace("{hour}", (hours)) +
+                resources.getString(R.string.minutes_format)
+                    .replace("{min}", minutes)
     }
 
     private fun setUpGenres(data: List<Genre>) {
@@ -327,7 +314,6 @@ class MovieActivity : AppCompatActivity() {
     }
 
     private fun calculatePercentBoxOffice(first: Double, second: Double): String {
-
         val percentValue = ((100 * (second - first)) / first).roundToInt()
         return when {
             percentValue > 0 -> {

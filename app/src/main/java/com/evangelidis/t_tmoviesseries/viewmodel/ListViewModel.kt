@@ -164,7 +164,6 @@ class ListViewModel : ViewModel() {
                     override fun onError(e: Throwable) {
 
                     }
-
                 })
         )
     }
@@ -300,7 +299,6 @@ class ListViewModel : ViewModel() {
                     override fun onError(e: Throwable) {
                         loadError.value = true
                     }
-
                 })
         )
     }
@@ -320,7 +318,6 @@ class ListViewModel : ViewModel() {
                     override fun onError(e: Throwable) {
                         loadError.value = true
                     }
-
                 })
         )
     }
@@ -338,7 +335,6 @@ class ListViewModel : ViewModel() {
                     override fun onError(e: Throwable) {
                         loadError.value = true
                     }
-
                 })
         )
     }
@@ -356,7 +352,6 @@ class ListViewModel : ViewModel() {
                     override fun onError(e: Throwable) {
                         loadError.value = true
                     }
-
                 })
         )
     }
@@ -374,7 +369,6 @@ class ListViewModel : ViewModel() {
                     override fun onError(e: Throwable) {
                         loadError.value = true
                     }
-
                 })
         )
     }
@@ -392,7 +386,6 @@ class ListViewModel : ViewModel() {
                     override fun onError(e: Throwable) {
                         loadError.value = true
                     }
-
                 })
         )
     }
@@ -410,7 +403,6 @@ class ListViewModel : ViewModel() {
                     override fun onError(e: Throwable) {
                         loadError.value = true
                     }
-
                 })
         )
     }
@@ -428,7 +420,6 @@ class ListViewModel : ViewModel() {
                     override fun onError(e: Throwable) {
                         loadError.value = true
                     }
-
                 })
         )
     }
@@ -446,7 +437,6 @@ class ListViewModel : ViewModel() {
                     override fun onError(e: Throwable) {
                         loadError.value = true
                     }
-
                 })
         )
     }
@@ -464,7 +454,6 @@ class ListViewModel : ViewModel() {
                     override fun onError(e: Throwable) {
                         loadError.value = true
                     }
-
                 })
         )
     }
@@ -482,7 +471,6 @@ class ListViewModel : ViewModel() {
                     override fun onError(e: Throwable) {
                         loadError.value = true
                     }
-
                 })
         )
     }
@@ -500,7 +488,6 @@ class ListViewModel : ViewModel() {
                     override fun onError(e: Throwable) {
                         loadError.value = true
                     }
-
                 })
         )
     }
@@ -518,7 +505,6 @@ class ListViewModel : ViewModel() {
                     override fun onError(e: Throwable) {
                         loadError.value = true
                     }
-
                 })
         )
     }
@@ -536,7 +522,6 @@ class ListViewModel : ViewModel() {
                     override fun onError(e: Throwable) {
                         loadError.value = true
                     }
-
                 })
         )
     }
@@ -554,7 +539,6 @@ class ListViewModel : ViewModel() {
                     override fun onError(e: Throwable) {
                         loadError.value = true
                     }
-
                 })
         )
     }

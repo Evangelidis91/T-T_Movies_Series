@@ -14,6 +14,7 @@ import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.model.PersonCombinedResponse
 import com.evangelidis.t_tmoviesseries.model.PersonDetailsResponse
 import com.evangelidis.t_tmoviesseries.utils.Constants.ACTOR_IMAGE_URL
+import com.evangelidis.t_tmoviesseries.utils.Constants.DATE_FORMAT
 import com.evangelidis.t_tmoviesseries.utils.Constants.MOVIE_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.PERSON_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_ID
@@ -27,7 +28,7 @@ class PersonActivity : AppCompatActivity() {
 
     private var personId: Int = 0
     lateinit var viewModel: ListViewModel
-    private val sdf = SimpleDateFormat("yyyy-MM-dd")
+    private val sdf = SimpleDateFormat(DATE_FORMAT)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +45,6 @@ class PersonActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-
         viewModel.personDetails.observe(this, Observer { data ->
             data?.let {
                 setUpPersonInfoUI(data)
@@ -59,7 +59,6 @@ class PersonActivity : AppCompatActivity() {
     }
 
     private fun setUpPersonInfoUI(data: PersonDetailsResponse) {
-
         data.name?.let {
             toolbar_title.text = it
             actorName.text = it
@@ -71,17 +70,17 @@ class PersonActivity : AppCompatActivity() {
         }
 
         data.profilePath?.let {
-            Glide.with(this@PersonActivity)
+            Glide.with(this)
                 .load(ACTOR_IMAGE_URL + it)
                 .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
                 .into(actorImage)
         }
 
         data.gender?.let {
-            when(it){
-                1 -> gender.text = "Gender: Female"
-                2 -> gender.text = "Gender: Male"
-                else -> gender.text = "Gender: Not specified"
+            when (it) {
+                1 -> gender.text = getString(R.string.gender_female)
+                2 -> gender.text = getString(R.string.gender_male)
+                else -> gender.text = getString(R.string.gender_no)
             }
         }
 
@@ -100,21 +99,21 @@ class PersonActivity : AppCompatActivity() {
         val currentDate = Date()
 
         data.birthday?.let {
-            if (data.deathday.isNullOrEmpty()){
+            if (data.deathday.isNullOrEmpty()) {
                 val date = sdf.parse(it)
                 val age = getDiffYears(date, currentDate)
-                born.text = "Born: " + it + " (age " + age + ")"
-            } else{
-                deathday.visibility = View.VISIBLE
-                //born.text = response.birthday
+                born.text = getString(R.string.person_single_born)
+                    .replace("{DATE}", it)
+                    .replace("{AGE}", age.toString())
+            } else {
                 val dateBorn = sdf.parse(it)
                 val dateDied = sdf.parse(data.deathday)
                 val age = getDiffYears(dateBorn, dateDied)
                 born.text = "Born: " + it
                 deathday.text = "Died: " + data.deathday + " (age " + age + ")"
+                deathday.visibility = View.VISIBLE
             }
         }
-
     }
 
     private fun getDiffYears(first: Date, last: Date): Int {
@@ -123,7 +122,8 @@ class PersonActivity : AppCompatActivity() {
         var diff = b.get(Calendar.YEAR) - a.get(Calendar.YEAR)
         if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) || a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(
                 Calendar.DATE
-            ) > b.get(Calendar.DATE)) {
+            ) > b.get(Calendar.DATE)
+        ) {
             diff--
         }
         return diff
@@ -157,7 +157,7 @@ class PersonActivity : AppCompatActivity() {
                         intent.putExtra(MOVIE_ID, result.id)
                         startActivity(intent)
                     }
-                } else if (result.mediaType == "tv"){
+                } else if (result.mediaType == "tv") {
                     movieName.text = result.name
                     actorCharacter.visibility = View.GONE
                     parent.setOnClickListener {

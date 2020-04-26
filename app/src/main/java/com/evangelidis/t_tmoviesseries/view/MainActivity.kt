@@ -5,7 +5,6 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.NonNull
@@ -107,8 +106,121 @@ class MainActivity : AppCompatActivity() {
         setupNavigationViewClickListeners()
     }
 
-    private fun setupNavigationViewClickListeners() {
+    private fun observeViewModel() {
+        viewModel.genresMovieData.observe(this, Observer { data ->
+            data.genres?.let {
+                moviesListAdapter.appendGenres(it)
+            }
+        })
 
+        viewModel.genresTvShowData.observe(this, Observer { data ->
+            data.genres?.let {
+                tvShowAdapter.appendGenres(it)
+            }
+        })
+
+        viewModel.moviesList.observe(this, Observer { data ->
+            data.results?.let {
+                moviesList.visibility = View.VISIBLE
+                tvshowList.visibility = View.GONE
+                if (listOfRetrievedPages.size == 1) {
+                    moviesListAdapter.updateData(it)
+                } else {
+                    moviesListAdapter.appendData(it)
+                }
+            }
+        })
+
+        viewModel.tvShowsList.observe(this, Observer { data ->
+            data.results?.let {
+                moviesList.visibility = View.GONE
+                tvshowList.visibility = View.VISIBLE
+                if (listOfRetrievedPages.size == 1) {
+                    tvShowAdapter.updateData(it)
+                } else {
+                    tvShowAdapter.appendData(it)
+                }
+            }
+        })
+
+        viewModel.loadError.observe(this, Observer { isError ->
+            isError?.let {
+                list_error.visibility = if (it) View.VISIBLE else View.GONE
+                if (it) {
+                    list_error.visibility = View.VISIBLE
+                    TanTinToast.Warning(this).text("Please check your internet connection.").show()
+                }
+            }
+        })
+
+        viewModel.loading.observe(this, Observer { isLoading ->
+            isLoading?.let {
+                loading_view.visibility = if (it) View.VISIBLE else View.GONE
+                if (it) {
+                    list_error.visibility = View.GONE
+                    moviesList.visibility = View.GONE
+                }
+            }
+        })
+    }
+
+    private fun setUpScrollListener() {
+        val manager = LinearLayoutManager(this)
+        moviesList.layoutManager = manager
+        moviesList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val totalItemCount = manager.itemCount
+                val visibleItemCount = manager.childCount
+                val firstVisibleItem = manager.findFirstVisibleItemPosition()
+                if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
+                    listOfRetrievedPages.add(listOfRetrievedPages.last() + 1)
+                    when (sortBy) {
+                        POPULAR_MOVIES -> {
+                            viewModel.getPopularMovies(listOfRetrievedPages.last())
+                        }
+                        TOP_RATED_MOVIES -> {
+                            viewModel.getTopRatedMovies(listOfRetrievedPages.last())
+                        }
+                        PLAYING_NOW_MOVIES -> {
+                            viewModel.getPlayingNowMovies(listOfRetrievedPages.last())
+                        }
+                        UPCOMING_MOVIES -> {
+                            viewModel.getUpcomingMovies(listOfRetrievedPages.last())
+                        }
+                    }
+                }
+            }
+        })
+
+        val manager1 = LinearLayoutManager(this)
+        tvshowList.layoutManager = manager1
+        tvshowList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val totalItemCount = manager1.itemCount
+                val visibleItemCount = manager1.childCount
+                val firstVisibleItem = manager1.findFirstVisibleItemPosition()
+                if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
+                    listOfRetrievedPages.add(listOfRetrievedPages.last() + 1)
+                    when (sortBy) {
+                        POPULAR_TV -> {
+                            viewModel.getPopularTvShows(listOfRetrievedPages.last())
+                        }
+                        TOP_RATED_TV -> {
+                            viewModel.getTopRatedTvShows(listOfRetrievedPages.last())
+                        }
+                        ON_THE_AIR_TV -> {
+                            viewModel.getOnAirTvShows(listOfRetrievedPages.last())
+                        }
+                        AIRING_TODAY_TV -> {
+                            viewModel.getAiringTodayTvShows(listOfRetrievedPages.last())
+                        }
+                    }
+                }
+            }
+        })
+    }
+
+    private fun setupNavigationViewClickListeners() {
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         val toggle = ActionBarDrawerToggle(
@@ -242,119 +354,5 @@ class MainActivity : AppCompatActivity() {
             expandableLayoutCommunicate.expand()
             communication_arrow.rotation = 270F
         }
-    }
-
-    private fun setUpScrollListener() {
-        val manager = LinearLayoutManager(this)
-        moviesList.layoutManager = manager
-        moviesList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(@NonNull recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val totalItemCount = manager.itemCount
-                val visibleItemCount = manager.childCount
-                val firstVisibleItem = manager.findFirstVisibleItemPosition()
-                if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
-                    listOfRetrievedPages.add(listOfRetrievedPages.last() + 1)
-                    when (sortBy) {
-                        POPULAR_MOVIES -> {
-                            viewModel.getPopularMovies(listOfRetrievedPages.last())
-                        }
-                        TOP_RATED_MOVIES -> {
-                            viewModel.getTopRatedMovies(listOfRetrievedPages.last())
-                        }
-                        PLAYING_NOW_MOVIES -> {
-                            viewModel.getPlayingNowMovies(listOfRetrievedPages.last())
-                        }
-                        UPCOMING_MOVIES -> {
-                            viewModel.getUpcomingMovies(listOfRetrievedPages.last())
-                        }
-                    }
-                }
-            }
-        })
-
-        val manager1 = LinearLayoutManager(this)
-        tvshowList.layoutManager = manager1
-        tvshowList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(@NonNull recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val totalItemCount = manager1.itemCount
-                val visibleItemCount = manager1.childCount
-                val firstVisibleItem = manager1.findFirstVisibleItemPosition()
-                if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
-                    listOfRetrievedPages.add(listOfRetrievedPages.last() + 1)
-                    when (sortBy) {
-                        POPULAR_TV -> {
-                            viewModel.getPopularTvShows(listOfRetrievedPages.last())
-                        }
-                        TOP_RATED_TV -> {
-                            viewModel.getTopRatedTvShows(listOfRetrievedPages.last())
-                        }
-                        ON_THE_AIR_TV -> {
-                            viewModel.getOnAirTvShows(listOfRetrievedPages.last())
-                        }
-                        AIRING_TODAY_TV -> {
-                            viewModel.getAiringTodayTvShows(listOfRetrievedPages.last())
-                        }
-                    }
-                }
-            }
-        })
-    }
-
-    private fun observeViewModel() {
-        viewModel.genresMovieData.observe(this, Observer { data ->
-            data.genres?.let {
-                moviesListAdapter.appendGenres(it)
-            }
-        })
-
-        viewModel.genresTvShowData.observe(this, Observer { data ->
-            data.genres?.let {
-                tvShowAdapter.appendGenres(it)
-            }
-        })
-
-        viewModel.moviesList.observe(this, Observer { data ->
-            data.results?.let {
-                moviesList.visibility = View.VISIBLE
-                tvshowList.visibility = View.GONE
-                if (listOfRetrievedPages.size == 1) {
-                    moviesListAdapter.updateData(it)
-                } else {
-                    moviesListAdapter.appendData(it)
-                }
-            }
-        })
-
-        viewModel.tvShowsList.observe(this, Observer { data ->
-            data.results?.let {
-                moviesList.visibility = View.GONE
-                tvshowList.visibility = View.VISIBLE
-                if (listOfRetrievedPages.size == 1) {
-                    tvShowAdapter.updateData(it)
-                } else {
-                    tvShowAdapter.appendData(it)
-                }
-            }
-        })
-
-        viewModel.loadError.observe(this, Observer { isError ->
-            isError?.let {
-                list_error.visibility = if (it) View.VISIBLE else View.GONE
-                if (it) {
-                    list_error.visibility = View.VISIBLE
-                    TanTinToast.Warning(this).text("Please check your internet connection.").show()
-                }
-            }
-        })
-
-        viewModel.loading.observe(this, Observer { isLoading ->
-            isLoading?.let {
-                loading_view.visibility = if (it) View.VISIBLE else View.GONE
-                if (it) {
-                    list_error.visibility = View.GONE
-                    moviesList.visibility = View.GONE
-                }
-            }
-        })
     }
 }

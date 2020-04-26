@@ -59,7 +59,6 @@ class LoginFragment : Fragment() {
         } else {
             Toast.makeText(context, "There is no internet connection", Toast.LENGTH_LONG).show()
         }
-
     }
 
     private fun loginUser(email: String, password: String) {
