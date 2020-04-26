@@ -1,6 +1,5 @@
 package com.evangelidis.t_tmoviesseries.model
 
-
 import com.google.gson.annotations.SerializedName
 
 data class PersonDetailsResponse(

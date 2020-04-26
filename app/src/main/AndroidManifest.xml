@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.evangelidis.t_tmoviesseries">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -13,18 +14,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.PersonActivity"></activity>
-        <activity android:name=".view.TvShowActivity" />
-        <activity android:name=".view.MovieActivity" />
-        <activity android:name=".login.LoginActivity" />
-        <activity android:name=".view.SplashScreenActivity">
+        <activity
+            android:name=".view.MainActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".view.TvShowActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".view.MovieActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".login.LoginActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".view.SplashScreenActivity"
+            android:screenOrientation="sensorPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.MainActivity" />
     </application>
 
 </manifest>

@@ -63,7 +63,7 @@ class MoviesListAdapter(
             releaseDate.text =
                 movie.releaseDate?.let {
                     it.split("-".toRegex()).dropLastWhile { it.isEmpty() }
-                    .toTypedArray()[0]
+                        .toTypedArray()[0]
                 }
             title.text = movie.title
             rating.text = movie.voteAverage.toString()
@@ -79,7 +79,6 @@ class MoviesListAdapter(
                 .into(poster)
 
             itemView.setOnClickListener { movieCallback.onClick(movie) }
-
         }
 
         private fun getGenres(genreIds: List<Int>): String {
@@ -88,7 +87,7 @@ class MoviesListAdapter(
                 for ((id, name) in genresList) {
                     if (id == genreId) {
                         name?.let {
-                            movieGenres.add(name)
+                            movieGenres.add(it)
                         }
                         break
                     }

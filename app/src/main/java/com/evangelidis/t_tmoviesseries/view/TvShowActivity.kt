@@ -135,11 +135,11 @@ class TvShowActivity : AppCompatActivity() {
                     if (lastYear == releasedYear) {
                         tvShowReleaseDate.text =
                             getString(R.string.tv_show_release_date_format1)
-                                .replace("{year}", releasedYear.toString() )
+                                .replace("{year}", releasedYear.toString())
                     } else {
                         tvShowReleaseDate.text = getString(R.string.tv_show_release_date_format2)
-                            .replace("{year1}", releasedYear.toString() )
-                            .replace("{year2}", it.substring(0, 4) )
+                            .replace("{year1}", releasedYear.toString())
+                            .replace("{year2}", it.substring(0, 4))
                     }
                 }
             }
@@ -153,8 +153,9 @@ class TvShowActivity : AppCompatActivity() {
         data.numberOfSeasons?.let {
             if (it == 1) {
                 tvShowAllSeasons.text = getString(R.string.one_season_text)
-            } else{
-                tvShowAllSeasons.text = getString(R.string.season_number).replace("{x}", it.toString())
+            } else {
+                tvShowAllSeasons.text =
+                    getString(R.string.season_number).replace("{x}", it.toString())
             }
         }
 
@@ -215,7 +216,7 @@ class TvShowActivity : AppCompatActivity() {
                 val thumbnail = parent.findViewById<ImageView>(R.id.thumbnail)
                 thumbnail.requestLayout()
                 thumbnail.setOnClickListener {
-                    showTrailer( String.format( YOUTUBE_VIDEO_URL, trailer.key ))
+                    showTrailer(String.format(YOUTUBE_VIDEO_URL, trailer.key))
                 }
                 Glide.with(this@TvShowActivity)
                     .load(String.format(YOUTUBE_THUMBNAIL_URL, trailer.key))
@@ -264,7 +265,6 @@ class TvShowActivity : AppCompatActivity() {
             }
         }
     }
-
 
 
     private fun setUpSimilarTvShowUI(data: TvShowListResponse) {

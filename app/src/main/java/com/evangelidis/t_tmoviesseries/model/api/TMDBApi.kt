@@ -2,11 +2,9 @@ package com.evangelidis.t_tmoviesseries.model.api
 
 import com.evangelidis.t_tmoviesseries.model.*
 import io.reactivex.Single
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import retrofit2.http.Streaming
 
 interface TMDBApi {
 
