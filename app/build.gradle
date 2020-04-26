@@ -70,6 +70,7 @@ dependencies {
 
     implementation 'com.tuyenmonkey:mkloader:1.4.0'
     implementation 'com.github.aakira:expandable-layout:1.6.0@aar'
+    implementation 'com.sun.mail:javax.mail:1.6.2'
     implementation 'com.github.Evangelidis91:TanTinToast:1.1.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.diogobernardino:williamchart:3.3.0'

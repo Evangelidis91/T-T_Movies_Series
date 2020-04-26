@@ -1,14 +1,20 @@
 package com.evangelidis.t_tmoviesseries.view
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.Toast
-import androidx.annotation.NonNull
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.Button
+import android.widget.EditText
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
@@ -18,9 +24,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.evangelidis.t_tmoviesseries.OnMoviesClickCallback
 import com.evangelidis.t_tmoviesseries.OnTvShowClickCallback
 import com.evangelidis.t_tmoviesseries.R
+import com.evangelidis.t_tmoviesseries.model.MessagePost
 import com.evangelidis.t_tmoviesseries.model.Movie
 import com.evangelidis.t_tmoviesseries.model.TvShow
 import com.evangelidis.t_tmoviesseries.utils.Constants.AIRING_TODAY_TV
+import com.evangelidis.t_tmoviesseries.utils.Constants.FIREBASE_DATABASE_DATE_FORMAT
 import com.evangelidis.t_tmoviesseries.utils.Constants.MOVIE_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.ON_THE_AIR_TV
 import com.evangelidis.t_tmoviesseries.utils.Constants.PLAYING_NOW_MOVIES
@@ -34,10 +42,21 @@ import com.evangelidis.t_tmoviesseries.utils.InternetStatus
 import com.evangelidis.t_tmoviesseries.utils.Tracking
 import com.evangelidis.t_tmoviesseries.viewmodel.ListViewModel
 import com.evangelidis.tantintoast.TanTinToast
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.navigation_drawer.*
+import java.text.SimpleDateFormat
+import java.util.*
+import javax.mail.internet.AddressException
+import javax.mail.internet.InternetAddress
 
 class MainActivity : AppCompatActivity() {
 
@@ -49,8 +68,7 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra(MOVIE_ID, movie.id)
                 startActivity(intent)
             } else {
-                TanTinToast.Warning(this@MainActivity).text(getString(R.string.no_internet))
-                    .time(Toast.LENGTH_LONG).show()
+                TanTinToast.Warning(this@MainActivity).text(getString(R.string.no_internet)).show()
             }
         }
     }
@@ -63,8 +81,7 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra(TV_SHOW_ID, tvShow.id)
                 startActivity(intent)
             } else {
-                TanTinToast.Warning(this@MainActivity).text(getString(R.string.no_internet))
-                    .time(Toast.LENGTH_LONG).show()
+                TanTinToast.Warning(this@MainActivity).text(getString(R.string.no_internet)).show()
             }
         }
     }
@@ -74,11 +91,19 @@ class MainActivity : AppCompatActivity() {
     private val tvShowAdapter = TvShowAdapter(arrayListOf(), tvShowCallback)
     private var sortBy = POPULAR_MOVIES
 
+    private lateinit var database: FirebaseDatabase
+    private lateinit var myRef: DatabaseReference
+    private var user: FirebaseUser? = null
+
     var listOfRetrievedPages = arrayListOf(1)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        database = FirebaseDatabase.getInstance()
+        myRef = database.getReference("message")
+        user = FirebaseAuth.getInstance().currentUser
 
         toolbar_title.text = getString(R.string.popular_movies)
 
@@ -323,7 +348,105 @@ class MainActivity : AppCompatActivity() {
             drawer.closeDrawer(GravityCompat.START)
         }
 
-        //nav_send.setOnClickListener { submitMessage() }
+        nav_send.setOnClickListener { submitMessage() }
+    }
+
+    private fun submitMessage() {
+        val sliderView = LayoutInflater.from(this).inflate(R.layout.submit_question_layout, null)
+        val messageDialog: AlertDialog = AlertDialog.Builder(this).create()
+        messageDialog.setView(sliderView)
+        messageDialog.show()
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+        val emailInput = sliderView.findViewById<TextInputLayout>(R.id.profile_input_email)
+        val emailET = sliderView.findViewById<EditText>(R.id.profile_et_email)
+        val messageInput = sliderView.findViewById<TextInputLayout>(R.id.profile_input_message)
+        val messageET = sliderView.findViewById<EditText>(R.id.profile_et_message)
+        val nameET = sliderView.findViewById<EditText>(R.id.profile_et_name)
+        val submitMessageToCloud = sliderView.findViewById<Button>(R.id.submit_message)
+
+        user?.email?.let {
+            emailET.setText(it)
+            nameET.requestFocus()
+        }
+
+        // When user press done in keyboard
+        messageET.setOnEditorActionListener { v, actionId, event ->
+            var handled = false
+            if (actionId == EditorInfo.IME_ACTION_GO) {
+                if (isValidEmailAddress(emailET.text.toString()) && messageET.text.isNotEmpty()) {
+                    val userName: String = if (nameET.text != null) {
+                        nameET.text.toString()
+                    } else {
+                        ""
+                    }
+                    val df = SimpleDateFormat(FIREBASE_DATABASE_DATE_FORMAT)
+                    val date = df.format(Calendar.getInstance().time)
+                    val post = MessagePost(
+                        emailET.text.toString(),
+                        messageET.text.toString(),
+                        date,
+                        userName
+                    )
+                    myRef.child(getString(R.string.firebase_Users_Posts_Path)).push()
+                        .setValue(post)
+                        .addOnSuccessListener(OnSuccessListener<Void> {
+                            TanTinToast.Success(this).text(getString(R.string.message_succ)).show()
+                            messageDialog.dismiss()
+                        })
+                        .addOnFailureListener(OnFailureListener {
+                            TanTinToast.Error(this).text(getString(R.string.message_fail)).show()
+                        })
+
+                    val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+
+                } else {
+                    if (!isValidEmailAddress(emailET.text.toString())) {
+                        emailInput.error = getString(R.string.mail_error)
+                    } else if (messageET.text.isEmpty()) {
+                        messageInput.error = getString(R.string.message_short)
+                    }
+                }
+                handled = true
+            }
+            handled
+        }
+
+        submitMessageToCloud.setOnClickListener {
+            if (isValidEmailAddress(emailET.text.toString()) && messageET.text.isNotEmpty()) {
+                val userName: String = if (nameET.text.isNullOrEmpty()) {
+                    ""
+                } else {
+                    nameET.text.toString()
+                }
+                val df = SimpleDateFormat(FIREBASE_DATABASE_DATE_FORMAT)
+                val date = df.format(Calendar.getInstance().time)
+                val post = MessagePost(
+                    emailET.text.toString(),
+                    messageET.text.toString(),
+                    date,
+                    userName
+                )
+                myRef.child(resources.getString(R.string.firebase_Users_Posts_Path)).push()
+                    .setValue(post)
+                    .addOnSuccessListener(OnSuccessListener<Void> {
+                            TanTinToast.Success(this).text(getString(R.string.message_succ)).show()
+                            messageDialog.dismiss()
+                        })
+                    .addOnFailureListener(OnFailureListener {
+                        TanTinToast.Error(this).text(getString(R.string.message_fail)).show()
+                    })
+                val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+            } else {
+                if (!isValidEmailAddress(emailET.text.toString())) {
+                    emailInput.error = getString(R.string.mail_error)
+                } else if (messageET.text.isEmpty()) {
+                    messageInput.error = getString(R.string.message_short)
+                }
+            }
+        }
     }
 
     private fun expandMoviesLayout() {
@@ -354,5 +477,16 @@ class MainActivity : AppCompatActivity() {
             expandableLayoutCommunicate.expand()
             communication_arrow.rotation = 270F
         }
+    }
+
+    private fun isValidEmailAddress(email: String): Boolean {
+        var result = true
+        try {
+            val emailAddress = InternetAddress(email)
+            emailAddress.validate()
+        } catch (ex: AddressException) {
+            result = false
+        }
+        return result
     }
 }
