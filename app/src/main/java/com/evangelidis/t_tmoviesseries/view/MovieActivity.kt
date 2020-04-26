@@ -200,9 +200,9 @@ class MovieActivity : AppCompatActivity() {
                 textView1.text = cast.character
                 thumbnail.requestLayout()
                 thumbnail.setOnClickListener {
-//                    val intent = Intent(this@MovieActivity, PersonActivity::class.java)
-//                    intent.putExtra(Constants.PERSON_ID, cast.id)
-//                    startActivity(intent)
+                    val intent = Intent(this@MovieActivity, PersonActivity::class.java)
+                    intent.putExtra(Constants.PERSON_ID, cast.id)
+                    startActivity(intent)
                 }
 
                 Glide.with(this)

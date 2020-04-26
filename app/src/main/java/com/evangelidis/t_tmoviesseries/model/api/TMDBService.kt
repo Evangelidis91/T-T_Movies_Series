@@ -99,4 +99,12 @@ class TMDBService {
     fun getTvShowSeasonDetails(id: Int, season: Int): Single<TvShowSeasonResponse> {
         return api.getTvShowSeasonDetails(id, season, API_KEY, LANGUAGE)
     }
+
+    fun getPersonInfo(id: Int): Single<PersonDetailsResponse> {
+        return api.getPersonInfo(id, API_KEY, LANGUAGE)
+    }
+
+    fun getPersonCombinedCredits(id: Int): Single<PersonCombinedResponse> {
+        return api.getPersonCombinedCredits(id, API_KEY, LANGUAGE)
+    }
 }

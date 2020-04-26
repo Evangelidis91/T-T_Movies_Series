@@ -2,9 +2,11 @@ package com.evangelidis.t_tmoviesseries.model.api
 
 import com.evangelidis.t_tmoviesseries.model.*
 import io.reactivex.Single
+import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.Streaming
 
 interface TMDBApi {
 
@@ -151,4 +153,18 @@ interface TMDBApi {
         @Query("api_key") apiKEy: String,
         @Query("language") language: String
     ): Single<TvShowSeasonResponse>
+
+    @GET("person/{person_id}")
+    fun getPersonInfo(
+        @Path("person_id") id: Int,
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String
+    ): Single<PersonDetailsResponse>
+
+    @GET("person/{person_id}/combined_credits")
+    fun getPersonCombinedCredits(
+        @Path("person_id") id: Int,
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String
+    ): Single<PersonCombinedResponse>
 }
