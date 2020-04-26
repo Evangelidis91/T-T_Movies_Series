@@ -4,6 +4,7 @@ object Constants {
 
     const val SPLASHSCREEN_TIME = 2500L
     const val DATE_FORMAT = "yyyy-MM-dd"
+    const val FIREBASE_DATABASE_DATE_FORMAT = "dd/MMM/yy HH:mm"
 
     const val BASE_URL = "https://api.themoviedb.org/3/"
     const val LANGUAGE = "en-US"

@@ -18,6 +18,15 @@
     <string name="airing_today_tv_shows">Airing today TV shows</string>
     <string name="communicate">Communicate</string>
     <string name="send_message">Send message</string>
+    <string name="submit_question">Submit a question</string>
+    <string name="your_name">Your name (Optional)</string>
+    <string name="your_message">Your message</string>
+
+    <string name="firebase_Users_Posts_Path">user-posts</string>
+    <string name="message_succ">Message submitted successful.</string>
+    <string name="message_fail">Message submitted unsuccessful. Please try again</string>
+    <string name="mail_error">Not a valid email</string>
+    <string name="message_short">Too short message. Write at least 10 chars</string>
 
     <string name="login">Login</string>
     <string name="sign_up">Sign up</string>
@@ -69,6 +78,5 @@
     <string name="gender_male">Gender: Male</string>
     <string name="gender_female">Gender: Female</string>
     <string name="gender_no">Gender: Not specified</string>
-
 
 </resources>
