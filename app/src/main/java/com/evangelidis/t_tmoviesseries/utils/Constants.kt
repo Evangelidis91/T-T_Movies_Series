@@ -32,4 +32,7 @@ object Constants {
     const val TV_SHOW_ID = "tv_show_id"
     const val PERSON_ID = "person_id"
 
+    const val BIOGRAPHY_TEXT = "biography_text"
+    const val ACTOR_NAME = "actor_name"
+
 }

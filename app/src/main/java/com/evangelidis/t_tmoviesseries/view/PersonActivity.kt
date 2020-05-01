@@ -14,6 +14,8 @@ import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.model.PersonCombinedResponse
 import com.evangelidis.t_tmoviesseries.model.PersonDetailsResponse
 import com.evangelidis.t_tmoviesseries.utils.Constants.ACTOR_IMAGE_URL
+import com.evangelidis.t_tmoviesseries.utils.Constants.ACTOR_NAME
+import com.evangelidis.t_tmoviesseries.utils.Constants.BIOGRAPHY_TEXT
 import com.evangelidis.t_tmoviesseries.utils.Constants.DATE_FORMAT
 import com.evangelidis.t_tmoviesseries.utils.Constants.MOVIE_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.PERSON_ID
@@ -90,6 +92,12 @@ class PersonActivity : AppCompatActivity() {
 
         data.biography?.let {
             biographyContent.text = it
+            biographyLayout.setOnClickListener {
+                val intent = Intent(this@PersonActivity, BiographyActivity::class.java)
+                intent.putExtra(BIOGRAPHY_TEXT, data.biography)
+                intent.putExtra(ACTOR_NAME, data.name)
+                startActivity(intent)
+            }
         }
 
         setUpActorDates(data)
