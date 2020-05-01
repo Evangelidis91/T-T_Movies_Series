@@ -42,7 +42,7 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="skip">Skip this step</string>
 
-    <string name="error_for_data">An error occurred while loading Data</string>
+    <string name="error_for_data">An error occurred while loading Data.</string>
     <string name="no_internet">It looks like you\'re offline. Please check your internet connection.</string>
 
     <string name="reviews"><u>Reviews</u></string>
