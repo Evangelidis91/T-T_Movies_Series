@@ -21,6 +21,7 @@
     <string name="submit_question">Submit a question</string>
     <string name="your_name">Your name (Optional)</string>
     <string name="your_message">Your message</string>
+    <string name="biography_label">Biography</string>
 
     <string name="firebase_Users_Posts_Path">user-posts</string>
     <string name="message_succ">Message submitted successful.</string>

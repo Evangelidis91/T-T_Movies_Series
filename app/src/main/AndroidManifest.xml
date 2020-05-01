@@ -14,6 +14,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".view.BiographyActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".view.PersonActivity"
+            android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".view.MainActivity"
             android:screenOrientation="sensorPortrait" />
