@@ -19,6 +19,7 @@ import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_BASE_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.YOUTUBE_THUMBNAIL_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.YOUTUBE_VIDEO_URL
 import com.evangelidis.t_tmoviesseries.viewmodel.ListViewModel
+import com.evangelidis.tantintoast.TanTinToast
 import kotlinx.android.synthetic.main.activity_movie.*
 import kotlinx.android.synthetic.main.main_toolbar.*
 import java.text.DecimalFormat
@@ -88,6 +89,13 @@ class MovieActivity : AppCompatActivity() {
         viewModel.movieRecommendation.observe(this, Observer { data ->
             data?.let {
                 setUpRecommendationMoviesUI(data)
+            }
+        })
+
+        viewModel.loadError.observe(this, Observer { data ->
+            data?.let {
+                TanTinToast.Warning(this).text(resources.getString(R.string.error_for_data)).show()
+                finish()
             }
         })
     }
