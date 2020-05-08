@@ -16,7 +16,9 @@ import com.evangelidis.t_tmoviesseries.model.*
 import com.evangelidis.t_tmoviesseries.utils.Constants
 import com.evangelidis.t_tmoviesseries.utils.Constants.ACTOR_IMAGE_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.PERSON_ID
+import com.evangelidis.t_tmoviesseries.utils.Constants.TOTAL_SEASONS
 import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_ID
+import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_NAME
 import com.evangelidis.t_tmoviesseries.utils.Constants.YOUTUBE_THUMBNAIL_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.YOUTUBE_VIDEO_URL
 import com.evangelidis.t_tmoviesseries.viewmodel.ListViewModel
@@ -32,6 +34,8 @@ class TvShowActivity : AppCompatActivity() {
 
     private var tvShowId = 0
     lateinit var viewModel: ListViewModel
+
+    private var totalSeasonsNumber = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,9 +55,16 @@ class TvShowActivity : AppCompatActivity() {
         viewModel.getTvShowVideos(tvShowId)
         viewModel.getTvShowSimilar(tvShowId)
         viewModel.getTvShowRecommendation(tvShowId)
-        viewModel.getTvShowSeasonDetails(tvShowId, 1)
 
         observeViewModel()
+
+        tvShowAllSeasons.setOnClickListener {
+            val intent = Intent(this@TvShowActivity, SeasonsActivity::class.java)
+            intent.putExtra(TOTAL_SEASONS, totalSeasonsNumber)
+            intent.putExtra(TV_SHOW_NAME, tvShowTitle.text)
+            intent.putExtra(TV_SHOW_ID, tvShowId)
+            startActivity(intent)
+        }
     }
 
     private fun observeViewModel() {
@@ -61,6 +72,9 @@ class TvShowActivity : AppCompatActivity() {
         viewModel.tvShowDetails.observe(this, Observer { data ->
             data?.let {
                 setUpUI(data)
+                data.numberOfSeasons?.let {
+                    totalSeasonsNumber = data.numberOfSeasons
+                }
                 data.genres?.let {
                     setUpGenres(it)
                 }

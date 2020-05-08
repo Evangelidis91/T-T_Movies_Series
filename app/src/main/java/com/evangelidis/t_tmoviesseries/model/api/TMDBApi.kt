@@ -2,11 +2,9 @@ package com.evangelidis.t_tmoviesseries.model.api
 
 import com.evangelidis.t_tmoviesseries.model.*
 import io.reactivex.Single
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import retrofit2.http.Streaming
 
 interface TMDBApi {
 
@@ -168,7 +166,6 @@ interface TMDBApi {
         @Query("language") language: String
     ): Single<PersonCombinedResponse>
 
-    @Streaming
     @GET("trending/all/day")
     fun getTrendings(
         @Query("api_key") apiKEy: String,
@@ -176,7 +173,6 @@ interface TMDBApi {
         @Query("language") language: String
     ): Single<MultisearchResponse>
 
-    @Streaming
     @GET("search/multi")
     fun getMultiSearchResult(
         @Query("api_key") apiKey: String,
@@ -184,4 +180,5 @@ interface TMDBApi {
         @Query("page") page: Int,
         @Query("language") language: String
     ): Single<MultisearchResponse>
+
 }
