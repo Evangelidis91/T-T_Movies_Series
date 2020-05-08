@@ -107,4 +107,12 @@ class TMDBService {
     fun getPersonCombinedCredits(id: Int): Single<PersonCombinedResponse> {
         return api.getPersonCombinedCredits(id, API_KEY, LANGUAGE)
     }
+
+    fun getTrendings(pageNumber: Int): Single<MultisearchResponse> {
+        return api.getTrendings(API_KEY, pageNumber, LANGUAGE)
+    }
+
+    fun getMultiSearchResult(query: String, pageNumber: Int): Single<MultisearchResponse> {
+        return api.getMultiSearchResult(API_KEY, query, pageNumber, LANGUAGE)
+    }
 }
