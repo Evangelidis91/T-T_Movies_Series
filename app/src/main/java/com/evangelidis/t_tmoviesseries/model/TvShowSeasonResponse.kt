@@ -6,7 +6,7 @@ data class TvShowSeasonResponse(
     @SerializedName("air_date")
     val airDate: String?,
     @SerializedName("episodes")
-    val episodes: List<Episode>?,
+    val episodes: MutableList<Episode>,
     @SerializedName("_id")
     val _id: String?,
     @SerializedName("id")
@@ -18,7 +18,7 @@ data class TvShowSeasonResponse(
     @SerializedName("poster_path")
     val posterPath: String?,
     @SerializedName("season_number")
-    val seasonNumber: Int?
+    val seasonNumber: Int
 )
 
 data class Episode(
@@ -47,7 +47,7 @@ data class Episode(
     @SerializedName("vote_average")
     val voteAverage: Double?,
     @SerializedName("vote_count")
-    val voteCount: Int?
+    val voteCount: Int
 )
 
 data class GuestStar(
