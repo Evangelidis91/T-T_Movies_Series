@@ -4,6 +4,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_desc">Navigation header</string>
 
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="fcm_message">FCM Message</string>
+
     <string name="tab">\u0009\u0009\u0009\u0009</string>
 
     <string name="movies">Movies</string>
