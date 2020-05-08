@@ -22,6 +22,7 @@ object Constants {
 
     const val IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
     const val ACTOR_IMAGE_URL = "https://image.tmdb.org/t/p/w185"
+    const val IMAGE_BASE_URL_SMALL = "https://image.tmdb.org/t/p/w154"
     const val YOUTUBE_VIDEO_URL = "https://www.youtube.com/watch?v=%s"
     const val YOUTUBE_THUMBNAIL_URL = "https://img.youtube.com/vi/%s/0.jpg"
 

@@ -51,7 +51,10 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.app_bar_main.search_img
+import kotlinx.android.synthetic.main.app_bar_main.toolbar_title
 import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.main_toolbar.*
 import kotlinx.android.synthetic.main.navigation_drawer.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -124,6 +127,11 @@ class MainActivity : AppCompatActivity() {
         tvshowList.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = tvShowAdapter
+        }
+
+        search_img.setOnClickListener {
+            val intent = Intent(this@MainActivity, SearchActivity::class.java)
+            startActivity(intent)
         }
 
         observeViewModel()

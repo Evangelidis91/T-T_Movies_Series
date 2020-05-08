@@ -35,6 +35,8 @@ class ListViewModel : ViewModel() {
     val tvShowSeasonDetails = MutableLiveData<TvShowSeasonResponse>()
     val personDetails = MutableLiveData<PersonDetailsResponse>()
     val personCombinedCredits = MutableLiveData<PersonCombinedResponse>()
+    val trendings = MutableLiveData<MultisearchResponse>()
+    val multisearch = MutableLiveData<MultisearchResponse>()
     val loadError = MutableLiveData<Boolean>()
     val loading = MutableLiveData<Boolean>()
 
@@ -132,6 +134,14 @@ class ListViewModel : ViewModel() {
 
     fun getPersonCombinedCredits(id: Int) {
         fetchPersonCombinedCredits(id)
+    }
+
+    fun getTrendings(pageNumber: Int) {
+        fetchTrendings(pageNumber)
+    }
+
+    fun getMultisearchResult(query: String, pageNumber: Int) {
+        fetchMultisearch(query, pageNumber)
     }
 
     private fun fetchMovieGenres() {
@@ -534,6 +544,40 @@ class ListViewModel : ViewModel() {
                 .subscribeWith(object : DisposableSingleObserver<PersonCombinedResponse>() {
                     override fun onSuccess(t: PersonCombinedResponse) {
                         personCombinedCredits.value = t
+                    }
+
+                    override fun onError(e: Throwable) {
+                        loadError.value = true
+                    }
+                })
+        )
+    }
+
+    private fun fetchTrendings(pageNumber: Int) {
+        disposable.add(
+            tmdbService.getTrendings(pageNumber)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<MultisearchResponse>() {
+                    override fun onSuccess(t: MultisearchResponse) {
+                        trendings.value = t
+                    }
+
+                    override fun onError(e: Throwable) {
+                        loadError.value = true
+                    }
+                })
+        )
+    }
+
+    private fun fetchMultisearch(query: String, pageNumber: Int) {
+        disposable.add(
+            tmdbService.getMultiSearchResult(query, pageNumber)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<MultisearchResponse>() {
+                    override fun onSuccess(t: MultisearchResponse) {
+                        multisearch.value = t
                     }
 
                     override fun onError(e: Throwable) {
