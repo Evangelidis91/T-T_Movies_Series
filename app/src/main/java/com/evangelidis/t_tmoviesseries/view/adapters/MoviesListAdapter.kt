@@ -1,4 +1,4 @@
-package com.evangelidis.t_tmoviesseries.view
+package com.evangelidis.t_tmoviesseries.view.adapters
 
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -46,7 +46,7 @@ class MoviesListAdapter(
 
     override fun getItemCount() = moviesListData.size
 
-    override fun onBindViewHolder(holder: MoviesListAdapter.MoviesViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
         holder.bind(moviesListData[position])
     }
 

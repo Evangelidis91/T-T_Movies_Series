@@ -40,6 +40,8 @@ import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.UPCOMING_MOVIES
 import com.evangelidis.t_tmoviesseries.utils.InternetStatus
 import com.evangelidis.t_tmoviesseries.utils.Tracking
+import com.evangelidis.t_tmoviesseries.view.adapters.MoviesListAdapter
+import com.evangelidis.t_tmoviesseries.view.adapters.TvShowAdapter
 import com.evangelidis.t_tmoviesseries.viewmodel.ListViewModel
 import com.evangelidis.tantintoast.TanTinToast
 import com.google.android.gms.tasks.OnFailureListener
@@ -54,7 +56,6 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.app_bar_main.search_img
 import kotlinx.android.synthetic.main.app_bar_main.toolbar_title
 import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.main_toolbar.*
 import kotlinx.android.synthetic.main.navigation_drawer.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -90,8 +91,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     lateinit var viewModel: ListViewModel
-    private val moviesListAdapter = MoviesListAdapter(arrayListOf(), movieCallback)
-    private val tvShowAdapter = TvShowAdapter(arrayListOf(), tvShowCallback)
+    private val moviesListAdapter =
+        MoviesListAdapter(
+            arrayListOf(),
+            movieCallback
+        )
+    private val tvShowAdapter =
+        TvShowAdapter(
+            arrayListOf(),
+            tvShowCallback
+        )
     private var sortBy = POPULAR_MOVIES
 
     private lateinit var database: FirebaseDatabase

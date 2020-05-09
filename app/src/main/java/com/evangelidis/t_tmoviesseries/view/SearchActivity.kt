@@ -16,6 +16,7 @@ import com.evangelidis.t_tmoviesseries.utils.Constants.MOVIE_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.PERSON_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_ID
 import com.evangelidis.t_tmoviesseries.utils.InternetStatus
+import com.evangelidis.t_tmoviesseries.view.adapters.SearchAdapter
 import com.evangelidis.t_tmoviesseries.viewmodel.ListViewModel
 import com.evangelidis.tantintoast.TanTinToast
 import kotlinx.android.synthetic.main.activity_search.*
@@ -52,7 +53,11 @@ class SearchActivity : AppCompatActivity() {
     }
 
     lateinit var viewModel: ListViewModel
-    private val trendsAdapter = TrendingsAdapter(arrayListOf(), trendCallback)
+    private val trendsAdapter =
+        SearchAdapter(
+            arrayListOf(),
+            trendCallback
+        )
 
     private val trendsList = mutableListOf<Multisearch>()
 
