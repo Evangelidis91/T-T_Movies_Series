@@ -23,6 +23,16 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@mipmap/ic_launcher_round" />
 
+        <ImageView
+            android:id="@+id/item_movie_wishlist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/item_rating"
+            app:srcCompat="@drawable/ic_disable_wishlist" />
+
         <TextView
             android:id="@+id/item_release_date"
             android:layout_width="0dp"

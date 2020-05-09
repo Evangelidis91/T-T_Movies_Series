@@ -1,4 +1,4 @@
-package com.evangelidis.t_tmoviesseries.view
+package com.evangelidis.t_tmoviesseries.view.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -14,10 +14,10 @@ import com.evangelidis.t_tmoviesseries.model.Multisearch
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_BASE_URL_SMALL
 import com.evangelidis.t_tmoviesseries.utils.InternetStatus.Companion.context
 
-class TrendingsAdapter(
+class SearchAdapter(
     var trendingsList: MutableList<Multisearch>,
     var callback: OnTrendingClickCallback
-) : RecyclerView.Adapter<TrendingsAdapter.TrendingViewHolder>() {
+) : RecyclerView.Adapter<SearchAdapter.SearchViewHolder>() {
 
 
     fun appendTrendings(trendings: MutableList<Multisearch>) {
@@ -30,17 +30,17 @@ class TrendingsAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ) = TrendingViewHolder(
-        LayoutInflater.from(parent.context).inflate(R.layout.trending_item_layout, parent, false)
+    ) = SearchViewHolder(
+        LayoutInflater.from(parent.context).inflate(R.layout.item_search, parent, false)
     )
 
     override fun getItemCount() = trendingsList.size
 
-    override fun onBindViewHolder(holder: TrendingViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
         holder.bind(trendingsList[position])
     }
 
-    inner class TrendingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class SearchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val itemPoster = itemView.findViewById<ImageView>(R.id.item_poster)
         private val title = itemView.findViewById<TextView>(R.id.item_title)

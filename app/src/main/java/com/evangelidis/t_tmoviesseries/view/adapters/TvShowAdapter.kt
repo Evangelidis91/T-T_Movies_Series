@@ -1,4 +1,4 @@
-package com.evangelidis.t_tmoviesseries.view
+package com.evangelidis.t_tmoviesseries.view.adapters
 
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -46,7 +46,7 @@ class TvShowAdapter(
 
     override fun getItemCount() = tvShowListData.size
 
-    override fun onBindViewHolder(holder: TvShowAdapter.TvShowViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TvShowViewHolder, position: Int) {
         holder.bind(tvShowListData[position])
     }
 
