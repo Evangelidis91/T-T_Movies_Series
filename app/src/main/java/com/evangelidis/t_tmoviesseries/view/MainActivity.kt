@@ -117,7 +117,6 @@ class MainActivity : AppCompatActivity() {
     private var mDb: WishListDataBase? = null
     private lateinit var mDbWorkerThread: DbWorkerThread
     private val mUiHandler = Handler()
-    //private var wishlistList: MutableList<WishListData>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -25,7 +25,7 @@ data class Multisearch(
     @SerializedName("genre_ids")
     val genreIds: List<Int>?,
     @SerializedName("id")
-    val id: Int?,
+    val id: Int,
     @SerializedName("known_for")
     val knownFor: List<KnownFor>?,
     @SerializedName("known_for_department")
