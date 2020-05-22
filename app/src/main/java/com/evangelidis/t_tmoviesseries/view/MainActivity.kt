@@ -7,6 +7,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -27,6 +28,8 @@ import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.model.MessagePost
 import com.evangelidis.t_tmoviesseries.model.Movie
 import com.evangelidis.t_tmoviesseries.model.TvShow
+import com.evangelidis.t_tmoviesseries.room.DbWorkerThread
+import com.evangelidis.t_tmoviesseries.room.WishListDataBase
 import com.evangelidis.t_tmoviesseries.utils.Constants.AIRING_TODAY_TV
 import com.evangelidis.t_tmoviesseries.utils.Constants.FIREBASE_DATABASE_DATE_FORMAT
 import com.evangelidis.t_tmoviesseries.utils.Constants.MOVIE_ID
@@ -94,12 +97,14 @@ class MainActivity : AppCompatActivity() {
     private val moviesListAdapter =
         MoviesListAdapter(
             arrayListOf(),
-            movieCallback
+            movieCallback,
+            mutableListOf()
         )
     private val tvShowAdapter =
         TvShowAdapter(
             arrayListOf(),
-            tvShowCallback
+            tvShowCallback,
+            mutableListOf()
         )
     private var sortBy = POPULAR_MOVIES
 
@@ -108,6 +113,11 @@ class MainActivity : AppCompatActivity() {
     private var user: FirebaseUser? = null
 
     var listOfRetrievedPages = arrayListOf(1)
+
+    private var mDb: WishListDataBase? = null
+    private lateinit var mDbWorkerThread: DbWorkerThread
+    private val mUiHandler = Handler()
+    //private var wishlistList: MutableList<WishListData>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -122,6 +132,12 @@ class MainActivity : AppCompatActivity() {
         expandableLayoutMovies.collapse()
         expandableLayoutTv.collapse()
         expandableLayoutCommunicate.expand()
+
+        mDbWorkerThread = DbWorkerThread("dbWorkerThread")
+        mDbWorkerThread.start()
+        mDb = WishListDataBase.getInstance(this)
+
+        getDataFromDB()
 
         viewModel = ViewModelProviders.of(this).get(ListViewModel::class.java)
         viewModel.getMoviesGenres()
@@ -146,6 +162,29 @@ class MainActivity : AppCompatActivity() {
         observeViewModel()
         setUpScrollListener()
         setupNavigationViewClickListeners()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideProgressBar()
+        getDataFromDB()
+    }
+
+    private fun hideProgressBar() {
+        //progressbar.visibility = View.GONE
+    }
+
+    private fun getDataFromDB() {
+        val task = Runnable {
+            val wishlistData = mDb?.todoDao()?.getAll()
+            mUiHandler.post {
+                if (!wishlistData.isNullOrEmpty()) {
+                    moviesListAdapter.updateWishlist(wishlistData)
+                    tvShowAdapter.updateWishlist(wishlistData)
+                }
+            }
+        }
+        mDbWorkerThread.postTask(task)
     }
 
     private fun observeViewModel() {
@@ -448,9 +487,9 @@ class MainActivity : AppCompatActivity() {
                 myRef.child(resources.getString(R.string.firebase_Users_Posts_Path)).push()
                     .setValue(post)
                     .addOnSuccessListener(OnSuccessListener<Void> {
-                            TanTinToast.Success(this).text(getString(R.string.message_succ)).show()
-                            messageDialog.dismiss()
-                        })
+                        TanTinToast.Success(this).text(getString(R.string.message_succ)).show()
+                        messageDialog.dismiss()
+                    })
                     .addOnFailureListener(OnFailureListener {
                         TanTinToast.Error(this).text(getString(R.string.message_fail)).show()
                     })

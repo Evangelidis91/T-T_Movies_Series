@@ -13,18 +13,31 @@ import com.evangelidis.t_tmoviesseries.OnMoviesClickCallback
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.model.Genre
 import com.evangelidis.t_tmoviesseries.model.Movie
+import com.evangelidis.t_tmoviesseries.room.DbWorkerThread
+import com.evangelidis.t_tmoviesseries.room.WishListData
+import com.evangelidis.t_tmoviesseries.room.WishListDataBase
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_BASE_URL
 
 class MoviesListAdapter(
     var moviesListData: MutableList<Movie>,
-    var movieCallback: OnMoviesClickCallback
+    var movieCallback: OnMoviesClickCallback,
+    var wishlistList: MutableList<WishListData>
 ) : RecyclerView.Adapter<MoviesListAdapter.MoviesViewHolder>() {
+
+    private var mDb: WishListDataBase? = null
+    private lateinit var mDbWorkerThread: DbWorkerThread
 
     private var genresList: ArrayList<Genre> = arrayListOf()
 
     fun updateData(newData: MutableList<Movie>) {
         moviesListData.clear()
         moviesListData.addAll(newData)
+        notifyDataSetChanged()
+    }
+
+    fun updateWishlist(wishlist: MutableList<WishListData>){
+        wishlistList.clear()
+        wishlistList.addAll(wishlist)
         notifyDataSetChanged()
     }
 
@@ -40,10 +53,14 @@ class MoviesListAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ) = MoviesViewHolder(
-        LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
-    )
+    ) : MoviesViewHolder{
+        mDbWorkerThread = DbWorkerThread("dbWorkerThread")
+        mDbWorkerThread.start()
+        mDb = WishListDataBase.getInstance(parent.context)
 
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
+        return MoviesViewHolder(view)
+    }
     override fun getItemCount() = moviesListData.size
 
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
@@ -78,7 +95,56 @@ class MoviesListAdapter(
                 .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
                 .into(poster)
 
+            addToWishList.setImageResource(R.drawable.ic_disable_wishlist)
+
             itemView.setOnClickListener { movieCallback.onClick(movie) }
+
+            if (!wishlistList.isNullOrEmpty()) {
+                val currentItem = WishListData()
+                currentItem.itemId = movie.id
+                currentItem.category = "Movie"
+
+                val finder = wishlistList.find { it.itemId == movie.id && it.category == "Movie" }
+                if (finder != null) {
+                    addToWishList.setImageResource(R.drawable.ic_enable_wishlist)
+                }
+            }
+
+            addToWishList.setOnClickListener {
+                val wishList = WishListData()
+                wishList.itemId = movie.id
+                wishList.category = "Movie"
+
+                if (wishlistList.isNullOrEmpty()) {
+                    insertDataToDatabase(wishList)
+                    wishlistList.add(wishList)
+                    addToWishList.setImageResource(R.drawable.ic_enable_wishlist)
+                } else {
+                    val finder =
+                        wishlistList.find { it.itemId == movie.id && it.category == "Movie" }
+                    if (finder != null) {
+                        addToWishList.setImageResource(R.drawable.ic_disable_wishlist)
+                        removeDataFromDatabase(wishList)
+                        wishlistList.remove(wishList)
+                    } else {
+                        insertDataToDatabase(wishList)
+                        wishlistList.add(wishList)
+                        addToWishList.setImageResource(R.drawable.ic_enable_wishlist)
+                    }
+                }
+            }
+        }
+
+        private fun insertDataToDatabase(wishList: WishListData) {
+            val task = Runnable { mDb?.todoDao()?.insert(wishList) }
+            mDbWorkerThread.postTask(task)
+        }
+
+        private fun removeDataFromDatabase(wishList: WishListData) {
+            val task = Runnable {
+                mDb?.todoDao()?.deleteByUserId(wishList.itemId)
+            }
+            mDbWorkerThread.postTask(task)
         }
 
         private fun getGenres(genreIds: List<Int>): String {
