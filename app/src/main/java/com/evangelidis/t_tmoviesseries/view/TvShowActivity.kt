@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -13,6 +14,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.model.*
+import com.evangelidis.t_tmoviesseries.room.DbWorkerThread
+import com.evangelidis.t_tmoviesseries.room.WishListData
+import com.evangelidis.t_tmoviesseries.room.WishListDataBase
 import com.evangelidis.t_tmoviesseries.utils.Constants
 import com.evangelidis.t_tmoviesseries.utils.Constants.ACTOR_IMAGE_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.PERSON_ID
@@ -37,11 +41,38 @@ class TvShowActivity : AppCompatActivity() {
 
     private var totalSeasonsNumber = 1
 
+    private var wishlistList: List<WishListData>? = null
+
+    private var mDb: WishListDataBase? = null
+    private lateinit var mDbWorkerThread: DbWorkerThread
+    private val mUiHandler = Handler()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tv_show)
 
         tvShowId = intent.getIntExtra(Constants.TV_SHOW_ID, tvShowId)
+
+        mDbWorkerThread = DbWorkerThread("dbWorkerThread")
+        mDbWorkerThread.start()
+        mDb = WishListDataBase.getInstance(this)
+
+        getDataFromDB()
+
+
+        item_tv_wishlist.setOnClickListener {
+            val finder = wishlistList?.find { it.itemId == tvShowId }
+            val wishList = WishListData()
+            wishList.itemId = tvShowId
+            wishList.category = "TV"
+            if (finder == null) {
+                item_tv_wishlist.setImageResource(R.drawable.ic_enable_wishlist)
+                insertDataToDatabase(wishList)
+            } else {
+                item_tv_wishlist.setImageResource(R.drawable.ic_disable_wishlist)
+                removeDataFromDatabase(wishList)
+            }
+        }
 
         imageToMain.setOnClickListener {
             val intent = Intent(this@TvShowActivity, MainActivity::class.java)
@@ -68,7 +99,6 @@ class TvShowActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-
         viewModel.tvShowDetails.observe(this, Observer { data ->
             data?.let {
                 setUpUI(data)
@@ -341,10 +371,46 @@ class TvShowActivity : AppCompatActivity() {
         }
     }
 
+    private fun getDataFromDB() {
+        Handler().postDelayed(
+            {
+                val task = Runnable {
+                    val wishlistData = mDb?.todoDao()?.getAll()
+                    mUiHandler.post {
+                        if (!wishlistData.isNullOrEmpty()) {
+                            wishlistList = wishlistData
+                            setWishListImage()
+                        }
+                    }
+                }
+                mDbWorkerThread.postTask(task)
+            },
+            800
+        )
+    }
+
+    private fun setWishListImage() {
+        val finder = wishlistList?.find { it.itemId == tvShowId }
+        if (finder != null) {
+            item_tv_wishlist.setImageResource(R.drawable.ic_enable_wishlist)
+        }
+    }
+
+    private fun insertDataToDatabase(wishList: WishListData) {
+        val task = Runnable { mDb?.todoDao()?.insert(wishList) }
+        mDbWorkerThread.postTask(task)
+    }
+
+    private fun removeDataFromDatabase(wishList: WishListData) {
+        val task = Runnable {
+            mDb?.todoDao()?.deleteByUserId(wishList.itemId)
+        }
+        mDbWorkerThread.postTask(task)
+    }
+
     private fun showTrailer(url: String) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(intent)
     }
-
 
 }

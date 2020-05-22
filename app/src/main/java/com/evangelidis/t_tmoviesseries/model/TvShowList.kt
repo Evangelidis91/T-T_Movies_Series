@@ -21,7 +21,7 @@ data class TvShow(
     @SerializedName("genre_ids")
     val genreIds: List<Int>?,
     @SerializedName("id")
-    val id: Int?,
+    val id: Int,
     @SerializedName("name")
     val name: String?,
     @SerializedName("origin_country")

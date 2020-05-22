@@ -41,6 +41,7 @@ def retrofitVersion = '2.7.1'
 def daggerVersion = '2.25.4'
 def mockitoVersion = '2.11.0'
 def rxJavaVersion = '2.1.1'
+def room_version = '2.2.4'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -68,6 +69,8 @@ dependencies {
 
     implementation "android.arch.lifecycle:extensions:$lifecycleExtensionsVersion"
 
+    implementation 'com.google.code.gson:gson:2.8.5'
+
     implementation 'com.tuyenmonkey:mkloader:1.4.0'
     implementation 'com.github.aakira:expandable-layout:1.6.0@aar'
     implementation 'com.sun.mail:javax.mail:1.6.2'
@@ -85,6 +88,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:19.2.1'
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta04'
     implementation 'com.google.firebase:firebase-messaging:20.1.7'
+
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.legacy:legacy-support-v4:1.0.0"
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    kapt "androidx.room:room-compiler:$room_version"
 
     testImplementation 'junit:junit:4.12'
     testImplementation "org.mockito:mockito-inline:$mockitoVersion"
