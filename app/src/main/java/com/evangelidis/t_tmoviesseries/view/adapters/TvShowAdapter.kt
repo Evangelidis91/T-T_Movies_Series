@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.evangelidis.t_tmoviesseries.OnTvShowClickCallback
+import com.evangelidis.t_tmoviesseries.callbacks.OnTvShowClickCallback
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.model.Genre
 import com.evangelidis.t_tmoviesseries.model.TvShow
@@ -114,6 +114,12 @@ class TvShowAdapter(
                 val wishList = WishListData()
                 wishList.itemId = tv.id
                 wishList.category = "TV"
+                wishList.name = tv.name.orEmpty()
+                wishList.posterPath = tv.posterPath.orEmpty()
+                wishList.releasedDate = tv.firstAirDate.orEmpty()
+                tv.voteAverage?.let {
+                    wishList.rate = it
+                }
 
                 if (wishlistList.isNullOrEmpty()) {
                     insertDataToDatabase(wishList)

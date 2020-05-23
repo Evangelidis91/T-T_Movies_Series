@@ -1,4 +1,4 @@
-package com.evangelidis.t_tmoviesseries
+package com.evangelidis.t_tmoviesseries.view.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.model.Episode
 import com.evangelidis.t_tmoviesseries.utils.Constants
 import java.text.SimpleDateFormat

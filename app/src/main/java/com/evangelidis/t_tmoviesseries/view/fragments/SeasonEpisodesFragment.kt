@@ -1,4 +1,4 @@
-package com.evangelidis.t_tmoviesseries
+package com.evangelidis.t_tmoviesseries.view.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.model.TvShowSeasonResponse
+import com.evangelidis.t_tmoviesseries.view.adapters.EpisodesListAdapter
 
 class SeasonEpisodesFragment(seasonDetailsResponse: TvShowSeasonResponse) : Fragment() {
 
@@ -20,7 +22,10 @@ class SeasonEpisodesFragment(seasonDetailsResponse: TvShowSeasonResponse) : Frag
         val episodesList = view.findViewById<RecyclerView>(R.id.episodes_list)
         episodesList.layoutManager = LinearLayoutManager(context)
 
-        episodesListAdapter = EpisodesListAdapter(seasonDetails.episodes)
+        episodesListAdapter =
+            EpisodesListAdapter(
+                seasonDetails.episodes
+            )
         episodesList.adapter = episodesListAdapter
 
         return view

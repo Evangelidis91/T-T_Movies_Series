@@ -3,22 +3,18 @@ package com.evangelidis.t_tmoviesseries.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.evangelidis.t_tmoviesseries.R
-import com.evangelidis.t_tmoviesseries.SeasonEpisodesFragment
-import com.evangelidis.t_tmoviesseries.SeasonsViewPagerAdapter
+import com.evangelidis.t_tmoviesseries.view.fragments.SeasonEpisodesFragment
+import com.evangelidis.t_tmoviesseries.view.adapters.SeasonsViewPagerAdapter
 import com.evangelidis.t_tmoviesseries.model.TvShowSeasonResponse
 import com.evangelidis.t_tmoviesseries.utils.Constants.TOTAL_SEASONS
 import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_NAME
 import com.evangelidis.t_tmoviesseries.viewmodel.ListViewModel
 import com.google.android.material.tabs.TabLayout
-import java.util.ArrayList
 
 class SeasonsActivity : AppCompatActivity() {
 
@@ -33,7 +29,10 @@ class SeasonsActivity : AppCompatActivity() {
 
     private var listOfSeasons: MutableList<TvShowSeasonResponse> = mutableListOf()
 
-    val adapter = SeasonsViewPagerAdapter(supportFragmentManager)
+    val adapter =
+        SeasonsViewPagerAdapter(
+            supportFragmentManager
+        )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +64,10 @@ class SeasonsActivity : AppCompatActivity() {
     private fun setAdapter(){
         listOfSeasons.sortBy { it.seasonNumber }
         for (x in 0 until listOfSeasons.size){
-            adapter.addFragment(SeasonEpisodesFragment(listOfSeasons[x]), listOfSeasons[x].seasonNumber.toString())
+            adapter.addFragment(
+                SeasonEpisodesFragment(
+                    listOfSeasons[x]
+                ), listOfSeasons[x].seasonNumber.toString())
             viewPager.adapter = adapter
         }
     }

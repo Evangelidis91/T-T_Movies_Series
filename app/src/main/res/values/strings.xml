@@ -9,6 +9,8 @@
 
     <string name="tab">\u0009\u0009\u0009\u0009</string>
 
+    <string name="my_wishlist"><u>My watch list</u></string>
+
     <string name="movies">Movies</string>
     <string name="movie">Movie</string>
     <string name="popular_movies">Popular movies</string>
