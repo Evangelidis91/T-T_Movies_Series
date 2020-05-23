@@ -37,6 +37,8 @@ class MovieActivity : AppCompatActivity() {
     lateinit var viewModel: ListViewModel
     private var wishlistList: List<WishListData>? = null
 
+    private lateinit var movie: MovieDetailsResponse
+
     private var mDb: WishListDataBase? = null
     private lateinit var mDbWorkerThread: DbWorkerThread
     private val mUiHandler = Handler()
@@ -73,6 +75,13 @@ class MovieActivity : AppCompatActivity() {
             val wishList = WishListData()
             wishList.itemId = movieId
             wishList.category = "Movie"
+            wishList.name = movie.title.orEmpty()
+            wishList.posterPath = movie.posterPath.orEmpty()
+            wishList.releasedDate = movie.releaseDate.orEmpty()
+            movie.voteAverage?.let {
+                wishList.rate = it
+            }
+
             if (finder == null) {
                 item_movie_wishlist.setImageResource(R.drawable.ic_enable_wishlist)
                 insertDataToDatabase(wishList)
@@ -91,6 +100,7 @@ class MovieActivity : AppCompatActivity() {
     private fun observeViewModel() {
         viewModel.movieDetails.observe(this, Observer { data ->
             data?.let {
+                movie = it
                 setUpUI(data)
                 data.genres?.let {
                     setUpGenres(it)

@@ -14,8 +14,12 @@
         android:roundIcon="@drawable/video_camera_white"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.SeasonsActivity"
+        <activity
+            android:name=".view.WishlistActivity"
             android:screenOrientation="sensorPortrait"/>
+        <activity
+            android:name=".view.SeasonsActivity"
+            android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".view.SearchActivity"
             android:screenOrientation="sensorPortrait" />

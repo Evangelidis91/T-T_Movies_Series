@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.evangelidis.t_tmoviesseries.OnTrendingClickCallback
+import com.evangelidis.t_tmoviesseries.callbacks.OnTrendingClickCallback
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.model.Multisearch
 import com.evangelidis.t_tmoviesseries.room.DbWorkerThread

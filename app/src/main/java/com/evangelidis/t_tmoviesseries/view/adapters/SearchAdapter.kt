@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.evangelidis.t_tmoviesseries.OnTrendingClickCallback
+import com.evangelidis.t_tmoviesseries.callbacks.OnTrendingClickCallback
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.model.Multisearch
 import com.evangelidis.t_tmoviesseries.room.DbWorkerThread
@@ -68,14 +68,16 @@ class SearchAdapter(
 
         fun bind(trend: Multisearch) {
             var imagePath: String? = null
+            var releasedDate: String? = null
 
             when (trend.mediaType) {
                 "tv" -> {
                     title.text = trend.name
                     itemReleaseDate.text = trend.firstAirDate
+                    releasedDate = trend.firstAirDate
                     itemType.text = itemView.context.getString(R.string.tv_show)
                     imagePath = trend.posterPath
-                    category = "Movie"
+                    category = "TV"
                 }
                 "person" -> {
                     itemReleaseDate.visibility = View.GONE
@@ -89,9 +91,10 @@ class SearchAdapter(
                 "movie" -> {
                     title.text = trend.title
                     itemReleaseDate.text = trend.releaseDate
+                    releasedDate = trend.releaseDate
                     itemType.text = itemView.context.getString(R.string.movie)
                     imagePath = trend.posterPath
-                    category = "TV"
+                    category = "Movie"
                 }
             }
             itemRating.text = trend.voteAverage.toString()
@@ -114,6 +117,12 @@ class SearchAdapter(
                 val wishList = WishListData()
                 wishList.itemId = trend.id
                 wishList.category = category.orEmpty()
+                wishList.name = trend.name.orEmpty()
+                wishList.posterPath = imagePath.orEmpty()
+                wishList.releasedDate = releasedDate.orEmpty()
+                trend.voteAverage?.let {
+                    wishList.rate = it
+                }
 
                 if (wishlistList.isNullOrEmpty()) {
                     insertDataToDatabase(wishList)

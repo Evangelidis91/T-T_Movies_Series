@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.evangelidis.t_tmoviesseries.OnMoviesClickCallback
+import com.evangelidis.t_tmoviesseries.callbacks.OnMoviesClickCallback
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.model.Genre
 import com.evangelidis.t_tmoviesseries.model.Movie
@@ -114,6 +114,12 @@ class MoviesListAdapter(
                 val wishList = WishListData()
                 wishList.itemId = movie.id
                 wishList.category = "Movie"
+                wishList.name = movie.title.orEmpty()
+                wishList.posterPath = movie.posterPath.orEmpty()
+                wishList.releasedDate = movie.releaseDate.orEmpty()
+                movie.voteAverage?.let {
+                    wishList.rate = it
+                }
 
                 if (wishlistList.isNullOrEmpty()) {
                     insertDataToDatabase(wishList)

@@ -22,8 +22,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.evangelidis.t_tmoviesseries.OnMoviesClickCallback
-import com.evangelidis.t_tmoviesseries.OnTvShowClickCallback
+import com.evangelidis.t_tmoviesseries.callbacks.OnMoviesClickCallback
+import com.evangelidis.t_tmoviesseries.callbacks.OnTvShowClickCallback
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.model.MessagePost
 import com.evangelidis.t_tmoviesseries.model.Movie
@@ -94,18 +94,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     lateinit var viewModel: ListViewModel
-    private val moviesListAdapter =
-        MoviesListAdapter(
-            arrayListOf(),
-            movieCallback,
-            mutableListOf()
-        )
-    private val tvShowAdapter =
-        TvShowAdapter(
-            arrayListOf(),
-            tvShowCallback,
-            mutableListOf()
-        )
+    private val moviesListAdapter = MoviesListAdapter(arrayListOf(), movieCallback, mutableListOf())
+    private val tvShowAdapter = TvShowAdapter(arrayListOf(), tvShowCallback, mutableListOf())
     private var sortBy = POPULAR_MOVIES
 
     private lateinit var database: FirebaseDatabase
@@ -401,6 +391,11 @@ class MainActivity : AppCompatActivity() {
                 viewModel.getAiringTodayTvShows(1)
             }
             drawer.closeDrawer(GravityCompat.START)
+        }
+
+        nav_wishlist.setOnClickListener {
+            val intent = Intent(this@MainActivity, WishlistActivity::class.java)
+            startActivity(intent)
         }
 
         nav_send.setOnClickListener { submitMessage() }

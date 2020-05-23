@@ -38,6 +38,7 @@ class TvShowActivity : AppCompatActivity() {
 
     private var tvShowId = 0
     lateinit var viewModel: ListViewModel
+    private lateinit var tvShow: TvShowDetailsResponse
 
     private var totalSeasonsNumber = 1
 
@@ -51,7 +52,7 @@ class TvShowActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tv_show)
 
-        tvShowId = intent.getIntExtra(Constants.TV_SHOW_ID, tvShowId)
+        tvShowId = intent.getIntExtra(TV_SHOW_ID, tvShowId)
 
         mDbWorkerThread = DbWorkerThread("dbWorkerThread")
         mDbWorkerThread.start()
@@ -59,12 +60,18 @@ class TvShowActivity : AppCompatActivity() {
 
         getDataFromDB()
 
-
         item_tv_wishlist.setOnClickListener {
             val finder = wishlistList?.find { it.itemId == tvShowId }
             val wishList = WishListData()
             wishList.itemId = tvShowId
             wishList.category = "TV"
+            wishList.name = tvShow.name.orEmpty()
+            wishList.posterPath = tvShow.posterPath.orEmpty()
+            wishList.releasedDate = tvShow.firstAirDate.orEmpty()
+            tvShow.voteAverage?.let {
+                wishList.rate = it
+            }
+
             if (finder == null) {
                 item_tv_wishlist.setImageResource(R.drawable.ic_enable_wishlist)
                 insertDataToDatabase(wishList)
@@ -101,6 +108,7 @@ class TvShowActivity : AppCompatActivity() {
     private fun observeViewModel() {
         viewModel.tvShowDetails.observe(this, Observer { data ->
             data?.let {
+                tvShow = data
                 setUpUI(data)
                 data.numberOfSeasons?.let {
                     totalSeasonsNumber = data.numberOfSeasons
