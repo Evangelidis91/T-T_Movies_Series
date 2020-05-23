@@ -2,10 +2,10 @@ package com.evangelidis.t_tmoviesseries.view
 
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface.OnClickListener
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -14,17 +14,19 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.callbacks.OnMoviesClickCallback
 import com.evangelidis.t_tmoviesseries.callbacks.OnTvShowClickCallback
-import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.model.MessagePost
 import com.evangelidis.t_tmoviesseries.model.Movie
 import com.evangelidis.t_tmoviesseries.model.TvShow
@@ -42,6 +44,7 @@ import com.evangelidis.t_tmoviesseries.utils.Constants.TOP_RATED_TV
 import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.UPCOMING_MOVIES
 import com.evangelidis.t_tmoviesseries.utils.InternetStatus
+import com.evangelidis.t_tmoviesseries.utils.InternetStatus.Companion.context
 import com.evangelidis.t_tmoviesseries.utils.Tracking
 import com.evangelidis.t_tmoviesseries.view.adapters.MoviesListAdapter
 import com.evangelidis.t_tmoviesseries.view.adapters.TvShowAdapter
@@ -56,8 +59,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.app_bar_main.search_img
-import kotlinx.android.synthetic.main.app_bar_main.toolbar_title
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.navigation_drawer.*
 import java.text.SimpleDateFormat
@@ -157,6 +158,26 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         hideProgressBar()
         getDataFromDB()
+    }
+
+    override fun onBackPressed() {
+        val drawer: DrawerLayout = findViewById(R.id.drawer_layout)
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START)
+        } else {
+            val builder = AlertDialog.Builder(this@MainActivity, R.style.AlertDialogTheme)
+            builder.apply {
+                setIcon(R.drawable.video_camera)
+                setTitle(R.string.app_name)
+                setMessage(resources.getString(R.string.close_popup_window_title))
+                setCancelable(false)
+                setPositiveButton(resources.getString(R.string.close_the_app_text),
+                    OnClickListener { dialog, id -> finish() })
+                setNegativeButton(resources.getString(R.string.cancel),
+                    OnClickListener { dialog, id -> dialog.cancel() })
+                create().show()
+            }
+        }
     }
 
     private fun hideProgressBar() {

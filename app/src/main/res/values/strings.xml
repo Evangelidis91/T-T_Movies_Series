@@ -7,6 +7,9 @@
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="fcm_message">FCM Message</string>
 
+    <string name="close_popup_window_title">What do you want to do?</string>
+    <string name="close_the_app_text">Close the app</string>
+
     <string name="tab">\u0009\u0009\u0009\u0009</string>
 
     <string name="my_wishlist"><u>My watch list</u></string>
