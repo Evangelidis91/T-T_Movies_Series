@@ -22,10 +22,7 @@ class SeasonEpisodesFragment(seasonDetailsResponse: TvShowSeasonResponse) : Frag
         val episodesList = view.findViewById<RecyclerView>(R.id.episodes_list)
         episodesList.layoutManager = LinearLayoutManager(context)
 
-        episodesListAdapter =
-            EpisodesListAdapter(
-                seasonDetails.episodes
-            )
+        episodesListAdapter = EpisodesListAdapter(seasonDetails.episodes)
         episodesList.adapter = episodesListAdapter
 
         return view
