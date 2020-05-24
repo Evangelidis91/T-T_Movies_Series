@@ -14,7 +14,6 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.callbacks.OnMoviesClickCallback
 import com.evangelidis.t_tmoviesseries.callbacks.OnTvShowClickCallback
+import com.evangelidis.t_tmoviesseries.login.LoginActivity
 import com.evangelidis.t_tmoviesseries.model.MessagePost
 import com.evangelidis.t_tmoviesseries.model.Movie
 import com.evangelidis.t_tmoviesseries.model.TvShow
@@ -34,6 +34,9 @@ import com.evangelidis.t_tmoviesseries.room.DbWorkerThread
 import com.evangelidis.t_tmoviesseries.room.WishListDataBase
 import com.evangelidis.t_tmoviesseries.utils.Constants.AIRING_TODAY_TV
 import com.evangelidis.t_tmoviesseries.utils.Constants.FIREBASE_DATABASE_DATE_FORMAT
+import com.evangelidis.t_tmoviesseries.utils.Constants.IS_LOGIN_SKIPPED
+import com.evangelidis.t_tmoviesseries.utils.Constants.IS_NOTIFICATION_ON
+import com.evangelidis.t_tmoviesseries.utils.Constants.IS_SYNC_WATCHLIST_ON
 import com.evangelidis.t_tmoviesseries.utils.Constants.MOVIE_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.ON_THE_AIR_TV
 import com.evangelidis.t_tmoviesseries.utils.Constants.PLAYING_NOW_MOVIES
@@ -44,7 +47,6 @@ import com.evangelidis.t_tmoviesseries.utils.Constants.TOP_RATED_TV
 import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.UPCOMING_MOVIES
 import com.evangelidis.t_tmoviesseries.utils.InternetStatus
-import com.evangelidis.t_tmoviesseries.utils.InternetStatus.Companion.context
 import com.evangelidis.t_tmoviesseries.utils.Tracking
 import com.evangelidis.t_tmoviesseries.view.adapters.MoviesListAdapter
 import com.evangelidis.t_tmoviesseries.view.adapters.TvShowAdapter
@@ -58,6 +60,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import es.dmoral.prefs.Prefs
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.navigation_drawer.*
@@ -122,6 +125,7 @@ class MainActivity : AppCompatActivity() {
         expandableLayoutMovies.collapse()
         expandableLayoutTv.collapse()
         expandableLayoutCommunicate.expand()
+        expandableLayoutSettings.collapse()
 
         mDbWorkerThread = DbWorkerThread("dbWorkerThread")
         mDbWorkerThread.start()
@@ -152,6 +156,10 @@ class MainActivity : AppCompatActivity() {
         observeViewModel()
         setUpScrollListener()
         setupNavigationViewClickListeners()
+
+        setUpNavigationDrawerWatchlistSwitch()
+        setUpNavigationDrawerNotificationSwitch()
+        setUpNavigationLoginUI()
     }
 
     override fun onResume() {
@@ -324,6 +332,7 @@ class MainActivity : AppCompatActivity() {
         nav_movies.setOnClickListener { expandMoviesLayout() }
         nav_tv.setOnClickListener { expandTvLayout() }
         nav_communicate.setOnClickListener { expandCommunicateLayout() }
+        nav_settings.setOnClickListener { expandSettings() }
 
         nav_popular_movies.setOnClickListener {
             Tracking.trackListCategory(this, getString(R.string.popular_movies))
@@ -420,6 +429,94 @@ class MainActivity : AppCompatActivity() {
         }
 
         nav_send.setOnClickListener { submitMessage() }
+    }
+
+    private fun setUpNavigationDrawerNotificationSwitch() {
+        if (Prefs.with(applicationContext).readBoolean(IS_NOTIFICATION_ON, false)) {
+            nav_notifications.isChecked = true
+            nav_notifications.text = resources.getString(R.string.notifications_are_on)
+        } else {
+            nav_notifications.isChecked = false
+            nav_notifications.text = resources.getString(R.string.notifications_are_off)
+        }
+
+        nav_notifications.setOnClickListener {
+            if (Prefs.with(applicationContext).readBoolean(IS_NOTIFICATION_ON, false)) {
+                nav_notifications.isChecked = false
+                nav_notifications.text = resources.getString(R.string.notifications_are_off)
+                Prefs.with(applicationContext).writeBoolean(IS_NOTIFICATION_ON, false)
+            } else {
+                nav_notifications.isChecked = true
+                nav_notifications.text = resources.getString(R.string.notifications_are_on)
+                Prefs.with(applicationContext).writeBoolean(IS_NOTIFICATION_ON, true)
+            }
+        }
+    }
+
+    private fun setUpNavigationDrawerWatchlistSwitch() {
+        if (Prefs.with(applicationContext).readBoolean(IS_SYNC_WATCHLIST_ON, false)) {
+            nav_sync_watchlist.isChecked = true
+            nav_sync_watchlist.text = resources.getString(R.string.sync_watchlist_is_on)
+        } else {
+            nav_sync_watchlist.isChecked = false
+            nav_sync_watchlist.text = resources.getString(R.string.sync_watchlist_is_off)
+        }
+
+        nav_sync_watchlist.setOnClickListener {
+            if (Prefs.with(applicationContext).readBoolean(IS_SYNC_WATCHLIST_ON, false)) {
+                nav_sync_watchlist.isChecked = false
+                nav_sync_watchlist.text = resources.getString(R.string.sync_watchlist_is_off)
+                Prefs.with(applicationContext).writeBoolean(IS_SYNC_WATCHLIST_ON, false)
+            } else {
+                nav_sync_watchlist.isChecked = true
+                nav_sync_watchlist.text = resources.getString(R.string.sync_watchlist_is_on)
+                Prefs.with(applicationContext).writeBoolean(IS_SYNC_WATCHLIST_ON, true)
+            }
+        }
+    }
+
+    private fun setUpNavigationLoginUI() {
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            nav_logout.visibility = View.GONE
+        } else {
+            user.email?.let {
+                loginText.text = resources.getString(R.string.welcome_user).replace("{USERNAME}", it.substringBefore("@"))
+                nav_logout.visibility = View.VISIBLE
+            }
+        }
+
+        nav_login_layout.setOnClickListener {
+            if (user == null) {
+                val intent = Intent(this@MainActivity, LoginActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                Prefs.with(applicationContext).writeBoolean(IS_LOGIN_SKIPPED, false)
+                startActivity(intent)
+            }
+        }
+
+        nav_logout.setOnClickListener {
+            displayPopWindowsForLogout()
+        }
+    }
+
+    private fun displayPopWindowsForLogout() {
+        val builder = AlertDialog.Builder(this@MainActivity, R.style.AlertDialogTheme)
+        builder.apply {
+            setIcon(R.drawable.video_camera)
+            setTitle(R.string.app_name)
+            setMessage(resources.getString(R.string.logout_popup_window_title))
+            setCancelable(false)
+            setPositiveButton(resources.getString(R.string.logout_from_the_app_text),
+                OnClickListener { dialog, id ->
+                    FirebaseAuth.getInstance().signOut()
+                    loginText.text = resources.getString(R.string.login)
+                    setUpNavigationLoginUI()
+                })
+            setNegativeButton(resources.getString(R.string.cancel),
+                OnClickListener { dialog, id -> dialog.cancel() })
+            create().show()
+        }
     }
 
     private fun submitMessage() {
@@ -547,6 +644,16 @@ class MainActivity : AppCompatActivity() {
         } else {
             expandableLayoutCommunicate.expand()
             communication_arrow.rotation = 270F
+        }
+    }
+
+    private fun expandSettings() {
+        if (expandableLayoutSettings.isExpanded) {
+            expandableLayoutSettings.collapse()
+            settings_arrow.rotation = 90F
+        } else {
+            expandableLayoutSettings.expand()
+            settings_arrow.rotation = 270F
         }
     }
 

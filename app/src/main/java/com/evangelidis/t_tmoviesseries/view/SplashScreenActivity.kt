@@ -8,6 +8,8 @@ import android.view.View
 import com.evangelidis.t_tmoviesseries.utils.Constants.SPLASHSCREEN_TIME
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.login.LoginActivity
+import com.evangelidis.t_tmoviesseries.utils.Constants.IS_NOTIFICATION_ON
+import es.dmoral.prefs.Prefs
 
 class SplashScreenActivity : AppCompatActivity() {
 
@@ -21,6 +23,10 @@ class SplashScreenActivity : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_FULLSCREEN
                 or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+
+        if (!Prefs.with(applicationContext).contains(IS_NOTIFICATION_ON)){
+            Prefs.with(applicationContext).writeBoolean(IS_NOTIFICATION_ON, true)
+        }
 
         val handler = Handler()
         handler.postDelayed({
