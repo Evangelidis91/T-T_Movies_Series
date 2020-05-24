@@ -282,12 +282,13 @@
                 android:visibility="gone"
                 tools:visibility="visible">
 
-                <TextView android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_regular"
                     android:text="@string/videos"
                     android:textColor="@color/white"
-                    android:textSize="24sp"/>
+                    android:textSize="24sp" />
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
@@ -361,21 +362,30 @@
                 </HorizontalScrollView>
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/reviewsLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="@string/reviews"
-                android:textColor="@color/white"
-                android:textSize="24sp"
-                android:visibility="gone" />
-
             <LinearLayout
-                android:id="@+id/tvShowReviews"
+                android:id="@+id/productionCompaniesLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/info_layout_design"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="Production Companies"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+
+                <LinearLayout
+                    android:id="@+id/productionCompanies"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </LinearLayout>
 
         </LinearLayout>
 

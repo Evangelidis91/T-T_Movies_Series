@@ -19,7 +19,9 @@ import com.evangelidis.t_tmoviesseries.room.WishListData
 import com.evangelidis.t_tmoviesseries.room.WishListDataBase
 import com.evangelidis.t_tmoviesseries.utils.Constants
 import com.evangelidis.t_tmoviesseries.utils.Constants.ACTOR_IMAGE_URL
+import com.evangelidis.t_tmoviesseries.utils.Constants.COMPANY_IMAGE_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_BASE_URL
+import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_BASE_URL_SMALL
 import com.evangelidis.t_tmoviesseries.utils.Constants.YOUTUBE_THUMBNAIL_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.YOUTUBE_VIDEO_URL
 import com.evangelidis.t_tmoviesseries.viewmodel.ListViewModel
@@ -336,6 +338,19 @@ class MovieActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+
+        data.productionCompanies?.let {
+            productionCompanies.removeAllViews()
+            for (company in it) {
+                val parent = layoutInflater.inflate(R.layout.thumbnail_company, productionCompanies, false)
+                val companyName: TextView = parent.findViewById(R.id.productionCompanyName)
+                company.name?.let {
+                    companyName.text = company.name
+                    productionCompanies.addView(parent)
+                }
+            }
+            productionCompaniesLayout.visibility = View.VISIBLE
         }
     }
 

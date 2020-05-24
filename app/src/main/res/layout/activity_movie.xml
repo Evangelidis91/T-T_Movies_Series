@@ -169,6 +169,7 @@
 
             </LinearLayout>
 
+
             <LinearLayout
                 android:id="@+id/summaryContainer"
                 android:layout_width="match_parent"
@@ -433,6 +434,32 @@
                         android:orientation="horizontal" />
                 </HorizontalScrollView>
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/productionCompaniesLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/info_layout_design"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="Production Companies"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+
+                <LinearLayout
+                    android:id="@+id/productionCompanies"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </LinearLayout>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
