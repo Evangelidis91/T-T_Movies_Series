@@ -26,8 +26,11 @@ import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_NAME
 import com.evangelidis.t_tmoviesseries.utils.Constants.YOUTUBE_THUMBNAIL_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.YOUTUBE_VIDEO_URL
 import com.evangelidis.t_tmoviesseries.viewmodel.ListViewModel
+import kotlinx.android.synthetic.main.activity_movie.*
 import kotlinx.android.synthetic.main.activity_tv_show.*
 import kotlinx.android.synthetic.main.activity_tv_show.directorsContainer
+import kotlinx.android.synthetic.main.activity_tv_show.productionCompanies
+import kotlinx.android.synthetic.main.activity_tv_show.productionCompaniesLayout
 import kotlinx.android.synthetic.main.activity_tv_show.tvShowDirectors
 import kotlinx.android.synthetic.main.activity_tv_show.progressBar
 import kotlinx.android.synthetic.main.activity_tv_show.summaryContainer
@@ -214,6 +217,19 @@ class TvShowActivity : AppCompatActivity() {
         data.overview?.let {
             tvShowOverview.text = it
             summaryContainer.visibility = View.VISIBLE
+        }
+
+        data.productionCompanies?.let {
+            productionCompanies.removeAllViews()
+            for (company in it) {
+                val parent = layoutInflater.inflate(R.layout.thumbnail_company, productionCompanies, false)
+                val companyName: TextView = parent.findViewById(R.id.productionCompanyName)
+                company.name?.let {
+                    companyName.text = company.name
+                    productionCompanies.addView(parent)
+                }
+            }
+            productionCompaniesLayout.visibility = View.VISIBLE
         }
     }
 
