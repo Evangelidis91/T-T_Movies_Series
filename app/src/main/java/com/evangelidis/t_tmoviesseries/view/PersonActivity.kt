@@ -43,6 +43,11 @@ class PersonActivity : AppCompatActivity() {
         viewModel.getPersonDetails(personId)
         viewModel.getPersonCombinedCredits(personId)
 
+        imageToMain.setOnClickListener {
+            val intent = Intent(this@PersonActivity, MainActivity::class.java)
+            startActivity(intent)
+        }
+
         observeViewModel()
     }
 
