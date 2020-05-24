@@ -9,11 +9,20 @@
 
     <string name="close_popup_window_title">What do you want to do?</string>
     <string name="close_the_app_text">Close the app</string>
+    <string name="logout_popup_window_title">Do you want to logout?</string>
+    <string name="logout_from_the_app_text">Logout</string>
 
     <string name="tab">\u0009\u0009\u0009\u0009</string>
     <string name="bullet">\u2022</string>
 
     <string name="my_wishlist"><u>My watch list</u></string>
+
+    <string name="notifications_are_on">Notifications are on</string>
+    <string name="notifications_are_off">Notifications are off</string>
+    <string name="sync_watchlist_is_on">Watchlist sync is on</string>
+    <string name="sync_watchlist_is_off">Watchlist sync is off</string>
+
+    <string name="welcome_user">Welcome {USERNAME}</string>
 
     <string name="movies">Movies</string>
     <string name="movie">Movie</string>

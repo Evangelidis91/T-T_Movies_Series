@@ -10,6 +10,9 @@ object Constants {
     const val LANGUAGE = "en-US"
     const val API_KEY = "73bd64c984323a7ca5be2fadb11b81a6"
 
+    const val IS_NOTIFICATION_ON = "is_notification_on"
+    const val IS_SYNC_WATCHLIST_ON = "is_sync_watchlist_on"
+
     const val PLAYING_NOW_MOVIES = "playing_now_movies"
     const val TOP_RATED_MOVIES = "top_rated_movies"
     const val UPCOMING_MOVIES = "upcoming_movies"
