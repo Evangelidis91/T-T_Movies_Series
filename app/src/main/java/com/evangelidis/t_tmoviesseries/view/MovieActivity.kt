@@ -19,7 +19,6 @@ import com.evangelidis.t_tmoviesseries.room.WishListData
 import com.evangelidis.t_tmoviesseries.room.WishListDataBase
 import com.evangelidis.t_tmoviesseries.utils.Constants
 import com.evangelidis.t_tmoviesseries.utils.Constants.ACTOR_IMAGE_URL
-import com.evangelidis.t_tmoviesseries.utils.Constants.COMPANY_IMAGE_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_BASE_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_BASE_URL_SMALL
 import com.evangelidis.t_tmoviesseries.utils.Constants.YOUTUBE_THUMBNAIL_URL
