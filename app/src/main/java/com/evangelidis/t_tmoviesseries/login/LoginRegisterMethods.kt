@@ -8,8 +8,7 @@ import java.util.regex.Pattern
 object LoginRegisterMethods {
 
     fun verifyAvailableNetwork(context: Context?): Boolean {
-        val connectivityManager =
-            context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectivityManager.activeNetworkInfo
         return networkInfo != null && networkInfo.isConnected
     }
@@ -28,7 +27,5 @@ object LoginRegisterMethods {
         return matcher.matches()
     }
 
-    fun arePasswordsEquals(pass1: String, pass2: String): Boolean{
-        return pass1 == pass2
-    }
+    fun arePasswordsEquals(pass1: String, pass2: String) = (pass1 == pass2)
 }

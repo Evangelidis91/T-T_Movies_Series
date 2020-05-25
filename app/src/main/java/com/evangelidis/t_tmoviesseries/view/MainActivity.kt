@@ -1,7 +1,5 @@
 package com.evangelidis.t_tmoviesseries.view
 
-import android.app.Activity
-import android.content.Context
 import android.content.DialogInterface.OnClickListener
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -9,9 +7,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
-import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -26,14 +22,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.callbacks.OnMoviesClickCallback
 import com.evangelidis.t_tmoviesseries.callbacks.OnTvShowClickCallback
+import com.evangelidis.t_tmoviesseries.extensions.*
 import com.evangelidis.t_tmoviesseries.login.LoginActivity
+import com.evangelidis.t_tmoviesseries.login.LoginRegisterMethods
 import com.evangelidis.t_tmoviesseries.model.MessagePost
 import com.evangelidis.t_tmoviesseries.model.Movie
 import com.evangelidis.t_tmoviesseries.model.TvShow
 import com.evangelidis.t_tmoviesseries.room.DbWorkerThread
-import com.evangelidis.t_tmoviesseries.room.WishListDataBase
+import com.evangelidis.t_tmoviesseries.room.WatchlistDataBase
 import com.evangelidis.t_tmoviesseries.utils.Constants.AIRING_TODAY_TV
+import com.evangelidis.t_tmoviesseries.utils.Constants.DATABASE_THREAD
 import com.evangelidis.t_tmoviesseries.utils.Constants.FIREBASE_DATABASE_DATE_FORMAT
+import com.evangelidis.t_tmoviesseries.utils.Constants.FIREBASE_MESSAGES_DATABASE_PATH
+import com.evangelidis.t_tmoviesseries.utils.Constants.FIREBASE_MESSAGES_DATABASE_PATH_CHILD
 import com.evangelidis.t_tmoviesseries.utils.Constants.IS_LOGIN_SKIPPED
 import com.evangelidis.t_tmoviesseries.utils.Constants.IS_NOTIFICATION_ON
 import com.evangelidis.t_tmoviesseries.utils.Constants.IS_SYNC_WATCHLIST_ON
@@ -66,8 +67,6 @@ import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.navigation_drawer.*
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.mail.internet.AddressException
-import javax.mail.internet.InternetAddress
 
 class MainActivity : AppCompatActivity() {
 
@@ -108,7 +107,7 @@ class MainActivity : AppCompatActivity() {
 
     var listOfRetrievedPages = arrayListOf(1)
 
-    private var mDb: WishListDataBase? = null
+    private var mDb: WatchlistDataBase? = null
     private lateinit var mDbWorkerThread: DbWorkerThread
     private val mUiHandler = Handler()
 
@@ -117,7 +116,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         database = FirebaseDatabase.getInstance()
-        myRef = database.getReference("message")
+        myRef = database.getReference(FIREBASE_MESSAGES_DATABASE_PATH)
         user = FirebaseAuth.getInstance().currentUser
 
         toolbar_title.text = getString(R.string.popular_movies)
@@ -127,9 +126,9 @@ class MainActivity : AppCompatActivity() {
         expandableLayoutCommunicate.expand()
         expandableLayoutSettings.collapse()
 
-        mDbWorkerThread = DbWorkerThread("dbWorkerThread")
+        mDbWorkerThread = DbWorkerThread(DATABASE_THREAD)
         mDbWorkerThread.start()
-        mDb = WishListDataBase.getInstance(this)
+        mDb = WatchlistDataBase.getInstance(this)
 
         getDataFromDB()
 
@@ -177,28 +176,26 @@ class MainActivity : AppCompatActivity() {
             builder.apply {
                 setIcon(R.drawable.video_camera)
                 setTitle(R.string.app_name)
-                setMessage(resources.getString(R.string.close_popup_window_title))
+                setMessage(R.string.close_popup_window_title)
                 setCancelable(false)
-                setPositiveButton(resources.getString(R.string.close_the_app_text),
-                    OnClickListener { dialog, id -> finish() })
-                setNegativeButton(resources.getString(R.string.cancel),
-                    OnClickListener { dialog, id -> dialog.cancel() })
+                setPositiveButton(R.string.close_the_app_text, OnClickListener { dialog, id -> finish() })
+                setNegativeButton(R.string.cancel, OnClickListener { dialog, id -> dialog.cancel() })
                 create().show()
             }
         }
     }
 
     private fun hideProgressBar() {
-        //progressbar.visibility = View.GONE
+        loading_view.gone()
     }
 
     private fun getDataFromDB() {
         val task = Runnable {
-            val wishlistData = mDb?.todoDao()?.getAll()
+            val watchlistData = mDb?.todoDao()?.getAll()
             mUiHandler.post {
-                if (!wishlistData.isNullOrEmpty()) {
-                    moviesListAdapter.updateWishlist(wishlistData)
-                    tvShowAdapter.updateWishlist(wishlistData)
+                watchlistData?.let {
+                    moviesListAdapter.updateWatchlist(it)
+                    tvShowAdapter.updateWatchlist(it)
                 }
             }
         }
@@ -220,8 +217,8 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.moviesList.observe(this, Observer { data ->
             data.results?.let {
-                moviesList.visibility = View.VISIBLE
-                tvshowList.visibility = View.GONE
+                moviesList.show()
+                tvshowList.gone()
                 if (listOfRetrievedPages.size == 1) {
                     moviesListAdapter.updateData(it)
                 } else {
@@ -232,8 +229,8 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.tvShowsList.observe(this, Observer { data ->
             data.results?.let {
-                moviesList.visibility = View.GONE
-                tvshowList.visibility = View.VISIBLE
+                moviesList.gone()
+                tvshowList.show()
                 if (listOfRetrievedPages.size == 1) {
                     tvShowAdapter.updateData(it)
                 } else {
@@ -244,33 +241,33 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.loadError.observe(this, Observer { isError ->
             isError?.let {
-                list_error.visibility = if (it) View.VISIBLE else View.GONE
+                list_error.showIf { isError }
                 if (it) {
-                    list_error.visibility = View.VISIBLE
-                    TanTinToast.Warning(this).text("Please check your internet connection.").show()
+                    list_error.show()
+                    TanTinToast.Warning(this).text(getString(R.string.no_internet)).show()
                 }
             }
         })
 
         viewModel.loading.observe(this, Observer { isLoading ->
             isLoading?.let {
-                loading_view.visibility = if (it) View.VISIBLE else View.GONE
+                loading_view.showIf { isLoading }
                 if (it) {
-                    list_error.visibility = View.GONE
-                    moviesList.visibility = View.GONE
+                    list_error.gone()
+                    moviesList.gone()
                 }
             }
         })
     }
 
     private fun setUpScrollListener() {
-        val manager = LinearLayoutManager(this)
-        moviesList.layoutManager = manager
+        val movieManager = LinearLayoutManager(this)
+        moviesList.layoutManager = movieManager
         moviesList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val totalItemCount = manager.itemCount
-                val visibleItemCount = manager.childCount
-                val firstVisibleItem = manager.findFirstVisibleItemPosition()
+                val totalItemCount = movieManager.itemCount
+                val visibleItemCount = movieManager.childCount
+                val firstVisibleItem = movieManager.findFirstVisibleItemPosition()
                 if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
                     listOfRetrievedPages.add(listOfRetrievedPages.last() + 1)
                     when (sortBy) {
@@ -291,13 +288,13 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        val manager1 = LinearLayoutManager(this)
-        tvshowList.layoutManager = manager1
+        val tvManager = LinearLayoutManager(this)
+        tvshowList.layoutManager = tvManager
         tvshowList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val totalItemCount = manager1.itemCount
-                val visibleItemCount = manager1.childCount
-                val firstVisibleItem = manager1.findFirstVisibleItemPosition()
+                val totalItemCount = tvManager.itemCount
+                val visibleItemCount = tvManager.childCount
+                val firstVisibleItem = tvManager.findFirstVisibleItemPosition()
                 if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
                     listOfRetrievedPages.add(listOfRetrievedPages.last() + 1)
                     when (sortBy) {
@@ -322,9 +319,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupNavigationViewClickListeners() {
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
-        val toggle = ActionBarDrawerToggle(
-            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
-        )
+        val toggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer.addDrawerListener(toggle)
         toggle.syncState()
         navigationView.itemTextColor = ColorStateList.valueOf(Color.WHITE)
@@ -424,7 +419,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         nav_wishlist.setOnClickListener {
-            val intent = Intent(this@MainActivity, WishlistActivity::class.java)
+            val intent = Intent(this@MainActivity, WatchlistActivity::class.java)
             startActivity(intent)
         }
 
@@ -433,44 +428,60 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpNavigationDrawerNotificationSwitch() {
         if (Prefs.with(applicationContext).readBoolean(IS_NOTIFICATION_ON, false)) {
-            nav_notifications.isChecked = true
-            nav_notifications.text = resources.getString(R.string.notifications_are_on)
+            nav_notifications.apply {
+                isChecked = true
+                text = getString(R.string.notifications_are_on)
+            }
         } else {
-            nav_notifications.isChecked = false
-            nav_notifications.text = resources.getString(R.string.notifications_are_off)
+            nav_notifications.apply {
+                isChecked = false
+                text = getString(R.string.notifications_are_off)
+            }
         }
 
         nav_notifications.setOnClickListener {
             if (Prefs.with(applicationContext).readBoolean(IS_NOTIFICATION_ON, false)) {
-                nav_notifications.isChecked = false
-                nav_notifications.text = resources.getString(R.string.notifications_are_off)
                 Prefs.with(applicationContext).writeBoolean(IS_NOTIFICATION_ON, false)
+                nav_notifications.apply {
+                    isChecked = false
+                    text = getString(R.string.notifications_are_off)
+                }
             } else {
-                nav_notifications.isChecked = true
-                nav_notifications.text = resources.getString(R.string.notifications_are_on)
                 Prefs.with(applicationContext).writeBoolean(IS_NOTIFICATION_ON, true)
+                nav_notifications.apply {
+                    isChecked = true
+                    text = getString(R.string.notifications_are_on)
+                }
             }
         }
     }
 
     private fun setUpNavigationDrawerWatchlistSwitch() {
         if (Prefs.with(applicationContext).readBoolean(IS_SYNC_WATCHLIST_ON, false)) {
-            nav_sync_watchlist.isChecked = true
-            nav_sync_watchlist.text = resources.getString(R.string.sync_watchlist_is_on)
+            nav_sync_watchlist.apply {
+                isChecked = true
+                text = getString(R.string.sync_watchlist_is_on)
+            }
         } else {
-            nav_sync_watchlist.isChecked = false
-            nav_sync_watchlist.text = resources.getString(R.string.sync_watchlist_is_off)
+            nav_sync_watchlist.apply {
+                isChecked = false
+                text = getString(R.string.sync_watchlist_is_off)
+            }
         }
 
         nav_sync_watchlist.setOnClickListener {
             if (Prefs.with(applicationContext).readBoolean(IS_SYNC_WATCHLIST_ON, false)) {
-                nav_sync_watchlist.isChecked = false
-                nav_sync_watchlist.text = resources.getString(R.string.sync_watchlist_is_off)
                 Prefs.with(applicationContext).writeBoolean(IS_SYNC_WATCHLIST_ON, false)
+                nav_sync_watchlist.apply {
+                    isChecked = false
+                    text = getString(R.string.sync_watchlist_is_off)
+                }
             } else {
-                nav_sync_watchlist.isChecked = true
-                nav_sync_watchlist.text = resources.getString(R.string.sync_watchlist_is_on)
                 Prefs.with(applicationContext).writeBoolean(IS_SYNC_WATCHLIST_ON, true)
+                nav_sync_watchlist.apply {
+                    isChecked = true
+                    text = getString(R.string.sync_watchlist_is_on)
+                }
             }
         }
     }
@@ -478,11 +489,11 @@ class MainActivity : AppCompatActivity() {
     private fun setUpNavigationLoginUI() {
         val user = FirebaseAuth.getInstance().currentUser
         if (user == null) {
-            nav_logout.visibility = View.GONE
+            nav_logout.gone()
         } else {
             user.email?.let {
                 loginText.text = resources.getString(R.string.welcome_user).replace("{USERNAME}", it.substringBefore("@"))
-                nav_logout.visibility = View.VISIBLE
+                nav_logout.show()
             }
         }
 
@@ -505,16 +516,15 @@ class MainActivity : AppCompatActivity() {
         builder.apply {
             setIcon(R.drawable.video_camera)
             setTitle(R.string.app_name)
-            setMessage(resources.getString(R.string.logout_popup_window_title))
+            setMessage(R.string.logout_popup_window_title)
             setCancelable(false)
-            setPositiveButton(resources.getString(R.string.logout_from_the_app_text),
+            setPositiveButton(getString(R.string.logout_from_the_app_text),
                 OnClickListener { dialog, id ->
                     FirebaseAuth.getInstance().signOut()
-                    loginText.text = resources.getString(R.string.login)
+                    loginText.text = getString(R.string.login)
                     setUpNavigationLoginUI()
                 })
-            setNegativeButton(resources.getString(R.string.cancel),
-                OnClickListener { dialog, id -> dialog.cancel() })
+            setNegativeButton(getString(R.string.cancel), OnClickListener { dialog, id -> dialog.cancel() })
             create().show()
         }
     }
@@ -522,21 +532,26 @@ class MainActivity : AppCompatActivity() {
     private fun submitMessage() {
         val sliderView = LayoutInflater.from(this).inflate(R.layout.submit_question_layout, null)
         val messageDialog: AlertDialog = AlertDialog.Builder(this).create()
-        messageDialog.setView(sliderView)
-        messageDialog.show()
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
-        val emailInput = sliderView.findViewById<TextInputLayout>(R.id.profile_input_email)
-        val emailET = sliderView.findViewById<EditText>(R.id.profile_et_email)
-        val messageInput = sliderView.findViewById<TextInputLayout>(R.id.profile_input_message)
-        val messageET = sliderView.findViewById<EditText>(R.id.profile_et_message)
+        messageDialog.apply {
+            setView(sliderView)
+            show()
+        }
+        val emailInput: TextInputLayout = sliderView.findViewById(R.id.profile_input_email)
+        val emailET: EditText = sliderView.findViewById(R.id.profile_et_email)
+        val messageInput: TextInputLayout = sliderView.findViewById(R.id.profile_input_message)
+        val messageET: EditText = sliderView.findViewById(R.id.profile_et_message)
         val nameET = sliderView.findViewById<EditText>(R.id.profile_et_name)
-        val submitMessageToCloud = sliderView.findViewById<Button>(R.id.submit_message)
+        val submitMessageToCloud : Button = sliderView.findViewById(R.id.submit_message)
+        val declineMessage : Button = sliderView.findViewById(R.id.decline_message)
+
+        showKeyboard()
 
         user?.email?.let {
             emailET.setText(it)
             nameET.requestFocus()
         }
+
+        declineMessage.setOnClickListener { messageDialog.dismiss() }
 
         // When user press done in keyboard
         messageET.setOnEditorActionListener { v, actionId, event ->
@@ -548,15 +563,10 @@ class MainActivity : AppCompatActivity() {
                     } else {
                         ""
                     }
-                    val df = SimpleDateFormat(FIREBASE_DATABASE_DATE_FORMAT)
+                    val df = SimpleDateFormat(FIREBASE_DATABASE_DATE_FORMAT, Locale.UK)
                     val date = df.format(Calendar.getInstance().time)
-                    val post = MessagePost(
-                        emailET.text.toString(),
-                        messageET.text.toString(),
-                        date,
-                        userName
-                    )
-                    myRef.child(getString(R.string.firebase_Users_Posts_Path)).push()
+                    val post = MessagePost(emailET.text.toString(), messageET.text.toString(), date, userName)
+                    myRef.child(FIREBASE_MESSAGES_DATABASE_PATH_CHILD).push()
                         .setValue(post)
                         .addOnSuccessListener(OnSuccessListener<Void> {
                             TanTinToast.Success(this).text(getString(R.string.message_succ)).show()
@@ -566,8 +576,7 @@ class MainActivity : AppCompatActivity() {
                             TanTinToast.Error(this).text(getString(R.string.message_fail)).show()
                         })
 
-                    val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+                    sliderView.hideKeyboard()
 
                 } else {
                     if (!isValidEmailAddress(emailET.text.toString())) {
@@ -588,15 +597,10 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     nameET.text.toString()
                 }
-                val df = SimpleDateFormat(FIREBASE_DATABASE_DATE_FORMAT)
+                val df = SimpleDateFormat(FIREBASE_DATABASE_DATE_FORMAT, Locale.UK)
                 val date = df.format(Calendar.getInstance().time)
-                val post = MessagePost(
-                    emailET.text.toString(),
-                    messageET.text.toString(),
-                    date,
-                    userName
-                )
-                myRef.child(resources.getString(R.string.firebase_Users_Posts_Path)).push()
+                val post = MessagePost(emailET.text.toString(), messageET.text.toString(), date, userName)
+                myRef.child(FIREBASE_MESSAGES_DATABASE_PATH_CHILD).push()
                     .setValue(post)
                     .addOnSuccessListener(OnSuccessListener<Void> {
                         TanTinToast.Success(this).text(getString(R.string.message_succ)).show()
@@ -605,8 +609,8 @@ class MainActivity : AppCompatActivity() {
                     .addOnFailureListener(OnFailureListener {
                         TanTinToast.Error(this).text(getString(R.string.message_fail)).show()
                     })
-                val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+
+                sliderView.hideKeyboard()
             } else {
                 if (!isValidEmailAddress(emailET.text.toString())) {
                     emailInput.error = getString(R.string.mail_error)
@@ -659,10 +663,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun isValidEmailAddress(email: String): Boolean {
         var result = true
-        try {
-            val emailAddress = InternetAddress(email)
-            emailAddress.validate()
-        } catch (ex: AddressException) {
+        if (!LoginRegisterMethods.isEmailValid(email)) {
             result = false
         }
         return result

@@ -3,7 +3,6 @@ package com.evangelidis.t_tmoviesseries.view
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
@@ -11,12 +10,14 @@ import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.evangelidis.t_tmoviesseries.R
+import com.evangelidis.t_tmoviesseries.extensions.gone
+import com.evangelidis.t_tmoviesseries.extensions.show
 import com.evangelidis.t_tmoviesseries.model.PersonCombinedResponse
 import com.evangelidis.t_tmoviesseries.model.PersonDetailsResponse
 import com.evangelidis.t_tmoviesseries.utils.Constants.ACTOR_IMAGE_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.ACTOR_NAME
 import com.evangelidis.t_tmoviesseries.utils.Constants.BIOGRAPHY_TEXT
-import com.evangelidis.t_tmoviesseries.utils.Constants.DATE_FORMAT
+import com.evangelidis.t_tmoviesseries.utils.Constants.INPUT_DATE_FORMAT
 import com.evangelidis.t_tmoviesseries.utils.Constants.MOVIE_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.PERSON_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_ID
@@ -30,7 +31,7 @@ class PersonActivity : AppCompatActivity() {
 
     private var personId: Int = 0
     lateinit var viewModel: ListViewModel
-    private val sdf = SimpleDateFormat(DATE_FORMAT)
+    private val sdf = SimpleDateFormat(INPUT_DATE_FORMAT, Locale.UK)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +46,11 @@ class PersonActivity : AppCompatActivity() {
 
         imageToMain.setOnClickListener {
             val intent = Intent(this@PersonActivity, MainActivity::class.java)
+            startActivity(intent)
+        }
+
+        search_img.setOnClickListener {
+            val intent = Intent(this@PersonActivity, SearchActivity::class.java)
             startActivity(intent)
         }
 
@@ -73,7 +79,7 @@ class PersonActivity : AppCompatActivity() {
 
         data.knownForDepartment?.let {
             knowingLabel.text = it
-            knowingContainer.visibility = View.VISIBLE
+            knowingContainer.show()
         }
 
         data.profilePath?.let {
@@ -104,7 +110,6 @@ class PersonActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
-
         setUpActorDates(data)
     }
 
@@ -122,9 +127,11 @@ class PersonActivity : AppCompatActivity() {
                 val dateBorn = sdf.parse(it)
                 val dateDied = sdf.parse(data.deathday)
                 val age = getDiffYears(dateBorn, dateDied)
-                born.text = "Born: " + it
-                deathday.text = "Died: " + data.deathday + " (age " + age + ")"
-                deathday.visibility = View.VISIBLE
+                born.text = getString(R.string.person_born).replace("{DATE}", it)
+                deathday.text = getString(R.string.person_death)
+                    .replace("{DEATH_DATE}", data.deathday)
+                    .replace("{AGE}", age.toString())
+                deathday.show()
             }
         }
     }
@@ -133,30 +140,25 @@ class PersonActivity : AppCompatActivity() {
         val a = getCalendar(first)
         val b = getCalendar(last)
         var diff = b.get(Calendar.YEAR) - a.get(Calendar.YEAR)
-        if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) || a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(
-                Calendar.DATE
-            ) > b.get(Calendar.DATE)
-        ) {
+        if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) || a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DATE) > b.get(Calendar.DATE)) {
             diff--
         }
         return diff
     }
 
     private fun getCalendar(date: Date): Calendar {
-        val cal = Calendar.getInstance(Locale.US)
+        val cal = Calendar.getInstance(Locale.UK)
         cal.time = date
         return cal
     }
 
     private fun setUpCombinedCreditsList(data: PersonCombinedResponse) {
-
         actorMovies.removeAllViews()
         data.cast?.let {
-            filmographyContainer.visibility = View.VISIBLE
+            filmographyContainer.show()
 
             for (result in it) {
-                val parent =
-                    layoutInflater.inflate(R.layout.thumbnail_actors_movie, actorMovies, false)
+                val parent = layoutInflater.inflate(R.layout.thumbnail_actors_movie, actorMovies, false)
                 val movieImg = parent.findViewById<ImageView>(R.id.movie_img)
                 val movieName = parent.findViewById<TextView>(R.id.movie_name)
                 val actorCharacter = parent.findViewById<TextView>(R.id.actor_character)
@@ -172,7 +174,7 @@ class PersonActivity : AppCompatActivity() {
                     }
                 } else if (result.mediaType == "tv") {
                     movieName.text = result.name
-                    actorCharacter.visibility = View.GONE
+                    actorCharacter.gone()
                     parent.setOnClickListener {
                         val intent = Intent(this@PersonActivity, TvShowActivity::class.java)
                         intent.putExtra(TV_SHOW_ID, result.id)
@@ -181,7 +183,7 @@ class PersonActivity : AppCompatActivity() {
                 }
 
                 if (!(result.releaseDate.isNullOrEmpty())) {
-                    movieYear.visibility = View.VISIBLE
+                    movieYear.show()
                     movieYear.text = result.releaseDate.substring(0, 4)
                 }
 
@@ -194,6 +196,4 @@ class PersonActivity : AppCompatActivity() {
             }
         }
     }
-
-
 }

@@ -4,20 +4,21 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.evangelidis.t_tmoviesseries.utils.Constants.ROOM_DATABASE_NAME
 
-@Database(entities = arrayOf(WishListData::class), version = 2)
-abstract class WishListDataBase : RoomDatabase() {
+@Database(entities = arrayOf(WatchlistData::class), version = 2)
+abstract class WatchlistDataBase : RoomDatabase() {
 
     abstract fun todoDao(): TodoDao
 
     companion object {
-        private var INSTANCE: WishListDataBase? = null
+        private var INSTANCE: WatchlistDataBase? = null
 
-        fun getInstance(context: Context): WishListDataBase? {
+        fun getInstance(context: Context): WatchlistDataBase? {
             if (INSTANCE == null){
-                synchronized(WishListDataBase::class){
+                synchronized(WatchlistDataBase::class){
                     INSTANCE = Room.databaseBuilder(context.applicationContext,
-                        WishListDataBase::class.java, "wishlist.db")
+                        WatchlistDataBase::class.java, ROOM_DATABASE_NAME)
                         .build()
                 }
             }

@@ -2,12 +2,12 @@
 <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/my_toolbar"
+    style="@style/HeaderBar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    style="@style/HeaderBar"
-    app:theme="@style/ActionBarThemeOverlay"
+    android:elevation="4dp"
     app:popupTheme="@style/ActionBarPopupThemeOverlay"
-    android:elevation="4dp">
+    app:theme="@style/ActionBarThemeOverlay">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,17 +21,17 @@
             android:layout_height="match_parent"
             android:layout_weight="20"
             android:padding="7dp"
-            android:src="@drawable/video_camera_white"/>
+            android:src="@drawable/video_camera_white" />
 
         <TextView
             android:id="@+id/toolbar_title"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="65"
-            android:gravity="center"
+            android:ellipsize="end"
             android:fontFamily="@font/montserrat_bold"
-            android:maxLines="1"
-            android:ellipsize="end"/>
+            android:gravity="center"
+            android:maxLines="1" />
 
         <ImageView
             android:id="@+id/search_img"
@@ -39,7 +39,7 @@
             android:layout_height="match_parent"
             android:layout_weight="15"
             android:padding="15dp"
-            android:src="@drawable/ic_search"/>
+            android:src="@drawable/ic_search" />
 
     </LinearLayout>
 

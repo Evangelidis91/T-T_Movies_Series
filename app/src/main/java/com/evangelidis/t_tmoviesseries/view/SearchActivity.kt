@@ -14,7 +14,7 @@ import com.evangelidis.t_tmoviesseries.callbacks.OnTrendingClickCallback
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.model.Multisearch
 import com.evangelidis.t_tmoviesseries.room.DbWorkerThread
-import com.evangelidis.t_tmoviesseries.room.WishListDataBase
+import com.evangelidis.t_tmoviesseries.room.WatchlistDataBase
 import com.evangelidis.t_tmoviesseries.utils.Constants.MOVIE_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.PERSON_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_ID
@@ -65,7 +65,7 @@ class SearchActivity : AppCompatActivity() {
 
     private val trendsList = mutableListOf<Multisearch>()
 
-    private var mDb: WishListDataBase? = null
+    private var mDb: WatchlistDataBase? = null
     private lateinit var mDbWorkerThread: DbWorkerThread
     private val mUiHandler = Handler()
 
@@ -75,7 +75,7 @@ class SearchActivity : AppCompatActivity() {
 
         mDbWorkerThread = DbWorkerThread("dbWorkerThread")
         mDbWorkerThread.start()
-        mDb = WishListDataBase.getInstance(this)
+        mDb = WatchlistDataBase.getInstance(this)
 
         getDataFromDB()
 
@@ -136,7 +136,7 @@ class SearchActivity : AppCompatActivity() {
             val wishlistData = mDb?.todoDao()?.getAll()
             mUiHandler.post {
                 if (!wishlistData.isNullOrEmpty()) {
-                    trendsAdapter.updateWishlist(wishlistData)
+                    trendsAdapter.updateWatchlist(wishlistData)
                 }
             }
         }

@@ -11,28 +11,18 @@ class InternetStatus {
     val isOnline: Boolean
         get() {
             try {
-                connectivityManager = context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
+                connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
                 val networkInfo = connectivityManager.activeNetworkInfo
-                connected = networkInfo != null && networkInfo.isAvailable &&
-                        networkInfo.isConnected
-                return connected
-
+                return networkInfo != null && networkInfo.isAvailable && networkInfo.isConnected
             } catch (e: Exception) {
                 Log.v("connectivity", e.toString())
             }
-
             return connected
         }
 
     companion object {
 
         lateinit var context: Context
-        /**
-         * Class to detect if there is internet connection
-         */
-
         private val instance = InternetStatus()
 
         fun getInstance(ctx: Context): InternetStatus {

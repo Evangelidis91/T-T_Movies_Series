@@ -11,18 +11,20 @@ import com.bumptech.glide.request.RequestOptions
 import com.evangelidis.t_tmoviesseries.callbacks.OnTrendingClickCallback
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.model.Multisearch
+import com.evangelidis.t_tmoviesseries.room.DatabaseManager.insertDataToDatabase
+import com.evangelidis.t_tmoviesseries.room.DatabaseManager.removeDataFromDatabase
 import com.evangelidis.t_tmoviesseries.room.DbWorkerThread
-import com.evangelidis.t_tmoviesseries.room.WishListData
-import com.evangelidis.t_tmoviesseries.room.WishListDataBase
+import com.evangelidis.t_tmoviesseries.room.WatchlistData
+import com.evangelidis.t_tmoviesseries.room.WatchlistDataBase
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_BASE_URL_SMALL
 
 class SearchAdapter(
     var trendingsList: MutableList<Multisearch>,
     var callback: OnTrendingClickCallback,
-    var wishlistList: MutableList<WishListData>
+    var watchlistList: MutableList<WatchlistData>
 ) : RecyclerView.Adapter<SearchAdapter.SearchViewHolder>() {
 
-    private var mDb: WishListDataBase? = null
+    private var mDb: WatchlistDataBase? = null
     private lateinit var mDbWorkerThread: DbWorkerThread
     private var category: String? = null
 
@@ -33,25 +35,22 @@ class SearchAdapter(
         notifyDataSetChanged()
     }
 
-    fun updateWishlist(wishlist: MutableList<WishListData>){
-        wishlistList.clear()
-        wishlistList.addAll(wishlist)
+    fun updateWatchlist(watchlist: MutableList<WatchlistData>) {
+        watchlistList.clear()
+        watchlistList.addAll(watchlist)
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): SearchViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
         mDbWorkerThread = DbWorkerThread("dbWorkerThread")
         mDbWorkerThread.start()
-        mDb = WishListDataBase.getInstance(parent.context)
+        mDb = WatchlistDataBase.getInstance(parent.context)
 
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_search, parent, false)
         return SearchViewHolder(view)
     }
 
-    override fun getItemCount() = trendingsList.size
+    override fun getItemCount() = trendingsList.count()
 
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
         holder.bind(trendingsList[position])
@@ -106,15 +105,15 @@ class SearchAdapter(
 
             itemView.setOnClickListener { callback.onClick(trend) }
 
-            if (!wishlistList.isNullOrEmpty()) {
-                val finder = wishlistList.find { it.itemId == trend.id && it.category == category }
+            if (!watchlistList.isNullOrEmpty()) {
+                val finder = watchlistList.find { it.itemId == trend.id && it.category == category }
                 if (finder != null) {
                     itemWishlist.setImageResource(R.drawable.ic_enable_wishlist)
                 }
             }
 
             itemWishlist.setOnClickListener {
-                val wishList = WishListData()
+                val wishList = WatchlistData()
                 wishList.itemId = trend.id
                 wishList.category = category.orEmpty()
                 wishList.name = trend.name.orEmpty()
@@ -124,36 +123,24 @@ class SearchAdapter(
                     wishList.rate = it
                 }
 
-                if (wishlistList.isNullOrEmpty()) {
-                    insertDataToDatabase(wishList)
-                    wishlistList.add(wishList)
+                if (watchlistList.isNullOrEmpty()) {
+                    insertDataToDatabase(wishList, mDb, mDbWorkerThread)
+                    watchlistList.add(wishList)
                     itemWishlist.setImageResource(R.drawable.ic_enable_wishlist)
                 } else {
                     val finder =
-                        wishlistList.find { it.itemId == trend.id && it.category == category }
+                        watchlistList.find { it.itemId == trend.id && it.category == category }
                     if (finder != null) {
                         itemWishlist.setImageResource(R.drawable.ic_disable_wishlist)
-                        removeDataFromDatabase(wishList)
-                        wishlistList.remove(wishList)
+                        removeDataFromDatabase(wishList, mDb, mDbWorkerThread)
+                        watchlistList.remove(wishList)
                     } else {
-                        insertDataToDatabase(wishList)
-                        wishlistList.add(wishList)
+                        insertDataToDatabase(wishList, mDb, mDbWorkerThread)
+                        watchlistList.add(wishList)
                         itemWishlist.setImageResource(R.drawable.ic_enable_wishlist)
                     }
                 }
             }
-        }
-
-        private fun insertDataToDatabase(wishList: WishListData) {
-            val task = Runnable { mDb?.todoDao()?.insert(wishList) }
-            mDbWorkerThread.postTask(task)
-        }
-
-        private fun removeDataFromDatabase(wishList: WishListData) {
-            val task = Runnable {
-                mDb?.todoDao()?.deleteByUserId(wishList.itemId)
-            }
-            mDbWorkerThread.postTask(task)
         }
     }
 }

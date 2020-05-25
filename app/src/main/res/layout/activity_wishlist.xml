@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@drawable/side_nav_bar_menu_gradient"
+    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".view.WishlistActivity">
+    tools:context=".view.WatchlistActivity">
 
     <TextView
         android:id="@+id/textView2"
@@ -22,10 +22,10 @@
         android:id="@+id/wishlist_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/textView2"
         android:layout_margin="8dp"
         android:divider="@android:color/transparent"
-        android:dividerHeight="8dp"
-        android:layout_below="@+id/textView2"/>
+        android:dividerHeight="8dp" />
 
     <com.tuyenmonkey.mkloader.MKLoader
         android:id="@+id/loading_view"
