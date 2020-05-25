@@ -1,5 +1,6 @@
 package com.evangelidis.t_tmoviesseries.view
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -43,7 +44,7 @@ class WatchlistActivity : AppCompatActivity() {
         }
     }
 
-    private val watchlistAdapter = WatchlistAdapter(arrayListOf(), watchlistCallback)
+    private val watchlistAdapter = WatchlistAdapter(arrayListOf(), watchlistCallback, this)
     private var mDb: WatchlistDataBase? = null
     private lateinit var mDbWorkerThread: DbWorkerThread
     private val mUiHandler = Handler()
@@ -72,18 +73,26 @@ class WatchlistActivity : AppCompatActivity() {
                     val watchlistData = mDb?.todoDao()?.getAll()
                     mUiHandler.post {
                         if (!watchlistData.isNullOrEmpty()) {
+                            empty_watchlist_text.gone()
                             wishlist_list.apply {
                                 layoutManager = LinearLayoutManager(context)
                                 adapter = watchlistAdapter
                             }
-                            watchlistAdapter.appendWishlistData(watchlistData)
-                            loading_view.gone()
+                            watchlistAdapter.appendWatchlistData(watchlistData)
+
+                        } else {
+                            empty_watchlist_text.show()
                         }
+                        loading_view.gone()
                     }
                 }
                 mDbWorkerThread.postTask(task)
             },
             400
         )
+    }
+
+    fun displayEmptyList(){
+        empty_watchlist_text.show()
     }
 }

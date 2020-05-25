@@ -112,6 +112,7 @@ class SearchActivity : AppCompatActivity() {
 
         viewModel.trendings.observe(this, Observer { data ->
             data.results?.let {
+                trendsList.clear()
                 trendsList.addAll(it)
                 trendsAdapter.appendTrendings(it)
             }

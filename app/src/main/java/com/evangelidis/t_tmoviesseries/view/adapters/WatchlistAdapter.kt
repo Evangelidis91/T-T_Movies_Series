@@ -1,5 +1,6 @@
 package com.evangelidis.t_tmoviesseries.view.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,16 +18,19 @@ import com.evangelidis.t_tmoviesseries.room.WatchlistData
 import com.evangelidis.t_tmoviesseries.room.WatchlistDataBase
 import com.evangelidis.t_tmoviesseries.utils.Constants.DATABASE_THREAD
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_BASE_URL_SMALL
+import com.evangelidis.t_tmoviesseries.view.WatchlistActivity
 
 class WatchlistAdapter(
     var watchlistList: MutableList<WatchlistData>,
-    var callback: OnWatchlistClickCallback
+    var callback: OnWatchlistClickCallback,
+    var context: Context
 ) : RecyclerView.Adapter<WatchlistAdapter.WatchlistViewHolder>() {
+
 
     private var mDb: WatchlistDataBase? = null
     private lateinit var mDbWorkerThread: DbWorkerThread
 
-    fun appendWishlistData(watchlist: MutableList<WatchlistData>) {
+    fun appendWatchlistData(watchlist: MutableList<WatchlistData>) {
         watchlistList.clear()
         watchlistList.addAll(watchlist)
         notifyDataSetChanged()
@@ -84,6 +88,11 @@ class WatchlistAdapter(
             watchlistList.removeAt(position)
             notifyItemChanged(position)
             notifyItemRangeRemoved(position, 1)
+            notifyDataSetChanged()
+
+            if (watchlistList.isEmpty()) {
+                (context as WatchlistActivity).displayEmptyList()
+            }
         }
     }
 }

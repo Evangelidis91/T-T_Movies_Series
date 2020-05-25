@@ -229,16 +229,18 @@ class TvShowActivity : AppCompatActivity() {
         }
 
         data.productionCompanies?.let {
-            productionCompanies.removeAllViews()
-            for (company in it) {
-                val parent = layoutInflater.inflate(R.layout.thumbnail_company, productionCompanies, false)
-                val companyName: TextView = parent.findViewById(R.id.productionCompanyName)
-                company.name?.let {
-                    companyName.text = company.name
-                    productionCompanies.addView(parent)
+            if (it.isNotEmpty()) {
+                productionCompanies.removeAllViews()
+                for (company in it) {
+                    val parent = layoutInflater.inflate(R.layout.thumbnail_company, productionCompanies, false)
+                    val companyName: TextView = parent.findViewById(R.id.productionCompanyName)
+                    company.name?.let {
+                        companyName.text = company.name
+                        productionCompanies.addView(parent)
+                    }
                 }
+                productionCompaniesLayout.show()
             }
-            productionCompaniesLayout.show()
         }
     }
 
@@ -252,29 +254,31 @@ class TvShowActivity : AppCompatActivity() {
 
     private fun setUpActors(casts: List<TvShowCast>?) {
         casts?.let {
-            for (cast in it) {
-                val parent = layoutInflater.inflate(R.layout.thumbnail_actors_list, tvShowActors, false)
-                val thumbnail = parent.findViewById<ImageView>(R.id.thumbnail)
-                val textView = parent.findViewById<TextView>(R.id.actor_name)
-                val textView1 = parent.findViewById<TextView>(R.id.actor_character)
-                textView.text = cast.name
-                textView1.text = cast.character
-                thumbnail.requestLayout()
-                thumbnail.setOnClickListener {
-                    val intent = Intent(this@TvShowActivity, PersonActivity::class.java)
-                    intent.putExtra(PERSON_ID, cast.id)
-                    startActivity(intent)
+            if (it.isNotEmpty()) {
+                for (cast in it) {
+                    val parent = layoutInflater.inflate(R.layout.thumbnail_actors_list, tvShowActors, false)
+                    val thumbnail = parent.findViewById<ImageView>(R.id.thumbnail)
+                    val textView = parent.findViewById<TextView>(R.id.actor_name)
+                    val textView1 = parent.findViewById<TextView>(R.id.actor_character)
+                    textView.text = cast.name
+                    textView1.text = cast.character
+                    thumbnail.requestLayout()
+                    thumbnail.setOnClickListener {
+                        val intent = Intent(this@TvShowActivity, PersonActivity::class.java)
+                        intent.putExtra(PERSON_ID, cast.id)
+                        startActivity(intent)
+                    }
+
+                    Glide.with(this@TvShowActivity)
+                        .load(ACTOR_IMAGE_URL + cast.profilePath)
+                        .apply(RequestOptions.placeholderOf(R.color.mainBackground))
+                        .into(thumbnail)
+
+                    tvShowActors.addView(parent)
                 }
-
-                Glide.with(this@TvShowActivity)
-                    .load(ACTOR_IMAGE_URL + cast.profilePath)
-                    .apply(RequestOptions.placeholderOf(R.color.mainBackground))
-                    .into(thumbnail)
-
-                tvShowActors.addView(parent)
+                tvShowActorsContainer.show()
             }
         }
-        tvShowActorsContainer.show()
     }
 
     private fun setUpVideosUI(results: List<Video>?) {

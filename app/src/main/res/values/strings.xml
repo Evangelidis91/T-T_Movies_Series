@@ -77,6 +77,7 @@
     <string name="videos">Videos</string>
     <string name="similar_movies">Similar Movies</string>
     <string name="recommendations">Recommendations</string>
+    <string name="no_watchlist_items">You have no items in your watchlist.</string>
 
     <string name="tv_show">TV Show</string>
     <string name="similar_tv_shows">Similar Tv Shows</string>
