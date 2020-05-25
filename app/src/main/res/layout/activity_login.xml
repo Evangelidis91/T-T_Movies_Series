@@ -1,33 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:bind="http://schemas.android.com/apk/res/android">
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/login_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <com.evangelidis.t_tmoviesseries.login.FlexibleFrameLayout
+        android:id="@+id/wrapper"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary">
+        android:layout_height="match_parent">
 
-        <com.evangelidis.t_tmoviesseries.login.FlexibleFrameLayout
-            android:id="@+id/wrapper"
+        <FrameLayout
+            android:id="@+id/login_fragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent" />
 
-            <FrameLayout
-                android:id="@+id/login_fragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+        <com.evangelidis.t_tmoviesseries.login.LoginButton
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-            <com.evangelidis.t_tmoviesseries.login.LoginButton
-                android:id="@+id/button"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:onClick="switchFragment"/>
+        <FrameLayout
+            android:id="@+id/sign_up_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.evangelidis.t_tmoviesseries.login.FlexibleFrameLayout>
 
-            <FrameLayout
-                android:id="@+id/sign_up_fragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-        </com.evangelidis.t_tmoviesseries.login.FlexibleFrameLayout>
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-</layout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -9,8 +9,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.evangelidis.t_tmoviesseries.R
+import com.evangelidis.t_tmoviesseries.extensions.gone
+import com.evangelidis.t_tmoviesseries.extensions.show
 import com.evangelidis.t_tmoviesseries.model.Episode
 import com.evangelidis.t_tmoviesseries.utils.Constants
+import com.evangelidis.t_tmoviesseries.utils.Constants.INPUT_DATE_FORMAT
+import com.evangelidis.t_tmoviesseries.utils.Constants.OUTPUT_DATE_FORMAT
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -23,7 +27,7 @@ class EpisodesListAdapter(private val episodes: MutableList<Episode>) :
         )
     }
 
-    override fun getItemCount() = episodes.size
+    override fun getItemCount() = episodes.count()
 
     override fun onBindViewHolder(holder: EpisodeViewHolder, position: Int) {
         holder.bind(episodes[position])
@@ -39,28 +43,29 @@ class EpisodesListAdapter(private val episodes: MutableList<Episode>) :
 
         fun bind(episode: Episode) {
 
-            val parser = SimpleDateFormat("yyyy-MM-dd")
-            val formatter = SimpleDateFormat("dd-MMM-yyyy")
+            val parser = SimpleDateFormat(INPUT_DATE_FORMAT, Locale.UK)
+            val formatter = SimpleDateFormat(OUTPUT_DATE_FORMAT, Locale.UK)
             val output = formatter.format(parser.parse(episode.airDate))
             val currentDate = formatter.format(Date())
             val cd = formatter.parse(currentDate)
             val ed = formatter.parse(output)
 
             if (episode.voteAverage == 0.0 || (cd.before(ed)) || episode.voteCount <= 1) {
-                episodeRateLayout.visibility = View.GONE
+                episodeRateLayout.gone()
             } else {
                 episodeRate.text = String.format("%.1f", episode.voteAverage)
             }
 
-            episodeName.text = (episode.episodeNumber).toString() + ". " + episode.name
+            episodeName.text = itemView.resources.getString(R.string.episode_name)
+                .replace("{NUMBER}",episode.episodeNumber.toString())
+                .replace("{TITLE}", episode.name.orEmpty())
             episodeDate.text = output
 
-            if (!episode.stillPath.isNullOrEmpty()) {
+            episode.stillPath?.let {
                 Glide.with(itemView.context)
-                    .load(Constants.IMAGE_BASE_URL + episode.stillPath)
+                    .load(Constants.IMAGE_BASE_URL + it)
                     .into(episodeImage)
-            } else{
-                episodeImage.visibility = View.INVISIBLE
+                episodeImage.show()
             }
         }
     }

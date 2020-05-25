@@ -1,95 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="15dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_marginTop="15dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="15dp"
         android:background="#ffffff"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/submit_email"
-            android:fontFamily="@font/montserrat_light"
             android:layout_gravity="center"
-            android:gravity="center"
-            android:textSize="24sp"
-            android:autoSizeMaxTextSize="24sp"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:layout_marginEnd="15dp"
             android:layout_marginStart="15sp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="5dp"/>
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="5dp"
+            android:fontFamily="@font/montserrat_light"
+            android:gravity="center"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="@string/submit_email"
+            android:textSize="24sp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#c5c5c5"
-            android:layout_marginBottom="10dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"/>
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="10dp"
+            android:background="#c5c5c5" />
 
         <EditText
             android:id="@+id/email_reset_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="25dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="25dp"
-            android:hint="@string/your_email"
-            android:inputType="textEmailAddress"
-            android:textColor="#212121"
             android:backgroundTint="#4cbbb6"
+            android:fontFamily="@font/montserrat_light"
+            android:hint="@string/your_email"
             android:imeOptions="actionDone"
-            android:fontFamily="@font/montserrat_light">
-        </EditText>
+            android:inputType="textEmailAddress"
+            android:textColor="#212121" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/decline_message"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:text="@string/cancel"
-                android:layout_marginRight="20dp"
                 android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:layout_marginBottom="15dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:layout_weight="1"
                 android:background="@drawable/xml_button_with_stroke"
                 android:fontFamily="@font/montserrat_extra_light"
-                android:textColor="#b5b5b5"
-                android:textAllCaps="false"/>
+                android:gravity="center"
+                android:text="@string/cancel"
+                android:textAllCaps="false"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="#b5b5b5" />
 
             <Button
                 android:id="@+id/submit_message"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:text="@string/submit"
-                android:layout_marginRight="20dp"
                 android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:layout_marginBottom="15dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                android:fontFamily="@font/montserrat_extra_light"
+                android:layout_weight="1"
                 android:background="@drawable/xml_button_with_corners"
-                android:textColor="#ffffff"
-                android:textAllCaps="false"/>
+                android:fontFamily="@font/montserrat_extra_light"
+                android:gravity="center"
+                android:text="@string/submit"
+                android:textAllCaps="false"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="#ffffff" />
 
         </LinearLayout>
 

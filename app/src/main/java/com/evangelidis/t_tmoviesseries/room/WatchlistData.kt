@@ -3,9 +3,10 @@ package com.evangelidis.t_tmoviesseries.room
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.evangelidis.t_tmoviesseries.utils.Constants.ROOM_WATCHLIST_TABLE_NAME
 
-@Entity(tableName = "wishlistData")
-data class WishListData(
+@Entity(tableName = ROOM_WATCHLIST_TABLE_NAME)
+data class WatchlistData(
     @PrimaryKey(autoGenerate = true) var id: Int?,
     @ColumnInfo(name = "itemId") var itemId: Int,
     @ColumnInfo(name = "category") var category: String,

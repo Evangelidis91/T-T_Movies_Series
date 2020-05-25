@@ -180,5 +180,4 @@ interface TMDBApi {
         @Query("page") page: Int,
         @Query("language") language: String
     ): Single<MultisearchResponse>
-
 }

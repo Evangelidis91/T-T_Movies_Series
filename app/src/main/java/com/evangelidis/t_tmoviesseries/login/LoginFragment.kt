@@ -1,6 +1,7 @@
 package com.evangelidis.t_tmoviesseries.login
 
 import android.app.ActionBar
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
@@ -15,23 +16,24 @@ import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.login.LoginRegisterMethods.isEmailValid
 import com.evangelidis.t_tmoviesseries.login.LoginRegisterMethods.isPasswordValid
 import com.evangelidis.t_tmoviesseries.login.LoginRegisterMethods.verifyAvailableNetwork
+import com.evangelidis.tantintoast.TanTinToast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
 class LoginFragment : Fragment() {
 
-    lateinit var inflate: View
+    private lateinit var inflate: View
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
+    private lateinit var fragmentContext: Context
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+        fragmentContext = inflater.context
+
         inflate = inflater.inflate(R.layout.fragment_login, container, false)
-        inflate.findViewById<TextView>(R.id.forgot_password)
-            .setOnClickListener { performForgotPassword() }
+        inflate.findViewById<TextView>(R.id.forgot_password).setOnClickListener { performForgotPassword() }
         inflate.findViewById<AppCompatButton>(R.id.btn_login).setOnClickListener { performLogin() }
 
         auth = FirebaseAuth.getInstance()
@@ -41,7 +43,6 @@ class LoginFragment : Fragment() {
     }
 
     private fun performLogin() {
-
         val email = inflate.findViewById<EditText>(R.id.email_editText).text.toString()
         val password = inflate.findViewById<EditText>(R.id.password_editText).text.toString()
 
@@ -50,14 +51,13 @@ class LoginFragment : Fragment() {
                 if (isPasswordValid(password)) {
                     loginUser(email, password)
                 } else {
-                    Toast.makeText(context, "Pass must be at least 6 characters", Toast.LENGTH_LONG)
-                        .show()
+                    TanTinToast.Warning(fragmentContext).text("Pass must be at least 6 characters").show()
                 }
             } else {
-                Toast.makeText(context, "The email is not valid", Toast.LENGTH_LONG).show()
+                TanTinToast.Warning(fragmentContext).text("The email is not valid").show()
             }
         } else {
-            Toast.makeText(context, "There is no internet connection", Toast.LENGTH_LONG).show()
+            TanTinToast.Warning(fragmentContext).text("There is no internet connection").show()
         }
     }
 
@@ -65,24 +65,18 @@ class LoginFragment : Fragment() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val user = auth.currentUser
                     activity?.let {
                         val intent = Intent(it, MainActivity::class.java)
                         it.startActivity(intent)
                         it.finish()
                     }
                 } else {
-                    Toast.makeText(
-                        context,
-                        "There is a problem. Please try again",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    TanTinToast.Warning(fragmentContext).text("There is a problem. Please try again").show()
                 }
             }
     }
 
     private fun performForgotPassword() {
-
         val mpopup: PopupWindow
         val popUpView: View = layoutInflater.inflate(R.layout.enter_email_layout, null)
 
@@ -96,16 +90,15 @@ class LoginFragment : Fragment() {
 
         popUpView.findViewById<Button>(R.id.decline_message).setOnClickListener { mpopup.dismiss() }
         popUpView.findViewById<Button>(R.id.submit_message).setOnClickListener {
-
             if (verifyAvailableNetwork(context)) {
                 if (isEmailValid(email.text.toString())) {
                     auth.sendPasswordResetEmail(email.text.toString())
                     mpopup.dismiss()
                 } else {
-                    Toast.makeText(context, "The email is not valid", Toast.LENGTH_LONG).show()
+                    TanTinToast.Warning(fragmentContext).text("The email is not valid").show()
                 }
             } else {
-                Toast.makeText(context, "There is no internet connection", Toast.LENGTH_LONG).show()
+                TanTinToast.Warning(fragmentContext).text("There is no internet connection").show()
             }
         }
     }

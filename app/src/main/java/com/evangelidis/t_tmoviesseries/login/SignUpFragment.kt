@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
 import com.evangelidis.t_tmoviesseries.utils.Constants.IS_LOGGED_IN
@@ -19,6 +18,9 @@ import com.evangelidis.t_tmoviesseries.login.LoginRegisterMethods.isEmailValid
 import com.evangelidis.t_tmoviesseries.login.LoginRegisterMethods.isPasswordValid
 import com.evangelidis.t_tmoviesseries.login.LoginRegisterMethods.verifyAvailableNetwork
 import com.evangelidis.t_tmoviesseries.login.model.User
+import com.evangelidis.t_tmoviesseries.utils.Constants.FIREBASE_NEW_USER_DATE_FORMAT
+import com.evangelidis.t_tmoviesseries.utils.Constants.FIREBASE_USER_DATABASE_PATH
+import com.evangelidis.tantintoast.TanTinToast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
@@ -29,7 +31,7 @@ import java.util.*
 
 class SignUpFragment : Fragment() {
 
-    lateinit var inflate: View
+    private lateinit var inflate: View
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private lateinit var fragmentContext: Context
@@ -39,14 +41,9 @@ class SignUpFragment : Fragment() {
         fragmentContext = context
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         inflate = inflater.inflate(R.layout.fragment_signup, container, false)
-        inflate.findViewById<AppCompatButton>(R.id.btn_signup)
-            .setOnClickListener { performSignUp() }
+        inflate.findViewById<AppCompatButton>(R.id.btn_signup).setOnClickListener { performSignUp() }
         inflate.findViewById<AppCompatButton>(R.id.btn_skip).setOnClickListener {
             Prefs.with(fragmentContext).writeBoolean(IS_LOGIN_SKIPPED, true)
             startActivity(Intent(this.context, MainActivity::class.java))
@@ -61,8 +58,7 @@ class SignUpFragment : Fragment() {
     private fun performSignUp() {
         val email = inflate.findViewById<EditText>(R.id.email_editText).text.toString()
         val password = inflate.findViewById<EditText>(R.id.password_editText).text.toString()
-        val confirmPassword =
-            inflate.findViewById<EditText>(R.id.confirm_password_editText).text.toString()
+        val confirmPassword = inflate.findViewById<EditText>(R.id.confirm_password_editText).text.toString()
 
         if (verifyAvailableNetwork(context)) {
             if (isEmailValid(email)) {
@@ -70,17 +66,16 @@ class SignUpFragment : Fragment() {
                     if (arePasswordsEquals(password, confirmPassword)) {
                         createUser(email, password)
                     } else {
-                        Toast.makeText(context, "Passwords are not match", Toast.LENGTH_LONG).show()
+                        TanTinToast.Warning(fragmentContext).text("Passwords are not match").show()
                     }
                 } else {
-                    Toast.makeText(context, "Pass must be at least 6 characters", Toast.LENGTH_LONG)
-                        .show()
+                    TanTinToast.Warning(fragmentContext).text("Password must be at least 6 characters").show()
                 }
             } else {
-                Toast.makeText(context, "The email is not valid", Toast.LENGTH_LONG).show()
+                TanTinToast.Warning(fragmentContext).text("The email is not valid").show()
             }
         } else {
-            Toast.makeText(context, "There is no internet connection", Toast.LENGTH_LONG).show()
+            TanTinToast.Warning(fragmentContext).text("There is no internet connection").show()
         }
     }
 
@@ -91,7 +86,7 @@ class SignUpFragment : Fragment() {
                     onAuthSuccess(task.result?.user, email)
                     sendVerificationEmail(task.result?.user)
                 } else {
-                    Toast.makeText(context, task.result.toString(), Toast.LENGTH_LONG).show()
+                    TanTinToast.Warning(fragmentContext).text(task.result.toString()).show()
                 }
             }
     }
@@ -100,10 +95,7 @@ class SignUpFragment : Fragment() {
         user?.sendEmailVerification()
     }
 
-    private fun onAuthSuccess(
-        user: FirebaseUser?,
-        email: String
-    ) {
+    private fun onAuthSuccess(user: FirebaseUser?, email: String) {
         val username: String = usernameFromEmail(email)
         writeNewUser(user?.uid, username, email)
         Prefs.with(fragmentContext).writeBoolean(IS_LOGGED_IN, true)
@@ -113,18 +105,19 @@ class SignUpFragment : Fragment() {
 
     private fun usernameFromEmail(email: String): String {
         return if (email.contains("@")) {
-            email.split("@").toTypedArray()[0]
+            email.substringBefore("@")
         } else {
             email
         }
     }
 
-    private fun writeNewUser(userid: String?, name: String, email: String) {
-        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+    private fun writeNewUser(userId: String?, name: String, email: String) {
+        val sdf = SimpleDateFormat(FIREBASE_NEW_USER_DATE_FORMAT, Locale.UK)
         val currentDate = sdf.format(Date())
-        val user = User(userid, name, email, currentDate)
-        if (userid != null) {
-            database.child("users").child(userid).setValue(user)
+        val user = User(userId, name, email, currentDate)
+
+        userId?.let {
+            database.child(FIREBASE_USER_DATABASE_PATH).child(it).setValue(user)
         }
     }
 }

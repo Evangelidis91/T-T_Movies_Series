@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.utils.Constants.IS_NOTIFICATION_ON
@@ -24,6 +23,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 sendNotification(it.body, it.title)
             }
         }
+    }
+
+    override fun onNewToken(p0: String) {
+        super.onNewToken(p0)
     }
 
     private fun sendNotification(messageBody: String?, title: String?) {

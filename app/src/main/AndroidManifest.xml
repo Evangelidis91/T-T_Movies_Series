@@ -8,14 +8,14 @@
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="false"
-        android:icon="@drawable/video_camera_white"
+        android:icon="@drawable/video_camera"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:roundIcon="@drawable/video_camera_white"
+        android:roundIcon="@drawable/video_camera"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".view.WishlistActivity"
+            android:name=".view.WatchlistActivity"
             android:screenOrientation="sensorPortrait"/>
         <activity
             android:name=".view.SeasonsActivity"

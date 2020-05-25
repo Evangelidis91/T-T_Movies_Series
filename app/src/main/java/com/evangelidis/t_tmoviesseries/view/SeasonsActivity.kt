@@ -29,10 +29,7 @@ class SeasonsActivity : AppCompatActivity() {
 
     private var listOfSeasons: MutableList<TvShowSeasonResponse> = mutableListOf()
 
-    val adapter =
-        SeasonsViewPagerAdapter(
-            supportFragmentManager
-        )
+    val adapter = SeasonsViewPagerAdapter(supportFragmentManager)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,23 +58,19 @@ class SeasonsActivity : AppCompatActivity() {
         observeViewModel()
     }
 
-    private fun setAdapter(){
+    private fun setAdapter() {
         listOfSeasons.sortBy { it.seasonNumber }
-        for (x in 0 until listOfSeasons.size){
-            adapter.addFragment(
-                SeasonEpisodesFragment(
-                    listOfSeasons[x]
-                ), listOfSeasons[x].seasonNumber.toString())
+        for (x in 0 until listOfSeasons.size) {
+            adapter.addFragment(SeasonEpisodesFragment(listOfSeasons[x]), listOfSeasons[x].seasonNumber.toString())
             viewPager.adapter = adapter
         }
     }
 
     private fun observeViewModel() {
-
         viewModel.tvShowSeasonDetails.observe(this, Observer { data ->
             data?.let {
                 listOfSeasons.add(it)
-                if (listOfSeasons.size == numberOfSeasons){
+                if (listOfSeasons.size == numberOfSeasons) {
                     setAdapter()
                 }
             }

@@ -13,28 +13,16 @@ class FlexibleFrameLayout : FrameLayout {
         isChildrenDrawingOrderEnabled = true
     }
 
-    constructor(
-        context: Context,
-        attrs: AttributeSet?
-    ) : super(context, attrs) {
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         isChildrenDrawingOrderEnabled = true
     }
 
-    constructor(
-        context: Context,
-        attrs: AttributeSet?,
-        defStyleAttr: Int
-    ) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         isChildrenDrawingOrderEnabled = true
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    constructor(
-        context: Context,
-        attrs: AttributeSet?,
-        defStyleAttr: Int,
-        defStyleRes: Int
-    ) : super(context, attrs, defStyleAttr, defStyleRes) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
         isChildrenDrawingOrderEnabled = true
     }
 
@@ -48,12 +36,12 @@ class FlexibleFrameLayout : FrameLayout {
     }
 
     companion object {
-        private const val TAG = "OrderLayout"
+
         @JvmField
         var ORDER_SIGN_UP_STATE = 0
+
         @JvmField
         var ORDER_LOGIN_STATE = 1
-        private val DRAW_ORDERS =
-            arrayOf(intArrayOf(0, 1, 2), intArrayOf(2, 1, 0))
+        private val DRAW_ORDERS = arrayOf(intArrayOf(0, 1, 2), intArrayOf(2, 1, 0))
     }
 }

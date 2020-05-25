@@ -43,8 +43,8 @@
     <string name="biography_label">Biography</string>
     <string name="search_a_title">Search a title</string>
     <string name="trending">Trending</string>
+    <string name="episode_name">{NUMBER}. {TITLE}</string>
 
-    <string name="firebase_Users_Posts_Path">user-posts</string>
     <string name="message_succ">Message submitted successful.</string>
     <string name="message_fail">Message submitted unsuccessful. Please try again</string>
     <string name="mail_error">Not a valid email</string>
@@ -91,6 +91,8 @@
 
     <string name="person">Person</string>
     <string name="person_single_born">Born: {DATE} (age {AGE})</string>
+    <string name="person_born">Born: {DATE}</string>
+    <string name="person_death">Died: {DEATH_DATE} ({AGE})</string>
 
     <string name="tv_show_release_date_format1">{year} -</string>
     <string name="tv_show_release_date_format2">{year1} - {year2}</string>

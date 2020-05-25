@@ -78,7 +78,6 @@ data class Season(
     val seasonNumber: Int?
 )
 
-
 data class CreatedBy(
     @SerializedName("credit_id")
     val creditId: String?,

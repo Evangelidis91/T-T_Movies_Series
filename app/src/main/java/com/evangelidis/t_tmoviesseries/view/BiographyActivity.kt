@@ -29,7 +29,7 @@ class BiographyActivity : AppCompatActivity() {
         }
 
         search_img.setOnClickListener {
-            //val intent = Intent(this@BiographyActivity, SearchActivity::class.java)
+            val intent = Intent(this@BiographyActivity, SearchActivity::class.java)
             startActivity(intent)
         }
     }
