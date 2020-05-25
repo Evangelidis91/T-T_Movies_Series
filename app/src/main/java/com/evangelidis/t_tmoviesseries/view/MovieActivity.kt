@@ -336,16 +336,18 @@ class MovieActivity : AppCompatActivity() {
         }
 
         data.productionCompanies?.let {
-            productionCompanies.removeAllViews()
-            for (company in it) {
-                val parent = layoutInflater.inflate(R.layout.thumbnail_company, productionCompanies, false)
-                val companyName: TextView = parent.findViewById(R.id.productionCompanyName)
-                company.name?.let {
-                    companyName.text = company.name
-                    productionCompanies.addView(parent)
+            if (it.isNotEmpty()) {
+                productionCompanies.removeAllViews()
+                for (company in it) {
+                    val parent = layoutInflater.inflate(R.layout.thumbnail_company, productionCompanies, false)
+                    val companyName: TextView = parent.findViewById(R.id.productionCompanyName)
+                    company.name?.let {
+                        companyName.text = company.name
+                        productionCompanies.addView(parent)
+                    }
                 }
+                productionCompaniesLayout.show()
             }
-            productionCompaniesLayout.show()
         }
     }
 

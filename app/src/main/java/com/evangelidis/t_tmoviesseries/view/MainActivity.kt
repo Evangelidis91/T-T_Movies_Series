@@ -163,7 +163,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        hideProgressBar()
         getDataFromDB()
     }
 
@@ -183,10 +182,6 @@ class MainActivity : AppCompatActivity() {
                 create().show()
             }
         }
-    }
-
-    private fun hideProgressBar() {
-        loading_view.gone()
     }
 
     private fun getDataFromDB() {
@@ -541,8 +536,8 @@ class MainActivity : AppCompatActivity() {
         val messageInput: TextInputLayout = sliderView.findViewById(R.id.profile_input_message)
         val messageET: EditText = sliderView.findViewById(R.id.profile_et_message)
         val nameET = sliderView.findViewById<EditText>(R.id.profile_et_name)
-        val submitMessageToCloud : Button = sliderView.findViewById(R.id.submit_message)
-        val declineMessage : Button = sliderView.findViewById(R.id.decline_message)
+        val submitMessageToCloud: Button = sliderView.findViewById(R.id.submit_message)
+        val declineMessage: Button = sliderView.findViewById(R.id.decline_message)
 
         showKeyboard()
 
