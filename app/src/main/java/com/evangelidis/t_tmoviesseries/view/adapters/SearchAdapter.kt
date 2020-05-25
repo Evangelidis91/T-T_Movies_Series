@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.evangelidis.t_tmoviesseries.callbacks.OnTrendingClickCallback
 import com.evangelidis.t_tmoviesseries.R
+import com.evangelidis.t_tmoviesseries.extensions.gone
 import com.evangelidis.t_tmoviesseries.model.Multisearch
 import com.evangelidis.t_tmoviesseries.room.DatabaseManager.insertDataToDatabase
 import com.evangelidis.t_tmoviesseries.room.DatabaseManager.removeDataFromDatabase
@@ -84,9 +85,9 @@ class SearchAdapter(
                     category = "TV"
                 }
                 "person" -> {
-                    itemReleaseDate.visibility = View.GONE
-                    itemRating.visibility = View.GONE
-                    itemWatchlist.visibility = View.GONE
+                    itemReleaseDate.gone()
+                    itemRating.gone()
+                    itemWatchlist.gone()
                     itemType.text = CATEGORY_PERSON
                     imagePath = trend.profilePath
                     title.text = trend.name
