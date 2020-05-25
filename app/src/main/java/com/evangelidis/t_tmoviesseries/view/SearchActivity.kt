@@ -15,6 +15,7 @@ import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.model.Multisearch
 import com.evangelidis.t_tmoviesseries.room.DbWorkerThread
 import com.evangelidis.t_tmoviesseries.room.WatchlistDataBase
+import com.evangelidis.t_tmoviesseries.utils.Constants.DATABASE_THREAD
 import com.evangelidis.t_tmoviesseries.utils.Constants.MOVIE_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.PERSON_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_ID
@@ -48,20 +49,13 @@ class SearchActivity : AppCompatActivity() {
                     }
                 }
             } else {
-                TanTinToast.Warning(this@SearchActivity).text(getString(R.string.no_internet)).time(
-                    Toast.LENGTH_LONG
-                ).show()
+                TanTinToast.Warning(this@SearchActivity).text(getString(R.string.no_internet)).show()
             }
         }
     }
 
     lateinit var viewModel: ListViewModel
-    private val trendsAdapter =
-        SearchAdapter(
-            arrayListOf(),
-            trendCallback,
-            mutableListOf()
-        )
+    private val trendsAdapter = SearchAdapter(arrayListOf(), trendCallback, mutableListOf())
 
     private val trendsList = mutableListOf<Multisearch>()
 
@@ -73,7 +67,7 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        mDbWorkerThread = DbWorkerThread("dbWorkerThread")
+        mDbWorkerThread = DbWorkerThread(DATABASE_THREAD)
         mDbWorkerThread.start()
         mDb = WatchlistDataBase.getInstance(this)
 
@@ -102,7 +96,6 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 s?.let {
-                    //for (x in 1..2)
                     viewModel.getMultisearchResult(it.toString(), 1)
                 }
             }
@@ -133,10 +126,10 @@ class SearchActivity : AppCompatActivity() {
 
     private fun getDataFromDB() {
         val task = Runnable {
-            val wishlistData = mDb?.todoDao()?.getAll()
+            val watchlistData = mDb?.todoDao()?.getAll()
             mUiHandler.post {
-                if (!wishlistData.isNullOrEmpty()) {
-                    trendsAdapter.updateWatchlist(wishlistData)
+                if (!watchlistData.isNullOrEmpty()) {
+                    trendsAdapter.updateWatchlist(watchlistData)
                 }
             }
         }

@@ -16,6 +16,9 @@ import com.evangelidis.t_tmoviesseries.room.DatabaseManager.removeDataFromDataba
 import com.evangelidis.t_tmoviesseries.room.DbWorkerThread
 import com.evangelidis.t_tmoviesseries.room.WatchlistData
 import com.evangelidis.t_tmoviesseries.room.WatchlistDataBase
+import com.evangelidis.t_tmoviesseries.utils.Constants
+import com.evangelidis.t_tmoviesseries.utils.Constants.CATEGORY_MOVIE
+import com.evangelidis.t_tmoviesseries.utils.Constants.CATEGORY_PERSON
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_BASE_URL_SMALL
 
 class SearchAdapter(
@@ -42,7 +45,7 @@ class SearchAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
-        mDbWorkerThread = DbWorkerThread("dbWorkerThread")
+        mDbWorkerThread = DbWorkerThread(Constants.DATABASE_THREAD)
         mDbWorkerThread.start()
         mDb = WatchlistDataBase.getInstance(parent.context)
 
@@ -58,16 +61,18 @@ class SearchAdapter(
 
     inner class SearchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val itemPoster = itemView.findViewById<ImageView>(R.id.item_poster)
-        private val title = itemView.findViewById<TextView>(R.id.item_title)
-        private val itemReleaseDate = itemView.findViewById<TextView>(R.id.item_release_date)
-        private val itemType = itemView.findViewById<TextView>(R.id.item_type)
-        private val itemRating = itemView.findViewById<TextView>(R.id.item_rating)
-        private val itemWishlist = itemView.findViewById<ImageView>(R.id.item_movie_wishlist)
+        private val itemPoster: ImageView = itemView.findViewById(R.id.item_poster)
+        private val title: TextView = itemView.findViewById(R.id.item_title)
+        private val itemReleaseDate: TextView = itemView.findViewById(R.id.item_release_date)
+        private val itemType: TextView = itemView.findViewById(R.id.item_type)
+        private val itemRating: TextView = itemView.findViewById(R.id.item_rating)
+        private val itemWatchlist: ImageView = itemView.findViewById(R.id.item_movie_wishlist)
 
         fun bind(trend: Multisearch) {
             var imagePath: String? = null
             var releasedDate: String? = null
+
+            itemWatchlist.setImageResource(R.drawable.ic_disable_wishlist)
 
             when (trend.mediaType) {
                 "tv" -> {
@@ -81,19 +86,19 @@ class SearchAdapter(
                 "person" -> {
                     itemReleaseDate.visibility = View.GONE
                     itemRating.visibility = View.GONE
-                    itemWishlist.visibility = View.GONE
-                    itemType.text = itemView.context.getString(R.string.person)
+                    itemWatchlist.visibility = View.GONE
+                    itemType.text = CATEGORY_PERSON
                     imagePath = trend.profilePath
                     title.text = trend.name
-                    category = "Person"
+                    category = CATEGORY_PERSON
                 }
                 "movie" -> {
                     title.text = trend.title
                     itemReleaseDate.text = trend.releaseDate
                     releasedDate = trend.releaseDate
-                    itemType.text = itemView.context.getString(R.string.movie)
+                    itemType.text = CATEGORY_MOVIE
                     imagePath = trend.posterPath
-                    category = "Movie"
+                    category = CATEGORY_MOVIE
                 }
             }
             itemRating.text = trend.voteAverage.toString()
@@ -108,11 +113,11 @@ class SearchAdapter(
             if (!watchlistList.isNullOrEmpty()) {
                 val finder = watchlistList.find { it.itemId == trend.id && it.category == category }
                 if (finder != null) {
-                    itemWishlist.setImageResource(R.drawable.ic_enable_wishlist)
+                    itemWatchlist.setImageResource(R.drawable.ic_enable_wishlist)
                 }
             }
 
-            itemWishlist.setOnClickListener {
+            itemWatchlist.setOnClickListener {
                 val wishList = WatchlistData()
                 wishList.itemId = trend.id
                 wishList.category = category.orEmpty()
@@ -126,18 +131,18 @@ class SearchAdapter(
                 if (watchlistList.isNullOrEmpty()) {
                     insertDataToDatabase(wishList, mDb, mDbWorkerThread)
                     watchlistList.add(wishList)
-                    itemWishlist.setImageResource(R.drawable.ic_enable_wishlist)
+                    itemWatchlist.setImageResource(R.drawable.ic_enable_wishlist)
                 } else {
                     val finder =
                         watchlistList.find { it.itemId == trend.id && it.category == category }
                     if (finder != null) {
-                        itemWishlist.setImageResource(R.drawable.ic_disable_wishlist)
+                        itemWatchlist.setImageResource(R.drawable.ic_disable_wishlist)
                         removeDataFromDatabase(wishList, mDb, mDbWorkerThread)
                         watchlistList.remove(wishList)
                     } else {
                         insertDataToDatabase(wishList, mDb, mDbWorkerThread)
                         watchlistList.add(wishList)
-                        itemWishlist.setImageResource(R.drawable.ic_enable_wishlist)
+                        itemWatchlist.setImageResource(R.drawable.ic_enable_wishlist)
                     }
                 }
             }
