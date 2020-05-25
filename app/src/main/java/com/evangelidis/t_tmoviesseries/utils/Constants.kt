@@ -17,6 +17,7 @@ object Constants {
     const val CATEGORY_MOVIE = "Movie"
     const val CATEGORY_TV = "TV"
     const val CATEGORY_DIRECTOR = "Director"
+    const val CATEGORY_PERSON = "Person"
 
     const val BASE_URL = "https://api.themoviedb.org/3/"
     const val LANGUAGE = "en-US"
