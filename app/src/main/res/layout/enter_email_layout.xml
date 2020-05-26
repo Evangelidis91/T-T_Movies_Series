@@ -24,10 +24,11 @@
             android:layout_marginBottom="5dp"
             android:fontFamily="@font/montserrat_light"
             android:gravity="center"
+            android:textColor="#212121"
             android:maxLines="1"
             android:singleLine="true"
             android:text="@string/submit_email"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
         <View
             android:layout_width="match_parent"
@@ -69,6 +70,7 @@
                 android:fontFamily="@font/montserrat_extra_light"
                 android:gravity="center"
                 android:text="@string/cancel"
+                android:textSize="17sp"
                 android:textAllCaps="false"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 android:textColor="#b5b5b5" />
@@ -85,6 +87,7 @@
                 android:fontFamily="@font/montserrat_extra_light"
                 android:gravity="center"
                 android:text="@string/submit"
+                android:textSize="17sp"
                 android:textAllCaps="false"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 android:textColor="#ffffff" />

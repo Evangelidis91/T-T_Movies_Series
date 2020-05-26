@@ -54,11 +54,22 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:fontFamily="@font/montserrat_light"
-                    android:text="Login"
+                    android:text="@string/login"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
-
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/nav_activate_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="@string/activate_your_account"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:visibility="gone"
+                tools:visibility="visible"/>
         </LinearLayout>
 
         <View
@@ -387,6 +398,7 @@
             android:textColor="@color/white"
             android:textSize="25sp" />
 
+
         <TextView
             android:id="@+id/nav_logout"
             android:layout_width="wrap_content"
@@ -395,7 +407,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="30dp"
             android:fontFamily="@font/montserrat_regular"
-            android:text="Logout"
+            android:text="@string/logout_from_the_app_text"
             android:textColor="@color/white"
             android:textSize="23sp"
             android:visibility="gone"
