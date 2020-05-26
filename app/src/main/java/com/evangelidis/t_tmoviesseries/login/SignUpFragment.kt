@@ -16,6 +16,7 @@ import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.login.LoginRegisterMethods.arePasswordsEquals
 import com.evangelidis.t_tmoviesseries.login.LoginRegisterMethods.isEmailValid
 import com.evangelidis.t_tmoviesseries.login.LoginRegisterMethods.isPasswordValid
+import com.evangelidis.t_tmoviesseries.login.LoginRegisterMethods.sendVerificationEmail
 import com.evangelidis.t_tmoviesseries.login.LoginRegisterMethods.verifyAvailableNetwork
 import com.evangelidis.t_tmoviesseries.login.model.User
 import com.evangelidis.t_tmoviesseries.utils.Constants.FIREBASE_NEW_USER_DATE_FORMAT
@@ -89,10 +90,6 @@ class SignUpFragment : Fragment() {
                     TanTinToast.Warning(fragmentContext).text(task.result.toString()).show()
                 }
             }
-    }
-
-    private fun sendVerificationEmail(user: FirebaseUser?) {
-        user?.sendEmailVerification()
     }
 
     private fun onAuthSuccess(user: FirebaseUser?, email: String) {

@@ -11,6 +11,7 @@
     <string name="close_the_app_text">Close the app</string>
     <string name="logout_popup_window_title">Do you want to logout?</string>
     <string name="logout_from_the_app_text">Logout</string>
+    <string name="activate_your_account">Activate your account</string>
 
     <string name="tab">\u0009\u0009\u0009\u0009</string>
     <string name="bullet">\u2022</string>

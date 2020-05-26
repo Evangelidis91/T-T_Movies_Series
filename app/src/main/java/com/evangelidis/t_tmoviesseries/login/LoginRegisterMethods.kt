@@ -2,6 +2,7 @@ package com.evangelidis.t_tmoviesseries.login
 
 import android.content.Context
 import android.net.ConnectivityManager
+import com.google.firebase.auth.FirebaseUser
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -28,4 +29,8 @@ object LoginRegisterMethods {
     }
 
     fun arePasswordsEquals(pass1: String, pass2: String) = (pass1 == pass2)
+
+    fun sendVerificationEmail(user: FirebaseUser?) {
+        user?.sendEmailVerification()
+    }
 }

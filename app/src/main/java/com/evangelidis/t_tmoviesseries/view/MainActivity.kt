@@ -419,6 +419,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         nav_send.setOnClickListener { submitMessage() }
+
+        nav_activate_account.setOnClickListener {
+            val user = FirebaseAuth.getInstance().currentUser
+            if (user != null){
+                if (user.isEmailVerified){
+                    TanTinToast.Success(this).text("Your email is activated").show()
+                } else{
+                    LoginRegisterMethods.sendVerificationEmail(user)
+                }
+                nav_activate_account.gone()
+            }
+        }
     }
 
     private fun setUpNavigationDrawerNotificationSwitch() {
@@ -483,9 +495,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpNavigationLoginUI() {
         val user = FirebaseAuth.getInstance().currentUser
+
         if (user == null) {
             nav_logout.gone()
         } else {
+            nav_activate_account.showIf { !user.isEmailVerified }
             user.email?.let {
                 loginText.text = resources.getString(R.string.welcome_user).replace("{USERNAME}", it.substringBefore("@"))
                 nav_logout.show()
@@ -518,6 +532,7 @@ class MainActivity : AppCompatActivity() {
                     FirebaseAuth.getInstance().signOut()
                     loginText.text = getString(R.string.login)
                     setUpNavigationLoginUI()
+                    nav_activate_account.gone()
                 })
             setNegativeButton(getString(R.string.cancel), OnClickListener { dialog, id -> dialog.cancel() })
             create().show()
