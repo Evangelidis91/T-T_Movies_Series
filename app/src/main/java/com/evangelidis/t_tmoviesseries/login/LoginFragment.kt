@@ -81,7 +81,7 @@ class LoginFragment : Fragment() {
         val popUpView: View = layoutInflater.inflate(R.layout.enter_email_layout, null)
 
         mpopup = PopupWindow(
-            popUpView, ActionBar.LayoutParams.FILL_PARENT,
+            popUpView, ActionBar.LayoutParams.MATCH_PARENT,
             ActionBar.LayoutParams.WRAP_CONTENT, true
         )
         mpopup.showAtLocation(popUpView, Gravity.CENTER, 0, 0)

@@ -19,7 +19,6 @@
         android:layout_height="40dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:alpha="0.8"
         app:srcCompat="@drawable/play_circle" />
 
 </RelativeLayout>

@@ -499,7 +499,7 @@ class MainActivity : AppCompatActivity() {
         if (user == null) {
             nav_logout.gone()
         } else {
-            nav_activate_account.showIf { !user.isEmailVerified }
+            //nav_activate_account.showIf { !user.isEmailVerified }
             user.email?.let {
                 loginText.text = resources.getString(R.string.welcome_user).replace("{USERNAME}", it.substringBefore("@"))
                 nav_logout.show()
