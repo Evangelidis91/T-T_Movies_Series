@@ -321,8 +321,8 @@ class MovieActivity : AppCompatActivity() {
         }
 
         data.budget?.let {
-            movieGrow.show()
             if (it > 0.0) {
+                movieGrow.show()
                 budgetContainer.show()
                 movieBudget.text = convertToRealNumber(it)
                 data.revenue?.let {

@@ -101,7 +101,6 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginStart="4dp"
-                            android:alpha="0.7"
                             android:fontFamily="@font/montserrat_light"
                             android:paddingEnd="12dp"
                             android:textColor="@color/white" />
@@ -111,7 +110,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:alpha="0.7"
                             android:fontFamily="@font/montserrat_light"
                             android:paddingStart="5dp"
                             android:textColor="@color/white" />
@@ -121,7 +119,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:alpha="0.7"
                             android:fontFamily="@font/montserrat_regular"
                             android:paddingStart="4dp"
                             android:text="@string/reviews"
@@ -144,42 +141,30 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:alpha="0.7"
                     android:fontFamily="@font/montserrat_light"
                     android:textColor="@color/white" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tvShowReleaseDate"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/montserrat_light"
+                    android:textColor="@color/white" />
 
-                    <TextView
-                        android:id="@+id/tvShowReleaseDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:alpha="0.7"
-                        android:fontFamily="@font/montserrat_light"
-                        android:textColor="@color/white" />
-
-                    <TextView
-                        android:id="@+id/tvShowEpisodeDuration"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="7dp"
-                        android:layout_marginTop="4dp"
-                        android:alpha="0.7"
-                        android:fontFamily="@font/montserrat_light"
-                        android:textColor="@color/white" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/tvShowEpisodeDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/montserrat_light"
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:id="@+id/tvShowAllSeasons"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:alpha="0.7"
+                    android:layout_marginTop="10dp"
                     android:fontFamily="@font/montserrat_bold"
                     android:textColor="@color/white"
                     android:textSize="17sp" />
@@ -208,7 +193,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:alpha="0.7"
                     android:fontFamily="@font/montserrat_light"
                     android:textColor="@color/white" />
 
@@ -236,7 +220,6 @@
                     android:id="@+id/tvShowDirectors"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:alpha="0.7"
                     android:fontFamily="@font/montserrat_light"
                     android:textColor="@color/white" />
 

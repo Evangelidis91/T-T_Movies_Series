@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".view.WatchlistActivity"
-            android:screenOrientation="sensorPortrait"/>
+            android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".view.SeasonsActivity"
             android:screenOrientation="sensorPortrait" />
