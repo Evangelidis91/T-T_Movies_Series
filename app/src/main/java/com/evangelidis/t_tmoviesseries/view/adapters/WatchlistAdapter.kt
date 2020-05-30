@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.callbacks.OnWatchlistClickCallback
@@ -76,6 +77,8 @@ class WatchlistAdapter(
             Glide.with(itemView)
                 .load(IMAGE_BASE_URL_SMALL + watchlist.posterPath)
                 .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .into(itemPoster)
 
             itemWatchlist.setOnClickListener {

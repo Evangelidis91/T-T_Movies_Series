@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.extensions.gone
@@ -86,6 +87,8 @@ class PersonActivity : AppCompatActivity() {
             Glide.with(this)
                 .load(ACTOR_IMAGE_URL + it)
                 .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .into(actorImage)
         }
 
@@ -190,6 +193,8 @@ class PersonActivity : AppCompatActivity() {
                 Glide.with(this@PersonActivity)
                     .load(ACTOR_IMAGE_URL + result.posterPath)
                     .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .into(movieImg)
 
                 actorMovies.addView(parent)

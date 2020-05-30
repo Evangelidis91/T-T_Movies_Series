@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.evangelidis.t_tmoviesseries.ItemsManager.getGenres
 import com.evangelidis.t_tmoviesseries.callbacks.OnTvShowClickCallback
@@ -93,6 +94,8 @@ class TvShowAdapter(
             Glide.with(itemView)
                 .load(IMAGE_BASE_URL + tv.posterPath)
                 .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .into(poster)
 
             addToWishList.setImageResource(R.drawable.ic_disable_wishlist)

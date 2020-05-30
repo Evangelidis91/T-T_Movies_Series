@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.evangelidis.t_tmoviesseries.ItemsManager
 import com.evangelidis.t_tmoviesseries.ItemsManager.showTrailer
@@ -172,11 +173,15 @@ class TvShowActivity : AppCompatActivity() {
             Glide.with(this)
                 .load(Constants.IMAGE_BASE_URL + data.backdropPath)
                 .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .into(tvShowBackdrop)
         } else if (!data.posterPath.isNullOrEmpty()) {
             Glide.with(this)
                 .load(Constants.IMAGE_BASE_URL + data.posterPath)
                 .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .into(tvShowBackdrop)
         }
 
@@ -272,6 +277,8 @@ class TvShowActivity : AppCompatActivity() {
                     Glide.with(this@TvShowActivity)
                         .load(ACTOR_IMAGE_URL + cast.profilePath)
                         .apply(RequestOptions.placeholderOf(R.color.mainBackground))
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
                         .into(thumbnail)
 
                     tvShowActors.addView(parent)
@@ -296,6 +303,8 @@ class TvShowActivity : AppCompatActivity() {
                 Glide.with(this@TvShowActivity)
                     .load(String.format(YOUTUBE_THUMBNAIL_URL, trailer.key))
                     .apply(RequestOptions.placeholderOf(R.color.colorPrimary).centerCrop())
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .into(thumbnail)
                 tvShowTrailers.addView(parent)
             }
@@ -361,6 +370,8 @@ class TvShowActivity : AppCompatActivity() {
                 Glide.with(this@TvShowActivity)
                     .load(ACTOR_IMAGE_URL + x.posterPath)
                     .apply(RequestOptions.placeholderOf(R.color.mainBackground))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .into(thumbnail)
                 tvShowSimilar.addView(parent)
             }
@@ -391,6 +402,8 @@ class TvShowActivity : AppCompatActivity() {
                 Glide.with(this@TvShowActivity)
                     .load(ACTOR_IMAGE_URL + x.posterPath)
                     .apply(RequestOptions.placeholderOf(R.color.mainBackground))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .into(thumbnail)
                 tvShowRecommendations.addView(parent)
             }
