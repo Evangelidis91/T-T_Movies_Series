@@ -4,6 +4,7 @@ import android.content.DialogInterface.OnClickListener
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import android.widget.EditText
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
@@ -78,7 +80,7 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra(MOVIE_ID, movie.id)
                 startActivity(intent)
             } else {
-                TanTinToast.Warning(this@MainActivity).text(getString(R.string.no_internet)).show()
+                TanTinToast.Warning(this@MainActivity).text(getString(R.string.no_internet)).typeface(typeface).show()
             }
         }
     }
@@ -91,7 +93,7 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra(TV_SHOW_ID, tvShow.id)
                 startActivity(intent)
             } else {
-                TanTinToast.Warning(this@MainActivity).text(getString(R.string.no_internet)).show()
+                TanTinToast.Warning(this@MainActivity).text(getString(R.string.no_internet)).typeface(typeface).show()
             }
         }
     }
@@ -111,9 +113,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mDbWorkerThread: DbWorkerThread
     private val mUiHandler = Handler()
 
+    private var typeface: Typeface? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        typeface  = ResourcesCompat.getFont(this, R.font.montserrat_regular)
 
         database = FirebaseDatabase.getInstance()
         myRef = database.getReference(FIREBASE_MESSAGES_DATABASE_PATH)
@@ -239,7 +245,7 @@ class MainActivity : AppCompatActivity() {
                 list_error.showIf { isError }
                 if (it) {
                     list_error.show()
-                    TanTinToast.Warning(this).text(getString(R.string.no_internet)).show()
+                    TanTinToast.Warning(this).text(getString(R.string.no_internet)).typeface(typeface).show()
                 }
             }
         })
@@ -424,7 +430,7 @@ class MainActivity : AppCompatActivity() {
             val user = FirebaseAuth.getInstance().currentUser
             if (user != null){
                 if (user.isEmailVerified){
-                    TanTinToast.Success(this).text("Your email is activated").show()
+                    TanTinToast.Success(this).text("Your email is activated").typeface(typeface).show()
                 } else{
                     LoginRegisterMethods.sendVerificationEmail(user)
                 }
@@ -579,11 +585,11 @@ class MainActivity : AppCompatActivity() {
                     myRef.child(FIREBASE_MESSAGES_DATABASE_PATH_CHILD).push()
                         .setValue(post)
                         .addOnSuccessListener(OnSuccessListener<Void> {
-                            TanTinToast.Success(this).text(getString(R.string.message_succ)).show()
+                            TanTinToast.Success(this).text(getString(R.string.message_succ)).typeface(typeface).show()
                             messageDialog.dismiss()
                         })
                         .addOnFailureListener(OnFailureListener {
-                            TanTinToast.Error(this).text(getString(R.string.message_fail)).show()
+                            TanTinToast.Error(this).text(getString(R.string.message_fail)).typeface(typeface).show()
                         })
 
                     sliderView.hideKeyboard()
@@ -613,11 +619,11 @@ class MainActivity : AppCompatActivity() {
                 myRef.child(FIREBASE_MESSAGES_DATABASE_PATH_CHILD).push()
                     .setValue(post)
                     .addOnSuccessListener(OnSuccessListener<Void> {
-                        TanTinToast.Success(this).text(getString(R.string.message_succ)).show()
+                        TanTinToast.Success(this).text(getString(R.string.message_succ)).typeface(typeface).show()
                         messageDialog.dismiss()
                     })
                     .addOnFailureListener(OnFailureListener {
-                        TanTinToast.Error(this).text(getString(R.string.message_fail)).show()
+                        TanTinToast.Error(this).text(getString(R.string.message_fail)).typeface(typeface).show()
                     })
 
                 sliderView.hideKeyboard()

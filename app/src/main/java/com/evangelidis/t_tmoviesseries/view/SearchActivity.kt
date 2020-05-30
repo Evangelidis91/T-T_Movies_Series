@@ -1,12 +1,13 @@
 package com.evangelidis.t_tmoviesseries.view
 
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -49,7 +50,7 @@ class SearchActivity : AppCompatActivity() {
                     }
                 }
             } else {
-                TanTinToast.Warning(this@SearchActivity).text(getString(R.string.no_internet)).show()
+                TanTinToast.Warning(this@SearchActivity).text(getString(R.string.no_internet)).typeface(typeface).show()
             }
         }
     }
@@ -63,9 +64,13 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var mDbWorkerThread: DbWorkerThread
     private val mUiHandler = Handler()
 
+    private var typeface: Typeface? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+
+        typeface  = ResourcesCompat.getFont(this, R.font.montserrat_regular)
 
         mDbWorkerThread = DbWorkerThread(DATABASE_THREAD)
         mDbWorkerThread.start()

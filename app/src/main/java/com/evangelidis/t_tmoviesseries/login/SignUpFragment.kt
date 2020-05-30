@@ -2,12 +2,14 @@ package com.evangelidis.t_tmoviesseries.login
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.evangelidis.t_tmoviesseries.utils.Constants.IS_LOGGED_IN
 import com.evangelidis.t_tmoviesseries.utils.Constants.IS_LOGIN_SKIPPED
@@ -36,6 +38,7 @@ class SignUpFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private lateinit var fragmentContext: Context
+    private var typeface: Typeface? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -53,6 +56,8 @@ class SignUpFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
 
+        typeface  = ResourcesCompat.getFont(fragmentContext, R.font.montserrat_regular)
+
         return inflate
     }
 
@@ -67,16 +72,16 @@ class SignUpFragment : Fragment() {
                     if (arePasswordsEquals(password, confirmPassword)) {
                         createUser(email, password)
                     } else {
-                        TanTinToast.Warning(fragmentContext).text("Passwords are not match").show()
+                        TanTinToast.Warning(fragmentContext).text("Passwords are not match").typeface(typeface).show()
                     }
                 } else {
-                    TanTinToast.Warning(fragmentContext).text("Password must be at least 6 characters").show()
+                    TanTinToast.Warning(fragmentContext).text("Password must be at least 6 characters").typeface(typeface).show()
                 }
             } else {
-                TanTinToast.Warning(fragmentContext).text("The email is not valid").show()
+                TanTinToast.Warning(fragmentContext).text("The email is not valid").typeface(typeface).show()
             }
         } else {
-            TanTinToast.Warning(fragmentContext).text("There is no internet connection").show()
+            TanTinToast.Warning(fragmentContext).text("There is no internet connection").typeface(typeface).show()
         }
     }
 
@@ -86,9 +91,9 @@ class SignUpFragment : Fragment() {
                 if (task.isSuccessful) {
                     onAuthSuccess(task.result?.user, email)
                     sendVerificationEmail(task.result?.user)
-                    TanTinToast.Success(fragmentContext).text("Your account created successfully!").show()
+                    TanTinToast.Success(fragmentContext).text("Your account created successfully!").typeface(typeface).show()
                 } else {
-                    TanTinToast.Warning(fragmentContext).text(task.result.toString()).show()
+                    TanTinToast.Warning(fragmentContext).text(task.result.toString()).typeface(typeface).show()
                 }
             }
     }
