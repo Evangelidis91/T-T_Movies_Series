@@ -1,12 +1,13 @@
 package com.evangelidis.t_tmoviesseries.view
 
 import android.content.Intent
-import android.net.Uri
+import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
@@ -50,9 +51,13 @@ class MovieActivity : AppCompatActivity() {
     private lateinit var mDbWorkerThread: DbWorkerThread
     private val mUiHandler = Handler()
 
+    private var typeface: Typeface? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie)
+
+        typeface  = ResourcesCompat.getFont(this, R.font.montserrat_regular)
 
         movieId = intent.getIntExtra(Constants.MOVIE_ID, movieId)
 
@@ -152,7 +157,7 @@ class MovieActivity : AppCompatActivity() {
 
         viewModel.loadError.observe(this, Observer { data ->
             data?.let {
-                TanTinToast.Warning(this).text(getString(R.string.error_for_data)).show()
+                TanTinToast.Warning(this).text(getString(R.string.error_for_data)).typeface(typeface).show()
                 finish()
             }
         })
