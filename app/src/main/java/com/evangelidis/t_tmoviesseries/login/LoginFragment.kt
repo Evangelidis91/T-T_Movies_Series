@@ -93,7 +93,13 @@ class LoginFragment : Fragment() {
             if (verifyAvailableNetwork(context)) {
                 if (isEmailValid(email.text.toString())) {
                     auth.sendPasswordResetEmail(email.text.toString())
-                    mpopup.dismiss()
+                        .addOnSuccessListener {
+                            mpopup.dismiss()
+                            TanTinToast.Info(fragmentContext).text("You will receive shortly an email to reset your password. Please check your inbox.").show()
+                        }
+                        .addOnFailureListener {
+                            TanTinToast.Error(fragmentContext).text(email.text.toString() + (" does not exist. Please try to Sign up first.")).show()
+                        }
                 } else {
                     TanTinToast.Warning(fragmentContext).text("The email is not valid").show()
                 }

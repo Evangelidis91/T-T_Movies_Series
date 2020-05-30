@@ -86,6 +86,7 @@ class SignUpFragment : Fragment() {
                 if (task.isSuccessful) {
                     onAuthSuccess(task.result?.user, email)
                     sendVerificationEmail(task.result?.user)
+                    TanTinToast.Success(fragmentContext).text("Your account created successfully!").show()
                 } else {
                     TanTinToast.Warning(fragmentContext).text(task.result.toString()).show()
                 }
