@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.extensions.gone
 import com.evangelidis.t_tmoviesseries.extensions.show
@@ -64,6 +65,8 @@ class EpisodesListAdapter(private val episodes: MutableList<Episode>) :
             episode.stillPath?.let {
                 Glide.with(itemView.context)
                     .load(Constants.IMAGE_BASE_URL + it)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .into(episodeImage)
                 episodeImage.show()
             }

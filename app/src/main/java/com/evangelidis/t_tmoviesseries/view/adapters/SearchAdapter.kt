@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.evangelidis.t_tmoviesseries.callbacks.OnTrendingClickCallback
 import com.evangelidis.t_tmoviesseries.R
@@ -107,6 +108,8 @@ class SearchAdapter(
             Glide.with(itemView)
                 .load(IMAGE_BASE_URL_SMALL + imagePath)
                 .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .into(itemPoster)
 
             itemView.setOnClickListener { callback.onClick(trend) }

@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.evangelidis.t_tmoviesseries.ItemsManager.showTrailer
 import com.evangelidis.t_tmoviesseries.R
@@ -171,6 +172,8 @@ class MovieActivity : AppCompatActivity() {
                 Glide.with(this)
                     .load(ACTOR_IMAGE_URL + result.posterPath)
                     .apply(RequestOptions.placeholderOf(R.color.mainBackground))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .into(thumbnail)
 
                 thumbnail.setOnClickListener {
@@ -198,6 +201,8 @@ class MovieActivity : AppCompatActivity() {
                 Glide.with(this)
                     .load(ACTOR_IMAGE_URL + similarResult.posterPath)
                     .apply(RequestOptions.placeholderOf(R.color.mainBackground))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .into(thumbnail)
 
                 thumbnail.setOnClickListener {
@@ -221,6 +226,8 @@ class MovieActivity : AppCompatActivity() {
                 Glide.with(this)
                     .load(String.format(YOUTUBE_THUMBNAIL_URL, video.key))
                     .apply(RequestOptions.placeholderOf(R.color.mainBackground))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .into(thumbnail)
 
                 thumbnail.setOnClickListener {
@@ -246,6 +253,8 @@ class MovieActivity : AppCompatActivity() {
                 Glide.with(this)
                     .load(ACTOR_IMAGE_URL + cast.profilePath)
                     .apply(RequestOptions.placeholderOf(R.color.mainBackground))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .into(thumbnail)
 
                 thumbnail.setOnClickListener {
@@ -298,6 +307,8 @@ class MovieActivity : AppCompatActivity() {
             Glide.with(this)
                 .load(IMAGE_BASE_URL + data.backdropPath)
                 .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .into(movieImage)
         }
 

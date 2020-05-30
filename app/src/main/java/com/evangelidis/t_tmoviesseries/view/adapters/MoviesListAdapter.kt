@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.evangelidis.t_tmoviesseries.ItemsManager.getGenres
 import com.evangelidis.t_tmoviesseries.callbacks.OnMoviesClickCallback
@@ -89,6 +90,8 @@ class MoviesListAdapter(
                 .load(IMAGE_BASE_URL + movie.posterPath)
                 .dontAnimate()
                 .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .into(poster)
 
             itemView.setOnClickListener { movieCallback.onClick(movie) }
