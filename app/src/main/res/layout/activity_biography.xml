@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="view.BiographyActivity">
+    tools:context=".view.biography.BiographyActivity">
 
     <include layout="@layout/main_toolbar" />
 

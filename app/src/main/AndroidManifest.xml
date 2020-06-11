@@ -15,34 +15,34 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".view.WatchlistActivity"
+            android:name=".view.watchlist.WatchlistActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".view.SeasonsActivity"
+            android:name=".view.seasons.SeasonsActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".view.SearchActivity"
+            android:name=".view.search.SearchActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".view.BiographyActivity"
+            android:name=".view.biography.BiographyActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".view.PersonActivity"
+            android:name=".view.person.PersonActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".view.MainActivity"
+            android:name=".view.main.MainActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".view.TvShowActivity"
+            android:name=".view.tvshow.TvShowActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".view.MovieActivity"
+            android:name=".view.movie.MovieActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".login.LoginActivity"
+            android:name=".view.login.LoginActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".view.SplashScreenActivity"
+            android:name=".view.splashscreen.SplashScreenActivity"
             android:screenOrientation="sensorPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

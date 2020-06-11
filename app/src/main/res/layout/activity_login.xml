@@ -2,10 +2,9 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/login_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:layout_height="match_parent">
 
-    <com.evangelidis.t_tmoviesseries.login.FlexibleFrameLayout
+    <com.evangelidis.t_tmoviesseries.view.login.FlexibleFrameLayout
         android:id="@+id/wrapper"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -15,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <com.evangelidis.t_tmoviesseries.login.LoginButton
+        <com.evangelidis.t_tmoviesseries.view.login.LoginButton
             android:id="@+id/button"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -24,6 +23,6 @@
             android:id="@+id/sign_up_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </com.evangelidis.t_tmoviesseries.login.FlexibleFrameLayout>
+    </com.evangelidis.t_tmoviesseries.view.login.FlexibleFrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -3,25 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_marginEnd="10dp"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground"
     android:orientation="vertical">
 
     <ImageView
         android:id="@+id/movie_img"
-        android:layout_width="150dp"
+        android:layout_width="120dp"
         android:layout_height="150dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/ic_star" />
+        android:contentDescription="@string/none" />
 
     <TextView
         android:id="@+id/movie_name"
-        android:layout_width="150dp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="4dp"
         android:ellipsize="end"
         android:fontFamily="@font/montserrat_light"
         android:gravity="center"
@@ -30,19 +27,20 @@
 
     <TextView
         android:id="@+id/actor_character"
-        android:layout_width="150dp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:fontFamily="@font/montserrat_light"
         android:gravity="center"
         android:maxLines="1"
-        android:paddingTop="7dp"
+        android:paddingTop="4dp"
         android:textColor="#80ffffff" />
 
     <TextView
         android:id="@+id/movie_year"
-        android:layout_width="150dp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:ellipsize="end"
         android:fontFamily="@font/montserrat_light"
         android:gravity="center"

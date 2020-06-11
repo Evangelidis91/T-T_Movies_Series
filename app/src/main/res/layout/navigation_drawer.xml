@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <LinearLayout
@@ -26,7 +26,7 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="25dp"
                 android:contentDescription="@string/nav_header_desc"
-                android:src="@drawable/video_camera_white" />
+                app:srcCompat="@drawable/video_camera_white" />
 
             <TextView
                 android:id="@+id/textView"
@@ -34,30 +34,18 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_light"
                 android:paddingTop="@dimen/nav_header_vertical_spacing"
-                android:text="Explore movies and tv series. Find details for any movie and tv show." />
+                android:text="@string/app_description" />
 
-            <LinearLayout
-                android:id="@+id/nav_login_layout"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/loginText"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_login" />
-
-                <TextView
-                    android:id="@+id/loginText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:fontFamily="@font/montserrat_light"
-                    android:text="@string/login"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
-            </LinearLayout>
+                android:drawableStart="@drawable/ic_login"
+                android:fontFamily="@font/montserrat_light"
+                android:text="@string/login"
+                android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/nav_activate_account"
@@ -69,7 +57,7 @@
                 android:textColor="@color/white"
                 android:textSize="13sp"
                 android:visibility="gone"
-                tools:visibility="visible"/>
+                tools:visibility="visible" />
         </LinearLayout>
 
         <View
@@ -86,7 +74,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
                 android:layout_marginStart="10dp"
+                android:layout_toStartOf="@+id/movies_arrow"
                 android:fontFamily="@font/montserrat_regular"
                 android:text="@string/movies"
                 android:textColor="@color/white"
@@ -96,11 +86,12 @@
                 android:id="@+id/movies_arrow"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="15dp"
+                android:contentDescription="@string/none"
                 android:rotation="90"
-                android:src="@drawable/expand_list_arrow" />
+                app:srcCompat="@drawable/expand_list_arrow" />
 
         </RelativeLayout>
 
@@ -169,7 +160,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
                 android:layout_marginStart="10dp"
+                android:layout_toStartOf="@+id/tv_arrow"
                 android:fontFamily="@font/montserrat_regular"
                 android:text="@string/tv"
                 android:textColor="@color/white"
@@ -179,11 +172,12 @@
                 android:id="@+id/tv_arrow"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="15dp"
+                android:contentDescription="@string/none"
                 android:rotation="90"
-                android:src="@drawable/expand_list_arrow" />
+                app:srcCompat="@drawable/expand_list_arrow" />
 
         </RelativeLayout>
 
@@ -259,7 +253,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
                 android:layout_marginStart="10dp"
+                android:layout_toStartOf="@+id/communication_arrow"
                 android:fontFamily="@font/montserrat_regular"
                 android:text="@string/communicate"
                 android:textColor="@color/white"
@@ -269,11 +265,12 @@
                 android:id="@+id/communication_arrow"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="15dp"
+                android:contentDescription="@string/none"
                 android:rotation="90"
-                android:src="@drawable/expand_list_arrow" />
+                app:srcCompat="@drawable/expand_list_arrow" />
 
         </RelativeLayout>
 
@@ -294,22 +291,26 @@
                     android:id="@+id/nav_send"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="5dp"
+                    android:layout_toStartOf="@+id/img_send"
                     android:fontFamily="@font/montserrat_light"
                     android:text="@string/send_message"
                     android:textColor="@color/white"
                     android:textSize="19sp" />
 
                 <ImageView
+                    android:id="@+id/img_send"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="15dp"
+                    android:contentDescription="@string/none"
                     android:rotation="315"
-                    android:src="@drawable/send" />
+                    app:srcCompat="@drawable/send" />
 
             </RelativeLayout>
 
@@ -324,9 +325,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
                 android:layout_marginStart="10dp"
+                android:layout_toStartOf="@+id/settings_arrow"
                 android:fontFamily="@font/montserrat_regular"
-                android:text="Settings"
+                android:text="@string/settings"
                 android:textColor="@color/white"
                 android:textSize="25sp" />
 
@@ -334,11 +337,12 @@
                 android:id="@+id/settings_arrow"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="15dp"
+                android:contentDescription="@string/none"
                 android:rotation="90"
-                android:src="@drawable/expand_list_arrow" />
+                app:srcCompat="@drawable/expand_list_arrow" />
 
         </RelativeLayout>
 
@@ -365,9 +369,9 @@
                     android:ellipsize="end"
                     android:fontFamily="@font/montserrat_light"
                     android:maxLines="1"
-                    android:visibility="gone"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:visibility="gone" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/nav_notifications"
@@ -387,14 +391,14 @@
         </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
 
         <TextView
-            android:id="@+id/nav_wishlist"
+            android:id="@+id/nav_watchlist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="30dp"
             android:fontFamily="@font/montserrat_regular"
-            android:text="My Watch list"
+            android:text="@string/my_watchlist"
             android:textColor="@color/white"
             android:textSize="25sp" />
 

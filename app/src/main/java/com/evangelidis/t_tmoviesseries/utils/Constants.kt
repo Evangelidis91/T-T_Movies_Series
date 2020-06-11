@@ -21,7 +21,7 @@ object Constants {
 
     const val BASE_URL = "https://api.themoviedb.org/3/"
     const val LANGUAGE = "en-US"
-    const val API_KEY = "73bd64c984323a7ca5be2fadb11b81a6"
+    const val API_KEY = "XXXXX"
 
     const val IS_NOTIFICATION_ON = "is_notification_on"
     const val IS_SYNC_WATCHLIST_ON = "is_sync_watchlist_on"
@@ -36,9 +36,8 @@ object Constants {
     const val ON_THE_AIR_TV = "on_the_air_tv"
     const val POPULAR_TV = "popular_tv"
 
-    const val IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
-    const val ACTOR_IMAGE_URL = "https://image.tmdb.org/t/p/w185"
-    const val IMAGE_BASE_URL_SMALL = "https://image.tmdb.org/t/p/w154"
+    const val IMAGE_POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500"
+    const val IMAGE_SMALL_BASE_URL = "https://image.tmdb.org/t/p/w154"
     const val YOUTUBE_VIDEO_URL = "https://www.youtube.com/watch?v=%s"
     const val YOUTUBE_THUMBNAIL_URL = "https://img.youtube.com/vi/%s/0.jpg"
 

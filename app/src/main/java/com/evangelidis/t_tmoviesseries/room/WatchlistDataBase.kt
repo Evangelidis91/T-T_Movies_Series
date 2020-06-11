@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.evangelidis.t_tmoviesseries.utils.Constants.ROOM_DATABASE_NAME
 
-@Database(entities = arrayOf(WatchlistData::class), version = 2)
+@Database(entities = [WatchlistData::class], version = 2)
 abstract class WatchlistDataBase : RoomDatabase() {
 
     abstract fun todoDao(): TodoDao

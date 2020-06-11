@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="256dp"
         android:layout_marginTop="?android:attr/actionBarSize"
-        android:elevation="4dp"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
@@ -33,7 +32,8 @@
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
-                app:layout_collapseMode="parallax" />
+                app:layout_collapseMode="parallax"
+                android:contentDescription="@string/none" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -42,16 +42,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="fill_vertical"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="?attr/actionBarSize"
         android:fitsSystemWindows="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_margin="@dimen/main_margin">
 
             <TextView
                 android:id="@+id/tvShowTitle"
@@ -59,6 +57,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_bold"
                 android:textColor="@color/white"
+                android:layout_marginBottom="5dp"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:visibility="gone"
@@ -70,30 +69,33 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_light"
                 android:text="@string/tv_show"
+                android:layout_marginBottom="5dp"
                 android:textColor="@color/white" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/info_layout_design"
                 android:orientation="vertical">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp">
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="5dp">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="50dp"
+                        android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="35dp"
                             android:layout_height="35dp"
                             android:layout_gravity="center"
-                            app:srcCompat="@drawable/ic_star" />
+                            app:srcCompat="@drawable/ic_star"
+                            android:contentDescription="@string/none" />
 
                         <TextView
                             android:id="@+id/tvShowRating"
@@ -102,7 +104,7 @@
                             android:layout_gravity="center"
                             android:layout_marginStart="4dp"
                             android:fontFamily="@font/montserrat_light"
-                            android:paddingEnd="12dp"
+                            android:layout_marginEnd="12dp"
                             android:textColor="@color/white" />
 
                         <TextView
@@ -111,7 +113,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:fontFamily="@font/montserrat_light"
-                            android:paddingStart="5dp"
+                            android:layout_marginStart="5dp"
                             android:textColor="@color/white" />
 
                         <TextView
@@ -120,19 +122,20 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:fontFamily="@font/montserrat_regular"
-                            android:paddingStart="4dp"
+                            android:layout_marginStart="4dp"
                             android:text="@string/reviews"
                             android:textColor="@color/white" />
                     </LinearLayout>
 
                     <ImageView
-                        android:id="@+id/item_tv_wishlist"
+                        android:id="@+id/item_tv_watchlist"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_margin="5dp"
                         android:scaleType="fitCenter"
-                        app:srcCompat="@drawable/ic_disable_wishlist" />
+                        app:srcCompat="@drawable/ic_disable_watchlist"
+                        android:contentDescription="@string/none" />
 
                 </RelativeLayout>
 
@@ -140,41 +143,49 @@
                     android:id="@+id/tvShowGenres"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="5dp"
                     android:fontFamily="@font/montserrat_light"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/tvShowReleaseDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="5dp"
                     android:fontFamily="@font/montserrat_light"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/tvShowEpisodeDuration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="5dp"
                     android:fontFamily="@font/montserrat_light"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/tvShowAllSeasons"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="5dp"
                     android:fontFamily="@font/montserrat_bold"
                     android:textColor="@color/white"
-                    android:textSize="17sp" />
+                    android:textSize="17sp"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/summaryContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/info_layout_design"
                 android:orientation="vertical"
                 android:visibility="gone"
@@ -192,6 +203,7 @@
                     android:id="@+id/tvShowOverview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
                     android:layout_marginTop="4dp"
                     android:fontFamily="@font/montserrat_light"
                     android:textColor="@color/white" />
@@ -202,7 +214,7 @@
                 android:id="@+id/directorsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/info_layout_design"
                 android:orientation="vertical"
                 android:visibility="gone"
@@ -220,6 +232,7 @@
                     android:id="@+id/tvShowDirectors"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
                     android:fontFamily="@font/montserrat_light"
                     android:textColor="@color/white" />
 
@@ -229,7 +242,7 @@
                 android:id="@+id/tvShowActorsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/info_layout_design"
                 android:orientation="vertical"
                 android:visibility="gone"
@@ -238,6 +251,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
                     android:fontFamily="@font/montserrat_regular"
                     android:text="@string/actors"
                     android:textColor="@color/white"
@@ -245,7 +259,8 @@
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
 
                     <LinearLayout
                         android:id="@+id/tvShowActors"
@@ -259,7 +274,7 @@
                 android:id="@+id/tvShowTrailersContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/info_layout_design"
                 android:orientation="vertical"
                 android:visibility="gone"
@@ -268,6 +283,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
                     android:fontFamily="@font/montserrat_regular"
                     android:text="@string/videos"
                     android:textColor="@color/white"
@@ -275,7 +291,8 @@
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
 
                     <LinearLayout
                         android:id="@+id/tvShowTrailers"
@@ -289,7 +306,7 @@
                 android:id="@+id/tvShowSimilarContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/info_layout_design"
                 android:orientation="vertical"
                 android:visibility="gone"
@@ -298,6 +315,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
                     android:fontFamily="@font/montserrat_regular"
                     android:text="@string/similar_tv_shows"
                     android:textColor="@color/white"
@@ -305,7 +323,8 @@
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
 
                     <LinearLayout
                         android:id="@+id/tvShowSimilar"
@@ -319,7 +338,7 @@
                 android:id="@+id/tvShowRecommendationsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/info_layout_design"
                 android:orientation="vertical"
                 android:visibility="gone"
@@ -328,6 +347,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
                     android:fontFamily="@font/montserrat_regular"
                     android:text="@string/recommendations"
                     android:textColor="@color/white"
@@ -335,7 +355,8 @@
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
 
                     <LinearLayout
                         android:id="@+id/tvShowRecommendations"
@@ -349,7 +370,7 @@
                 android:id="@+id/productionCompaniesLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/info_layout_design"
                 android:orientation="vertical"
                 android:visibility="gone"
@@ -359,7 +380,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_regular"
-                    android:text="Production Companies"
+                    android:text="@string/production_companies"
                     android:textColor="@color/white"
                     android:textSize="24sp" />
 
@@ -377,8 +398,8 @@
     <com.tuyenmonkey.mkloader.MKLoader
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/loading_bar_size"
+        android:layout_height="@dimen/loading_bar_size"
         android:layout_gravity="center"
         app:mk_color="@color/deepSkyBlue"
         app:mk_type="FishSpinner" />
