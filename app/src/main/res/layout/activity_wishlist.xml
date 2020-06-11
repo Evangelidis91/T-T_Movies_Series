@@ -7,22 +7,17 @@
     android:background="@drawable/side_nav_bar_menu_gradient"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".view.WatchlistActivity">
+    tools:context=".view.watchlist.WatchlistActivity">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:fontFamily="@font/montserrat_regular"
-        android:text="@string/my_wishlist"
-        android:textSize="26sp" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/main_toolbar" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/wishlist_list"
+        android:id="@+id/watchlist_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/toolbar"
         android:layout_margin="8dp"
         android:divider="@android:color/transparent"
         android:dividerHeight="8dp" />
@@ -43,10 +38,10 @@
     <com.tuyenmonkey.mkloader.MKLoader
         android:id="@+id/loading_view"
         style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/loading_bar_size"
+        android:layout_height="@dimen/loading_bar_size"
         android:layout_centerInParent="true"
         app:mk_color="@color/deepSkyBlue"
-        app:mk_type="TwinFishesSpinner" />
+        app:mk_type="FishSpinner" />
 
 </RelativeLayout>

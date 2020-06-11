@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/side_nav_bar_menu_gradient"
-    tools:context=".view.SplashScreenActivity">
+    tools:context=".view.splashscreen.SplashScreenActivity">
 
     <ImageView
         android:id="@+id/img"
@@ -17,7 +17,8 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.35"
-        app:srcCompat="@drawable/video_camera_white" />
+        app:srcCompat="@drawable/video_camera_white"
+        android:contentDescription="@string/none" />
 
     <TextView
         android:layout_width="match_parent"
@@ -37,8 +38,8 @@
     <com.tuyenmonkey.mkloader.MKLoader
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/loading_bar_size"
+        android:layout_height="@dimen/loading_bar_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

@@ -3,9 +3,9 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_desc">Navigation header</string>
+    <string name="none">none</string>
 
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
-    <string name="fcm_message">FCM Message</string>
 
     <string name="close_popup_window_title">What do you want to do?</string>
     <string name="close_the_app_text">Close the app</string>
@@ -13,10 +13,9 @@
     <string name="logout_from_the_app_text">Logout</string>
     <string name="activate_your_account">Activate your account</string>
 
-    <string name="tab">\u0009\u0009\u0009\u0009</string>
     <string name="bullet">\u2022</string>
 
-    <string name="my_wishlist"><u>My watch list</u></string>
+    <string name="my_watchlist">My watchlist</string>
 
     <string name="notifications_are_on">Notifications are on</string>
     <string name="notifications_are_off">Notifications are off</string>
@@ -26,7 +25,6 @@
     <string name="welcome_user">Welcome {USERNAME}</string>
 
     <string name="movies">Movies</string>
-    <string name="movie">Movie</string>
     <string name="popular_movies">Popular movies</string>
     <string name="playing_now_movies">Playing now movies</string>
     <string name="top_rated_movies">Top rated movies</string>
@@ -46,7 +44,7 @@
     <string name="trending">Trending</string>
     <string name="episode_name">{NUMBER}. {TITLE}</string>
 
-    <string name="message_succ">Message submitted successful.</string>
+    <string name="message_success">Message submitted successful.</string>
     <string name="message_fail">Message submitted unsuccessful. Please try again</string>
     <string name="mail_error">Not a valid email</string>
     <string name="message_short">Too short message. Write at least 10 chars</string>
@@ -74,7 +72,6 @@
     <string name="budget">Budget</string>
     <string name="box_office">Box Office</string>
     <string name="actors">Actors</string>
-    <string name="trailers">Trailers</string>
     <string name="videos">Videos</string>
     <string name="similar_movies">Similar Movies</string>
     <string name="recommendations">Recommendations</string>
@@ -91,19 +88,23 @@
     <string name="multi_directors">{dir1} and {dir2}</string>
     <string name="movie_rate">({MOVIE_RATE})</string>
 
-    <string name="person">Person</string>
+    <string name="known_for">Known for {x}</string>
     <string name="person_single_born">Born: {DATE} (age {AGE})</string>
     <string name="person_born">Born: {DATE}</string>
     <string name="person_death">Died: {DEATH_DATE} ({AGE})</string>
+    <string name="filmography">Filmography</string>
 
     <string name="tv_show_release_date_format1">{year} -</string>
     <string name="tv_show_release_date_format2">{year1} - {year2}</string>
     <string name="one_season_text">1 season</string>
     <string name="season_number">{x} seasons</string>
-    <string name="tv_show_rate">({TV_SHOW_RATE})</string>
 
     <string name="gender_male">Gender: Male</string>
     <string name="gender_female">Gender: Female</string>
     <string name="gender_no">Gender: Not specified</string>
+    <string name="production_companies">Production Companies</string>
+    <string name="biography">Biography</string>
+    <string name="app_description">Explore movies and tv series. Find details for any movie and tv show.</string>
+    <string name="settings">Settings</string>
 
 </resources>

@@ -10,7 +10,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.utils.Constants.IS_NOTIFICATION_ON
-import com.evangelidis.t_tmoviesseries.view.SplashScreenActivity
+import com.evangelidis.t_tmoviesseries.view.splashscreen.SplashScreenActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import es.dmoral.prefs.Prefs
@@ -23,10 +23,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 sendNotification(it.body, it.title)
             }
         }
-    }
-
-    override fun onNewToken(p0: String) {
-        super.onNewToken(p0)
     }
 
     private fun sendNotification(messageBody: String?, title: String?) {

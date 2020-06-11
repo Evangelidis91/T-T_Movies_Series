@@ -26,34 +26,9 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="NavigationDrawerStyle">
-        <item name="android:textColor">@color/white</item>
-
-        <item name="colorControlNormal">@color/white</item>
-
-        <!-- item size in menu-->
-        <item name="android:listPreferredItemHeightSmall">40dp</item>
-        <item name="listPreferredItemHeightSmall">40dp</item>
-
-        <!-- item padding left in menu-->
-        <item name="android:listPreferredItemPaddingLeft">11dp</item>
-        <item name="listPreferredItemPaddingLeft">11dp</item>
-
-        <item name="android:itemPadding">40dp</item>
-
-        <!-- item padding right in menu-->
-        <item name="android:listPreferredItemPaddingRight">8dp</item>
-        <item name="listPreferredItemPaddingRight">8dp</item>
-    </style>
-
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <style name="MyThemeNavigationDrawerTextColor">
-        <item name="android:textColor">#fff</item>
-        <item name="android:textSize">20sp</item>
-    </style>
 
     <style name="HeaderBar">
         <item name="android:background">@color/mainBackground</item>
@@ -69,11 +44,6 @@
     <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:background">@android:color/white</item>
         <item name="android:textColor">#fff</item>
-    </style>
-
-    <style name="MyListViewStyle">
-        <item name="android:divider">#F00</item>
-        <item name="android:dividerHeight">1dp</item>
     </style>
 
 </resources>
