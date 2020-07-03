@@ -8,13 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.evangelidis.t_tmoviesseries.utils.Constants.IS_LOGGED_IN
 import com.evangelidis.t_tmoviesseries.utils.Constants.IS_LOGIN_SKIPPED
 import com.evangelidis.t_tmoviesseries.view.main.MainActivity
 import com.evangelidis.t_tmoviesseries.R
+import com.evangelidis.t_tmoviesseries.databinding.FragmentSignupBinding
 import com.evangelidis.t_tmoviesseries.view.login.LoginRegisterMethods.arePasswordsEquals
 import com.evangelidis.t_tmoviesseries.view.login.LoginRegisterMethods.isEmailValid
 import com.evangelidis.t_tmoviesseries.view.login.LoginRegisterMethods.isPasswordValid
@@ -34,11 +34,12 @@ import java.util.*
 
 class SignUpFragment : Fragment() {
 
-    private lateinit var inflate: View
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private lateinit var fragmentContext: Context
     private var typeface: Typeface? = null
+
+    private val binding: FragmentSignupBinding by lazy { FragmentSignupBinding.inflate(layoutInflater) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -46,9 +47,8 @@ class SignUpFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        inflate = inflater.inflate(R.layout.fragment_signup, container, false)
-        inflate.findViewById<AppCompatButton>(R.id.btn_signUp).setOnClickListener { performSignUp() }
-        inflate.findViewById<AppCompatButton>(R.id.btn_skip).setOnClickListener {
+        binding.btnSignUp.setOnClickListener { performSignUp() }
+        binding.btnSkip.setOnClickListener {
             Prefs.with(fragmentContext).writeBoolean(IS_LOGIN_SKIPPED, true)
             startActivity(Intent(this.context, MainActivity::class.java))
             activity?.finish()
@@ -56,15 +56,15 @@ class SignUpFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
 
-        typeface  = ResourcesCompat.getFont(fragmentContext, R.font.montserrat_regular)
+        typeface = ResourcesCompat.getFont(fragmentContext, R.font.montserrat_regular)
 
-        return inflate
+        return binding.root
     }
 
     private fun performSignUp() {
-        val email = inflate.findViewById<EditText>(R.id.email_editText).text.toString()
-        val password = inflate.findViewById<EditText>(R.id.password_editText).text.toString()
-        val confirmPassword = inflate.findViewById<EditText>(R.id.confirm_password_editText).text.toString()
+        val email = binding.emailEditText.text.toString()
+        val password = binding.passwordEditText.text.toString()
+        val confirmPassword = binding.confirmPasswordEditText.text.toString()
 
         if (verifyAvailableNetwork(context)) {
             if (isEmailValid(email)) {

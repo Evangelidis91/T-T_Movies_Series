@@ -18,7 +18,7 @@
         android:contentDescription="@string/none" />
 
     <EditText
-        android:id="@+id/email_editText"
+        android:id="@+id/email_edit_text"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_gravity="center_horizontal"
@@ -33,7 +33,7 @@
         android:autofillHints="" />
 
     <EditText
-        android:id="@+id/password_editText"
+        android:id="@+id/password_edit_text"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_gravity="center_horizontal"
@@ -49,7 +49,7 @@
         android:autofillHints="" />
 
     <EditText
-        android:id="@+id/confirm_password_editText"
+        android:id="@+id/confirm_password_edit_text"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_gravity="center_horizontal"
@@ -65,7 +65,7 @@
         android:autofillHints="" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_signUp"
+        android:id="@+id/btn_sign_up"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="35dp"

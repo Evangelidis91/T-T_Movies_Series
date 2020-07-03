@@ -55,11 +55,11 @@
                 android:id="@+id/profile_et_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:backgroundTint="#4cbbb6"
                 android:fontFamily="@font/montserrat_light"
                 android:hint="@string/your_email"
                 android:imeOptions="actionNext"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                app:backgroundTint="#4cbbb6" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -76,11 +76,11 @@
                 android:id="@+id/profile_et_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:backgroundTint="#4cbbb6"
                 android:fontFamily="@font/montserrat_light"
                 android:hint="@string/your_name"
                 android:imeOptions="actionNext"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                app:backgroundTint="#4cbbb6" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -97,11 +97,11 @@
                 android:id="@+id/profile_et_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:backgroundTint="#4cbbb6"
                 android:fontFamily="@font/montserrat_extra_light"
                 android:hint="@string/your_message"
                 android:imeOptions="actionGo"
-                android:inputType="text" />
+                android:inputType="text"
+                app:backgroundTint="#4cbbb6" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

@@ -422,7 +422,7 @@ class LoginButton : View {
                 return@setOnTouchListener true
             } else if (!isLogin && loginTextOutline.contains(x, y)) {
                 if (event.action == KeyEvent.ACTION_UP) {
-                    onLoginListener.login()
+                    //onLoginListener.login()
                 }
                 return@setOnTouchListener true
             } else if (isLogin && signUpTextOutline.contains(x, y)) {

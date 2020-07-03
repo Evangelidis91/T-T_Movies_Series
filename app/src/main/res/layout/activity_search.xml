@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/side_nav_bar_menu_gradient"
     android:orientation="vertical"
     tools:context=".view.search.SearchActivity">
@@ -19,27 +19,27 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1.5"
+            android:contentDescription="@string/none"
             android:padding="15dp"
-            app:srcCompat="@drawable/ic_search"
-            android:contentDescription="@string/none" />
+            app:srcCompat="@drawable/ic_search" />
 
         <EditText
-            android:id="@+id/searchText"
+            android:id="@+id/search_title"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
             android:layout_weight="8.5"
+            android:autofillHints=""
             android:fontFamily="@font/montserrat_light"
             android:hint="@string/search_a_title"
             android:inputType="text"
-            android:layout_marginStart="15dp"
             android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:autofillHints="" />
+            android:textColorHint="@color/white" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/trendingLabel"
+        android:id="@+id/trending_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -50,7 +50,7 @@
         android:textSize="19sp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/trendingList"
+        android:id="@+id/trending_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="8dp"

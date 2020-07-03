@@ -11,15 +11,15 @@
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:scaleType="fitXY"
-        android:contentDescription="@string/none" />
+        android:contentDescription="@string/none"
+        android:scaleType="fitXY" />
 
     <ImageView
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        app:srcCompat="@drawable/play_circle"
-        android:contentDescription="@string/none" />
+        android:contentDescription="@string/none"
+        app:srcCompat="@drawable/play_circle" />
 
 </RelativeLayout>

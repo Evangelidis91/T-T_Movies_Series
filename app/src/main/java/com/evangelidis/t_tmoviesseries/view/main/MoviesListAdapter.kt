@@ -1,14 +1,12 @@
 package com.evangelidis.t_tmoviesseries.view.main
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.getGenres
 import com.evangelidis.t_tmoviesseries.callbacks.OnMoviesClickCallback
 import com.evangelidis.t_tmoviesseries.R
+import com.evangelidis.t_tmoviesseries.databinding.ItemMovieBinding
 import com.evangelidis.t_tmoviesseries.model.Genre
 import com.evangelidis.t_tmoviesseries.model.Movie
 import com.evangelidis.t_tmoviesseries.room.*
@@ -55,9 +53,7 @@ class MoviesListAdapter(
         mDbWorkerThread = DbWorkerThread(DATABASE_THREAD)
         mDbWorkerThread.start()
         mDb = WatchlistDataBase.getInstance(parent.context)
-
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
-        return MoviesViewHolder(view)
+        return MoviesViewHolder(ItemMovieBinding.inflate(LayoutInflater.from(parent.context),parent,false))
     }
 
     override fun getItemCount() = moviesListData.count()
@@ -66,25 +62,17 @@ class MoviesListAdapter(
         holder.bind(moviesListData[position])
     }
 
-    inner class MoviesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
-        private var releaseDate: TextView = itemView.findViewById(R.id.item_movie_release_date)
-        private var title: TextView = itemView.findViewById(R.id.item_movie_title)
-        private var rating: TextView = itemView.findViewById(R.id.item_movie_rating)
-        private var genres: TextView = itemView.findViewById(R.id.item_movie_genre)
-        private var poster: ImageView = itemView.findViewById(R.id.item_movie_poster)
-        private var addToWishList: ImageView = itemView.findViewById(R.id.item_movie_watchlist)
-
+    inner class MoviesViewHolder(private val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: Movie) {
-            releaseDate.text = movie.releaseDate?.substringBefore("-")
-            title.text = movie.title
-            rating.text = movie.voteAverage.toString()
+            binding.itemMovieReleaseDate.text = movie.releaseDate?.substringBefore("-")
+            binding.itemMovieTitle.text = movie.title
+            binding.itemMovieRating.text = movie.voteAverage.toString()
             movie.genreIds?.let {
-                genres.text = getGenres(it, genresList)
+                binding.itemMovieGenre.text = getGenres(it, genresList)
             }
-            addToWishList.setImageResource(R.drawable.ic_disable_watchlist)
+            binding.itemMovieWatchlist.setImageResource(R.drawable.ic_disable_watchlist)
 
-            getGlideImage(itemView.context, IMAGE_SMALL_BASE_URL.plus(movie.posterPath), poster)
+            getGlideImage(itemView.context, IMAGE_SMALL_BASE_URL.plus(movie.posterPath), binding.itemMoviePoster)
 
             itemView.setOnClickListener { movieCallback.onClick(movie) }
 
@@ -95,11 +83,11 @@ class MoviesListAdapter(
 
                 val finder = watchlistList.find { it.itemId == movie.id && it.category == CATEGORY_MOVIE }
                 if (finder != null) {
-                    addToWishList.setImageResource(R.drawable.ic_enable_watchlist)
+                    binding.itemMovieWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
                 }
             }
 
-            addToWishList.setOnClickListener {
+            binding.itemMovieWatchlist.setOnClickListener {
                 val wishList = WatchlistData()
                 wishList.itemId = movie.id
                 wishList.category = CATEGORY_MOVIE
@@ -113,17 +101,17 @@ class MoviesListAdapter(
                 if (watchlistList.isNullOrEmpty()) {
                     insertDataToDatabase(wishList, mDb, mDbWorkerThread)
                     watchlistList.add(wishList)
-                    addToWishList.setImageResource(R.drawable.ic_enable_watchlist)
+                    binding.itemMovieWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
                 } else {
                     val finder = watchlistList.find { it.itemId == movie.id && it.category == CATEGORY_MOVIE }
                     if (finder != null) {
-                        addToWishList.setImageResource(R.drawable.ic_disable_watchlist)
+                        binding.itemMovieWatchlist.setImageResource(R.drawable.ic_disable_watchlist)
                         removeDataFromDatabase(wishList, mDb, mDbWorkerThread)
                         watchlistList.remove(wishList)
                     } else {
                         insertDataToDatabase(wishList, mDb, mDbWorkerThread)
                         watchlistList.add(wishList)
-                        addToWishList.setImageResource(R.drawable.ic_enable_watchlist)
+                        binding.itemMovieWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
                     }
                 }
             }

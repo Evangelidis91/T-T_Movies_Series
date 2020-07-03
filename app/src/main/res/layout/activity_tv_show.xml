@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     android:background="@color/mainBackground">
 
-    <include layout="@layout/main_toolbar" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/main_toolbar" />
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
@@ -17,7 +19,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsingToolbar"
+            android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
@@ -27,13 +29,13 @@
             app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
 
             <ImageView
-                android:id="@+id/tvShowBackdrop"
+                android:id="@+id/tv_show_backdrop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:contentDescription="@string/none"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
-                app:layout_collapseMode="parallax"
-                android:contentDescription="@string/none" />
+                app:layout_collapseMode="parallax" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -48,28 +50,27 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_margin="@dimen/main_margin">
+            android:layout_margin="@dimen/main_margin"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvShowTitle"
+                android:id="@+id/tv_show_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 android:fontFamily="@font/montserrat_bold"
                 android:textColor="@color/white"
-                android:layout_marginBottom="5dp"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:visibility="gone"
                 tools:visibility="visible" />
 
             <TextView
-                android:id="@+id/tvShow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 android:fontFamily="@font/montserrat_light"
                 android:text="@string/tv_show"
-                android:layout_marginBottom="5dp"
                 android:textColor="@color/white" />
 
             <LinearLayout
@@ -94,35 +95,35 @@
                             android:layout_width="35dp"
                             android:layout_height="35dp"
                             android:layout_gravity="center"
-                            app:srcCompat="@drawable/ic_star"
-                            android:contentDescription="@string/none" />
+                            android:contentDescription="@string/none"
+                            app:srcCompat="@drawable/ic_star" />
 
                         <TextView
-                            android:id="@+id/tvShowRating"
+                            android:id="@+id/tv_show_rating"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginStart="4dp"
-                            android:fontFamily="@font/montserrat_light"
                             android:layout_marginEnd="12dp"
-                            android:textColor="@color/white" />
-
-                        <TextView
-                            android:id="@+id/tvShowTotalVotes"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
                             android:fontFamily="@font/montserrat_light"
-                            android:layout_marginStart="5dp"
                             android:textColor="@color/white" />
 
                         <TextView
-                            android:id="@+id/reviewsText"
+                            android:id="@+id/tv_show_total_votes"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:fontFamily="@font/montserrat_regular"
+                            android:layout_marginStart="5dp"
+                            android:fontFamily="@font/montserrat_light"
+                            android:textColor="@color/white" />
+
+                        <TextView
+                            android:id="@+id/reviews_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
                             android:layout_marginStart="4dp"
+                            android:fontFamily="@font/montserrat_regular"
                             android:text="@string/reviews"
                             android:textColor="@color/white" />
                     </LinearLayout>
@@ -133,14 +134,14 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_margin="5dp"
+                        android:contentDescription="@string/none"
                         android:scaleType="fitCenter"
-                        app:srcCompat="@drawable/ic_disable_watchlist"
-                        android:contentDescription="@string/none" />
+                        app:srcCompat="@drawable/ic_disable_watchlist" />
 
                 </RelativeLayout>
 
                 <TextView
-                    android:id="@+id/tvShowGenres"
+                    android:id="@+id/tv_show_genres"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -150,7 +151,7 @@
                     android:visibility="gone" />
 
                 <TextView
-                    android:id="@+id/tvShowReleaseDate"
+                    android:id="@+id/tv_show_release_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -160,7 +161,7 @@
                     android:visibility="gone" />
 
                 <TextView
-                    android:id="@+id/tvShowEpisodeDuration"
+                    android:id="@+id/tv_show_episode_duration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -170,7 +171,7 @@
                     android:visibility="gone" />
 
                 <TextView
-                    android:id="@+id/tvShowAllSeasons"
+                    android:id="@+id/tv_show_all_seasons"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -182,7 +183,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/summaryContainer"
+                android:id="@+id/tv_show_summary_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -200,7 +201,7 @@
                     android:textSize="24sp" />
 
                 <TextView
-                    android:id="@+id/tvShowOverview"
+                    android:id="@+id/tv_show_overview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -211,7 +212,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/directorsContainer"
+                android:id="@+id/tv_show_directors_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -229,7 +230,7 @@
                     android:textSize="24sp" />
 
                 <TextView
-                    android:id="@+id/tvShowDirectors"
+                    android:id="@+id/tv_show_directors"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -239,7 +240,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/tvShowActorsContainer"
+                android:id="@+id/tv_show_actors_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -263,7 +264,7 @@
                     android:scrollbars="none">
 
                     <LinearLayout
-                        android:id="@+id/tvShowActors"
+                        android:id="@+id/tv_show_actors"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal" />
@@ -271,7 +272,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/tvShowTrailersContainer"
+                android:id="@+id/tv_show_trailers_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -295,7 +296,7 @@
                     android:scrollbars="none">
 
                     <LinearLayout
-                        android:id="@+id/tvShowTrailers"
+                        android:id="@+id/tv_show_trailers"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal" />
@@ -303,7 +304,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/tvShowSimilarContainer"
+                android:id="@+id/tv_show_similar_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -327,7 +328,7 @@
                     android:scrollbars="none">
 
                     <LinearLayout
-                        android:id="@+id/tvShowSimilar"
+                        android:id="@+id/tv_show_similar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal" />
@@ -335,7 +336,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/tvShowRecommendationsContainer"
+                android:id="@+id/tv_show_recommendations_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -359,7 +360,7 @@
                     android:scrollbars="none">
 
                     <LinearLayout
-                        android:id="@+id/tvShowRecommendations"
+                        android:id="@+id/tv_show_recommendations"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal" />
@@ -367,7 +368,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/productionCompaniesLayout"
+                android:id="@+id/tv_show_production_companies_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -385,7 +386,7 @@
                     android:textSize="24sp" />
 
                 <LinearLayout
-                    android:id="@+id/productionCompanies"
+                    android:id="@+id/tv_show_production_companies"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />
@@ -396,7 +397,7 @@
     </androidx.core.widget.NestedScrollView>
 
     <com.tuyenmonkey.mkloader.MKLoader
-        android:id="@+id/progressBar"
+        android:id="@+id/progress_bar"
         style="?android:attr/progressBarStyle"
         android:layout_width="@dimen/loading_bar_size"
         android:layout_height="@dimen/loading_bar_size"

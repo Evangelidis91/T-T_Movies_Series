@@ -21,7 +21,7 @@ object Constants {
 
     const val BASE_URL = "https://api.themoviedb.org/3/"
     const val LANGUAGE = "en-US"
-    const val API_KEY = "XXXXX"
+    const val API_KEY = "73bd64c984323a7ca5be2fadb11b81a6"
 
     const val IS_NOTIFICATION_ON = "is_notification_on"
     const val IS_SYNC_WATCHLIST_ON = "is_sync_watchlist_on"

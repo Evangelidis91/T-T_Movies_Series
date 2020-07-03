@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.evangelidis.t_tmoviesseries.callbacks.OnTrendingClickCallback
 import com.evangelidis.t_tmoviesseries.R
+import com.evangelidis.t_tmoviesseries.databinding.ActivitySearchBinding
 import com.evangelidis.t_tmoviesseries.extensions.gone
 import com.evangelidis.t_tmoviesseries.extensions.show
 import com.evangelidis.t_tmoviesseries.model.Multisearch
@@ -27,7 +28,6 @@ import com.evangelidis.t_tmoviesseries.view.movie.MovieActivity
 import com.evangelidis.t_tmoviesseries.view.person.PersonActivity
 import com.evangelidis.t_tmoviesseries.view.tvshow.TvShowActivity
 import com.evangelidis.tantintoast.TanTinToast
-import kotlinx.android.synthetic.main.activity_search.*
 
 class SearchActivity : AppCompatActivity() {
 
@@ -69,11 +69,13 @@ class SearchActivity : AppCompatActivity() {
 
     private var typeface: Typeface? = null
 
+    val binding: ActivitySearchBinding by lazy { ActivitySearchBinding.inflate(layoutInflater) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
+        setContentView(binding.root)
 
-        typeface  = ResourcesCompat.getFont(this, R.font.montserrat_regular)
+        typeface = ResourcesCompat.getFont(this, R.font.montserrat_regular)
 
         mDbWorkerThread = DbWorkerThread(DATABASE_THREAD)
         mDbWorkerThread.start()
@@ -87,21 +89,21 @@ class SearchActivity : AppCompatActivity() {
             viewModel.getTrendings(1)
         }
 
-        trendingList.apply {
+        binding.trendingList.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = trendsAdapter
         }
 
-        searchText.addTextChangedListener(object : TextWatcher {
+        binding.searchTitle.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                if (after == 0){
+                if (after == 0) {
                     trendsAdapter.appendTrendings(trendsList)
-                    trendingLabel.show()
+                    binding.trendingLabel.show()
                 } else {
-                    trendingLabel.gone()
+                    binding.trendingLabel.gone()
                 }
             }
 

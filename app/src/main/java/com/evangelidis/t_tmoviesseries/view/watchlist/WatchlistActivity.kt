@@ -9,6 +9,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.callbacks.OnWatchlistClickCallback
+import com.evangelidis.t_tmoviesseries.databinding.ActivityWatchlistBinding
 import com.evangelidis.t_tmoviesseries.extensions.gone
 import com.evangelidis.t_tmoviesseries.extensions.show
 import com.evangelidis.t_tmoviesseries.room.DbWorkerThread
@@ -23,8 +24,6 @@ import com.evangelidis.t_tmoviesseries.view.movie.MovieActivity
 import com.evangelidis.t_tmoviesseries.view.search.SearchActivity
 import com.evangelidis.t_tmoviesseries.view.tvshow.TvShowActivity
 import com.evangelidis.tantintoast.TanTinToast
-import kotlinx.android.synthetic.main.activity_wishlist.*
-import kotlinx.android.synthetic.main.main_toolbar.*
 
 class WatchlistActivity : AppCompatActivity() {
 
@@ -55,25 +54,27 @@ class WatchlistActivity : AppCompatActivity() {
     private lateinit var mDbWorkerThread: DbWorkerThread
     private val mUiHandler = Handler()
 
-    private var typeface : Typeface? = null
+    private var typeface: Typeface? = null
+
+    private val binding: ActivityWatchlistBinding by lazy { ActivityWatchlistBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_wishlist)
-        typeface  = ResourcesCompat.getFont(this, R.font.montserrat_regular)
+        setContentView(R.layout.activity_watchlist)
+        typeface = ResourcesCompat.getFont(this, R.font.montserrat_regular)
 
         mDbWorkerThread = DbWorkerThread(DATABASE_THREAD)
         mDbWorkerThread.start()
         mDb = WatchlistDataBase.getInstance(this)
 
-        toolbar_title.text = getString(R.string.my_watchlist).underline()
+        binding.toolbar.toolbarTitle.text = getString(R.string.my_watchlist).underline()
 
-        imageToMain.setOnClickListener {
+        binding.toolbar.imageToMain.setOnClickListener {
             val intent = Intent(this@WatchlistActivity, MainActivity::class.java)
             startActivity(intent)
         }
 
-        search_img.setOnClickListener {
+        binding.toolbar.searchIcn.setOnClickListener {
             val intent = Intent(this@WatchlistActivity, SearchActivity::class.java)
             startActivity(intent)
         }
@@ -83,7 +84,7 @@ class WatchlistActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        loading_view.show()
+        binding.loadingView.show()
         getDataFromDB()
     }
 
@@ -94,17 +95,17 @@ class WatchlistActivity : AppCompatActivity() {
                     val watchlistData = mDb?.todoDao()?.getAll()
                     mUiHandler.post {
                         if (!watchlistData.isNullOrEmpty()) {
-                            empty_watchlist_text.gone()
-                            watchlist_list.apply {
+                            binding.emptyWatchlistText.gone()
+                            binding.watchlistList.apply {
                                 layoutManager = LinearLayoutManager(context)
                                 adapter = watchlistAdapter
                             }
                             watchlistAdapter.appendWatchlistData(watchlistData.reversed())
 
                         } else {
-                            empty_watchlist_text.show()
+                            binding.emptyWatchlistText.show()
                         }
-                        loading_view.gone()
+                        binding.loadingView.gone()
                     }
                 }
                 mDbWorkerThread.postTask(task)
@@ -113,7 +114,7 @@ class WatchlistActivity : AppCompatActivity() {
         )
     }
 
-    fun displayEmptyList(){
-        empty_watchlist_text.show()
+    fun displayEmptyList() {
+        binding.emptyWatchlistText.show()
     }
 }

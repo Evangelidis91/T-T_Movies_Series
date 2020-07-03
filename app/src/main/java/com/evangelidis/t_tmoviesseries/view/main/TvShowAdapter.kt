@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.getGenres
 import com.evangelidis.t_tmoviesseries.callbacks.OnTvShowClickCallback
 import com.evangelidis.t_tmoviesseries.R
+import com.evangelidis.t_tmoviesseries.databinding.ItemTvBinding
 import com.evangelidis.t_tmoviesseries.model.Genre
 import com.evangelidis.t_tmoviesseries.model.TvShow
 import com.evangelidis.t_tmoviesseries.room.DatabaseManager.insertDataToDatabase
@@ -56,9 +57,7 @@ class TvShowAdapter(
         mDbWorkerThread = DbWorkerThread(DATABASE_THREAD)
         mDbWorkerThread.start()
         mDb = WatchlistDataBase.getInstance(parent.context)
-
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_tv, parent, false)
-        return TvShowViewHolder(view)
+        return TvShowViewHolder(ItemTvBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun getItemCount() = tvShowListData.count()
@@ -67,33 +66,23 @@ class TvShowAdapter(
         holder.bind(tvShowListData[position])
     }
 
-    inner class TvShowViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
-        private var releaseDate: TextView = itemView.findViewById(R.id.item_movie_release_date)
-        private var title: TextView = itemView.findViewById(R.id.item_movie_title)
-        private var rating: TextView = itemView.findViewById(R.id.item_movie_rating)
-        private var genres: TextView = itemView.findViewById(R.id.item_movie_genre)
-        private var poster: ImageView = itemView.findViewById(R.id.item_movie_poster)
-        private var addToWishList: ImageView = itemView.findViewById(R.id.item_movie_watchlist)
-
+    inner class TvShowViewHolder(private val binding: ItemTvBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(tv: TvShow) {
             tv.firstAirDate?.let {
-                releaseDate.text = it.substringBefore("-")
+                binding.itemTvReleaseDate.text = it.substringBefore("-")
             }
 
-            title.text = tv.name
-            rating.text = tv.voteAverage.toString()
+            binding.itemTvTitle.text = tv.name
+            binding.itemTvRating.text = tv.voteAverage.toString()
             tv.genreIds?.let {
-                genres.text = getGenres(it, genresList)
+                binding.itemTvGenre.text = getGenres(it, genresList)
             }
 
-            addToWishList.setImageResource(R.drawable.ic_disable_watchlist)
+            binding.itemTvWatchlist.setImageResource(R.drawable.ic_disable_watchlist)
 
-            getGlideImage(itemView.context, IMAGE_SMALL_BASE_URL.plus(tv.posterPath), poster)
+            getGlideImage(binding.root.context, IMAGE_SMALL_BASE_URL.plus(tv.posterPath), binding.itemTvPoster)
 
-            addToWishList.setImageResource(R.drawable.ic_disable_watchlist)
-
-            itemView.setOnClickListener { tvShowCallback.onClick(tv) }
+            binding.root.setOnClickListener { tvShowCallback.onClick(tv) }
 
             if (!watchlistList.isNullOrEmpty()) {
                 val currentItem = WatchlistData()
@@ -102,11 +91,11 @@ class TvShowAdapter(
 
                 val finder = watchlistList.find { it.itemId == tv.id && it.category == CATEGORY_TV }
                 if (finder != null) {
-                    addToWishList.setImageResource(R.drawable.ic_enable_watchlist)
+                    binding.itemTvWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
                 }
             }
 
-            addToWishList.setOnClickListener {
+            binding.itemTvWatchlist.setOnClickListener {
                 val wishList = WatchlistData()
                 wishList.itemId = tv.id
                 wishList.category = CATEGORY_TV
@@ -120,17 +109,17 @@ class TvShowAdapter(
                 if (watchlistList.isNullOrEmpty()) {
                     insertDataToDatabase(wishList, mDb, mDbWorkerThread)
                     watchlistList.add(wishList)
-                    addToWishList.setImageResource(R.drawable.ic_enable_watchlist)
+                    binding.itemTvWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
                 } else {
                     val finder = watchlistList.find { it.itemId == tv.id && it.category == CATEGORY_TV }
                     if (finder != null) {
-                        addToWishList.setImageResource(R.drawable.ic_disable_watchlist)
+                        binding.itemTvWatchlist.setImageResource(R.drawable.ic_disable_watchlist)
                         removeDataFromDatabase(wishList, mDb, mDbWorkerThread)
                         watchlistList.remove(wishList)
                     } else {
                         insertDataToDatabase(wishList, mDb, mDbWorkerThread)
                         watchlistList.add(wishList)
-                        addToWishList.setImageResource(R.drawable.ic_enable_watchlist)
+                        binding.itemTvWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
                     }
                 }
             }

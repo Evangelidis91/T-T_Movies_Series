@@ -17,23 +17,23 @@
             android:id="@+id/item_movie_poster"
             android:layout_width="96dp"
             android:layout_height="0dp"
+            android:contentDescription="@string/none"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/ic_launcher_round"
-            android:contentDescription="@string/none" />
+            app:srcCompat="@mipmap/ic_launcher_round" />
 
         <ImageView
             android:id="@+id/item_movie_watchlist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
+            android:contentDescription="@string/none"
             android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/item_movie_rating"
-            app:srcCompat="@drawable/ic_disable_watchlist"
-            android:contentDescription="@string/none" />
+            app:srcCompat="@drawable/ic_disable_watchlist" />
 
         <TextView
             android:id="@+id/item_movie_release_date"

@@ -9,13 +9,10 @@ class SeasonsViewPagerAdapter(manager: FragmentManager) : FragmentPagerAdapter(m
 
     override fun getCount() = mFragmentList.size
 
-
     private val mFragmentList = ArrayList<Fragment>()
     private val mFragmentTitleList = ArrayList<String>()
 
-
     override fun getItem(position: Int) = mFragmentList[position]
-
 
     fun addFragment(fragment: Fragment, title: String) {
         mFragmentList.add(fragment)
@@ -23,5 +20,4 @@ class SeasonsViewPagerAdapter(manager: FragmentManager) : FragmentPagerAdapter(m
     }
 
     override fun getPageTitle(position: Int) = mFragmentTitleList[position]
-
 }

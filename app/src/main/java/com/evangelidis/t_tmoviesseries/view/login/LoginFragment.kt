@@ -11,11 +11,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.evangelidis.t_tmoviesseries.view.main.MainActivity
 import com.evangelidis.t_tmoviesseries.R
+import com.evangelidis.t_tmoviesseries.databinding.EnterEmailLayoutBinding
+import com.evangelidis.t_tmoviesseries.databinding.FragmentLoginBinding
 import com.evangelidis.t_tmoviesseries.view.login.LoginRegisterMethods.isEmailValid
 import com.evangelidis.t_tmoviesseries.view.login.LoginRegisterMethods.isPasswordValid
 import com.evangelidis.t_tmoviesseries.view.login.LoginRegisterMethods.verifyAvailableNetwork
@@ -26,31 +27,31 @@ import com.google.firebase.database.FirebaseDatabase
 
 class LoginFragment : Fragment() {
 
-    private lateinit var inflate: View
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private lateinit var fragmentContext: Context
     private var typeface: Typeface? = null
 
+    private val binding: FragmentLoginBinding by lazy { FragmentLoginBinding.inflate(layoutInflater) }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         fragmentContext = inflater.context
 
-        inflate = inflater.inflate(R.layout.fragment_login, container, false)
-        inflate.findViewById<TextView>(R.id.forgot_password).setOnClickListener { performForgotPassword() }
-        inflate.findViewById<AppCompatButton>(R.id.btn_login).setOnClickListener { performLogin() }
+        binding.forgotPassword.setOnClickListener { performForgotPassword() }
+        binding.btnLogin.setOnClickListener { performLogin() }
 
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
 
-        typeface  = ResourcesCompat.getFont(fragmentContext, R.font.montserrat_regular)
+        typeface = ResourcesCompat.getFont(fragmentContext, R.font.montserrat_regular)
 
-        return inflate
+        return binding.root
     }
 
     private fun performLogin() {
-        val email = inflate.findViewById<EditText>(R.id.email_editText).text.toString()
-        val password = inflate.findViewById<EditText>(R.id.password_editText).text.toString()
+        val email = binding.emailEditText.text.toString()
+        val password = binding.passwordEditText.text.toString()
 
         if (verifyAvailableNetwork(context)) {
             if (isEmailValid(email)) {
@@ -84,28 +85,27 @@ class LoginFragment : Fragment() {
 
     @SuppressLint("InflateParams")
     private fun performForgotPassword() {
-        val popup: PopupWindow
-        val popUpView: View = layoutInflater.inflate(R.layout.enter_email_layout, null)
+        val popUpView = EnterEmailLayoutBinding.inflate(layoutInflater)
 
-        popup = PopupWindow(
-            popUpView, ActionBar.LayoutParams.MATCH_PARENT,
-            ActionBar.LayoutParams.WRAP_CONTENT, true
+        val popup = PopupWindow(
+            popUpView.root,
+            ActionBar.LayoutParams.MATCH_PARENT,
+            ActionBar.LayoutParams.WRAP_CONTENT,
+            true
         )
-        popup.showAtLocation(popUpView, Gravity.CENTER, 0, 0)
+        popup.showAtLocation(popUpView.root, Gravity.CENTER, 0, 0)
 
-        val email = popUpView.findViewById<EditText>(R.id.email_reset)
-
-        popUpView.findViewById<Button>(R.id.decline_message).setOnClickListener { popup.dismiss() }
-        popUpView.findViewById<Button>(R.id.submit_message).setOnClickListener {
+        popUpView.declineMessage.setOnClickListener { popup.dismiss() }
+        popUpView.submitMessage.setOnClickListener {
             if (verifyAvailableNetwork(context)) {
-                if (isEmailValid(email.text.toString())) {
-                    auth.sendPasswordResetEmail(email.text.toString())
+                if (isEmailValid(popUpView.emailReset.text.toString())) {
+                    auth.sendPasswordResetEmail(popUpView.emailReset.text.toString())
                         .addOnSuccessListener {
                             popup.dismiss()
                             TanTinToast.Info(fragmentContext).text("You will receive shortly an email to reset your password. Please check your inbox.").typeface(typeface).show()
                         }
                         .addOnFailureListener {
-                            TanTinToast.Error(fragmentContext).text(email.text.toString() + (" does not exist. Please try to Sign up first.")).typeface(typeface).show()
+                            TanTinToast.Error(fragmentContext).text(popUpView.emailReset.text.toString() + (" does not exist. Please try to Sign up first.")).typeface(typeface).show()
                         }
                 } else {
                     TanTinToast.Warning(fragmentContext).text("The email is not valid").typeface(typeface).show()

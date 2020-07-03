@@ -24,6 +24,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.callbacks.OnMoviesClickCallback
 import com.evangelidis.t_tmoviesseries.callbacks.OnTvShowClickCallback
+import com.evangelidis.t_tmoviesseries.databinding.ActivityMainBinding
+import com.evangelidis.t_tmoviesseries.databinding.SubmitQuestionLayoutBinding
 import com.evangelidis.t_tmoviesseries.extensions.*
 import com.evangelidis.t_tmoviesseries.view.login.LoginActivity
 import com.evangelidis.t_tmoviesseries.view.login.LoginRegisterMethods
@@ -63,9 +65,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import es.dmoral.prefs.Prefs
-import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.navigation_drawer.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -114,9 +113,11 @@ class MainActivity : AppCompatActivity() {
 
     private var typeface: Typeface? = null
 
+    private val binding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
 
         typeface = ResourcesCompat.getFont(this, R.font.montserrat_regular)
 
@@ -124,12 +125,12 @@ class MainActivity : AppCompatActivity() {
         myRef = database.getReference(FIREBASE_MESSAGES_DATABASE_PATH)
         user = FirebaseAuth.getInstance().currentUser
 
-        toolbar_title.text = getString(R.string.popular_movies)
+        binding.appBar.toolbarTitle.text = getString(R.string.popular_movies)
 
-        expandableLayoutMovies.collapse()
-        expandableLayoutTv.collapse()
-        expandableLayoutCommunicate.expand()
-        expandableLayoutSettings.collapse()
+        binding.navigationDrawer.expandableLayoutMovies.collapse()
+        binding.navigationDrawer.expandableLayoutTv.collapse()
+        binding.navigationDrawer.expandableLayoutCommunicate.expand()
+        binding.navigationDrawer.expandableLayoutSettings.collapse()
 
         mDbWorkerThread = DbWorkerThread(DATABASE_THREAD)
         mDbWorkerThread.start()
@@ -142,17 +143,18 @@ class MainActivity : AppCompatActivity() {
         viewModel.getTvShowGenres()
         viewModel.getPopularMovies(1)
 
-        moviesList.apply {
+
+        binding.appBar.mainView.moviesList.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = moviesListAdapter
         }
 
-        tvShowList.apply {
+        binding.appBar.mainView.tvShowList.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = tvShowAdapter
         }
 
-        search_img.setOnClickListener {
+        binding.appBar.searchIcn.setOnClickListener {
             val intent = Intent(this@MainActivity, SearchActivity::class.java)
             startActivity(intent)
         }
@@ -172,9 +174,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val drawer: DrawerLayout = findViewById(R.id.drawer_layout)
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START)
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             val builder = AlertDialog.Builder(this@MainActivity, R.style.AlertDialogTheme)
             builder.apply {
@@ -217,8 +218,8 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.moviesList.observe(this, Observer { data ->
             data.results?.let {
-                moviesList.show()
-                tvShowList.gone()
+                binding.appBar.mainView.moviesList.show()
+                binding.appBar.mainView.tvShowList.gone()
                 if (listOfRetrievedPages.size == 1) {
                     moviesListAdapter.updateData(it)
                 } else {
@@ -229,8 +230,8 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.tvShowsList.observe(this, Observer { data ->
             data.results?.let {
-                moviesList.gone()
-                tvShowList.show()
+                binding.appBar.mainView.moviesList.gone()
+                binding.appBar.mainView.tvShowList.show()
                 if (listOfRetrievedPages.size == 1) {
                     tvShowAdapter.updateData(it)
                 } else {
@@ -241,9 +242,9 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.loadError.observe(this, Observer { isError ->
             isError?.let {
-                list_error.showIf { isError }
+                binding.appBar.mainView.listError.showIf { isError }
                 if (it) {
-                    list_error.show()
+                    binding.appBar.mainView.listError.show()
                     TanTinToast.Warning(this).text(getString(R.string.no_internet)).typeface(typeface).show()
                 }
             }
@@ -251,10 +252,10 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.loading.observe(this, Observer { isLoading ->
             isLoading?.let {
-                loading_view.showIf { isLoading }
+                binding.appBar.mainView.loadingView.showIf { isLoading }
                 if (it) {
-                    list_error.gone()
-                    moviesList.gone()
+                    binding.appBar.mainView.listError.gone()
+                    binding.appBar.mainView.moviesList.gone()
                 }
             }
         })
@@ -262,8 +263,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpScrollListener() {
         val movieManager = LinearLayoutManager(this)
-        moviesList.layoutManager = movieManager
-        moviesList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.appBar.mainView.moviesList.layoutManager = movieManager
+        binding.appBar.mainView.moviesList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val totalItemCount = movieManager.itemCount
                 val visibleItemCount = movieManager.childCount
@@ -289,8 +290,8 @@ class MainActivity : AppCompatActivity() {
         })
 
         val tvManager = LinearLayoutManager(this)
-        tvShowList.layoutManager = tvManager
-        tvShowList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.appBar.mainView.tvShowList.layoutManager = tvManager
+        binding.appBar.mainView.tvShowList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val totalItemCount = tvManager.itemCount
                 val visibleItemCount = tvManager.childCount
@@ -317,115 +318,112 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavigationViewClickListeners() {
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
-        val navigationView = findViewById<NavigationView>(R.id.nav_view)
-        val toggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer.addDrawerListener(toggle)
+        val toggle = ActionBarDrawerToggle(this, binding.drawerLayout, binding.appBar.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
-        navigationView.itemTextColor = ColorStateList.valueOf(Color.WHITE)
+        binding.navView.itemTextColor = ColorStateList.valueOf(Color.WHITE)
 
-        nav_movies.setOnClickListener { expandMoviesLayout() }
-        nav_tv.setOnClickListener { expandTvLayout() }
-        nav_communicate.setOnClickListener { expandCommunicateLayout() }
-        nav_settings.setOnClickListener { expandSettings() }
+        binding.navigationDrawer.navMovies.setOnClickListener { expandMoviesLayout() }
+        binding.navigationDrawer.navTv.setOnClickListener { expandTvLayout() }
+        binding.navigationDrawer.navCommunicate.setOnClickListener { expandCommunicateLayout() }
+        binding.navigationDrawer.navSettings.setOnClickListener { expandSettings() }
 
-        nav_popular_movies.setOnClickListener {
+        binding.navigationDrawer.navPopularMovies.setOnClickListener {
             Tracking.trackListCategory(this, getString(R.string.popular_movies))
-            toolbar_title.text = getString(R.string.popular_movies)
+            binding.appBar.toolbarTitle.text = getString(R.string.popular_movies)
             if (sortBy != POPULAR_MOVIES) {
                 sortBy = POPULAR_MOVIES
                 listOfRetrievedPages = arrayListOf(1)
                 viewModel.getPopularMovies(1)
             }
-            drawer.closeDrawer(GravityCompat.START)
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         }
 
-        nav_playing_now_movies.setOnClickListener {
+        binding.navigationDrawer.navPlayingNowMovies.setOnClickListener {
             Tracking.trackListCategory(this, getString(R.string.playing_now_movies))
-            toolbar_title.text = getString(R.string.playing_now_movies)
+            binding.appBar.toolbarTitle.text = getString(R.string.playing_now_movies)
             if (sortBy != PLAYING_NOW_MOVIES) {
                 sortBy = PLAYING_NOW_MOVIES
                 listOfRetrievedPages = arrayListOf(1)
                 viewModel.getPlayingNowMovies(1)
             }
-            drawer.closeDrawer(GravityCompat.START)
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         }
 
-        nav_top_rated_movies.setOnClickListener {
+        binding.navigationDrawer.navTopRatedMovies.setOnClickListener {
             Tracking.trackListCategory(this, getString(R.string.top_rated_movies))
-            toolbar_title.text = getString(R.string.top_rated_movies)
+            binding.appBar.toolbarTitle.text = getString(R.string.top_rated_movies)
             if (sortBy != TOP_RATED_MOVIES) {
                 sortBy = TOP_RATED_MOVIES
                 listOfRetrievedPages = arrayListOf(1)
                 viewModel.getTopRatedMovies(1)
             }
-            drawer.closeDrawer(GravityCompat.START)
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         }
 
-        nav_upcoming_movies.setOnClickListener {
+        binding.navigationDrawer.navUpcomingMovies.setOnClickListener {
             Tracking.trackListCategory(this, getString(R.string.upcoming_movies))
-            toolbar_title.text = getString(R.string.upcoming_movies)
+            binding.appBar.toolbarTitle.text = getString(R.string.upcoming_movies)
             if (sortBy != UPCOMING_MOVIES) {
                 sortBy = UPCOMING_MOVIES
                 listOfRetrievedPages = arrayListOf(1)
                 viewModel.getUpcomingMovies(1)
             }
-            drawer.closeDrawer(GravityCompat.START)
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         }
 
-
-        nav_popular_tv_shows.setOnClickListener {
+        binding.navigationDrawer.navPopularTvShows.setOnClickListener {
             Tracking.trackListCategory(this, getString(R.string.popular_tv_shows))
-            toolbar_title.text = getString(R.string.popular_tv_shows)
+            binding.appBar.toolbarTitle.text = getString(R.string.popular_tv_shows)
             if (sortBy != POPULAR_TV) {
                 sortBy = POPULAR_TV
                 listOfRetrievedPages = arrayListOf(1)
                 viewModel.getPopularTvShows(1)
             }
-            drawer.closeDrawer(GravityCompat.START)
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         }
 
-        nav_top_rated_tv_shows.setOnClickListener {
+        binding.navigationDrawer.navTopRatedTvShows.setOnClickListener {
             Tracking.trackListCategory(this, getString(R.string.top_rated_tv_shows))
-            toolbar_title.text = getString(R.string.top_rated_tv_shows)
+            binding.appBar.toolbarTitle.text = getString(R.string.top_rated_tv_shows)
             if (sortBy != TOP_RATED_TV) {
                 sortBy = TOP_RATED_TV
                 listOfRetrievedPages = arrayListOf(1)
                 viewModel.getTopRatedTvShows(1)
             }
-            drawer.closeDrawer(GravityCompat.START)
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         }
 
-        nav_on_air_tv_shows.setOnClickListener {
+        binding.navigationDrawer.navOnAirTvShows.setOnClickListener {
             Tracking.trackListCategory(this, getString(R.string.on_the_air_tv_shows))
-            toolbar_title.text = getString(R.string.on_the_air_tv_shows)
+            binding.appBar.toolbarTitle.text = getString(R.string.on_the_air_tv_shows)
             if (sortBy != ON_THE_AIR_TV) {
                 sortBy = ON_THE_AIR_TV
                 listOfRetrievedPages = arrayListOf(1)
                 viewModel.getOnAirTvShows(1)
             }
-            drawer.closeDrawer(GravityCompat.START)
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         }
 
-        nav_airing_today_tv_shows.setOnClickListener {
+        binding.navigationDrawer.navAiringTodayTvShows.setOnClickListener {
             Tracking.trackListCategory(this, getString(R.string.airing_today_tv_shows))
-            toolbar_title.text = getString(R.string.airing_today_tv_shows)
+            binding.appBar.toolbarTitle.text = getString(R.string.airing_today_tv_shows)
             if (sortBy != AIRING_TODAY_TV) {
                 sortBy = AIRING_TODAY_TV
                 listOfRetrievedPages = arrayListOf(1)
                 viewModel.getAiringTodayTvShows(1)
             }
-            drawer.closeDrawer(GravityCompat.START)
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         }
 
-        nav_watchlist.setOnClickListener {
+        binding.navigationDrawer.navWatchlist.setOnClickListener {
             val intent = Intent(this@MainActivity, WatchlistActivity::class.java)
             startActivity(intent)
         }
 
-        nav_send.setOnClickListener { submitMessage() }
+        binding.navigationDrawer.navSend.setOnClickListener { submitMessage() }
 
-        nav_activate_account.setOnClickListener {
+        binding.navigationDrawer.navActivateAccount.setOnClickListener {
             val user = FirebaseAuth.getInstance().currentUser
             if (user != null) {
                 if (user.isEmailVerified) {
@@ -433,34 +431,34 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     LoginRegisterMethods.sendVerificationEmail(user)
                 }
-                nav_activate_account.gone()
+                binding.navigationDrawer.navActivateAccount.gone()
             }
         }
     }
 
     private fun setUpNavigationDrawerNotificationSwitch() {
         if (Prefs.with(applicationContext).readBoolean(IS_NOTIFICATION_ON, false)) {
-            nav_notifications.apply {
+            binding.navigationDrawer.navNotifications.apply {
                 isChecked = true
                 text = getString(R.string.notifications_are_on)
             }
         } else {
-            nav_notifications.apply {
+            binding.navigationDrawer.navNotifications.apply {
                 isChecked = false
                 text = getString(R.string.notifications_are_off)
             }
         }
 
-        nav_notifications.setOnClickListener {
+        binding.navigationDrawer.navNotifications.setOnClickListener {
             if (Prefs.with(applicationContext).readBoolean(IS_NOTIFICATION_ON, false)) {
                 Prefs.with(applicationContext).writeBoolean(IS_NOTIFICATION_ON, false)
-                nav_notifications.apply {
+                binding.navigationDrawer.navNotifications.apply {
                     isChecked = false
                     text = getString(R.string.notifications_are_off)
                 }
             } else {
                 Prefs.with(applicationContext).writeBoolean(IS_NOTIFICATION_ON, true)
-                nav_notifications.apply {
+                binding.navigationDrawer.navNotifications.apply {
                     isChecked = true
                     text = getString(R.string.notifications_are_on)
                 }
@@ -470,27 +468,27 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpNavigationDrawerWatchlistSwitch() {
         if (Prefs.with(applicationContext).readBoolean(IS_SYNC_WATCHLIST_ON, false)) {
-            nav_sync_watchlist.apply {
+            binding.navigationDrawer.navSyncWatchlist.apply {
                 isChecked = true
                 text = getString(R.string.sync_watchlist_is_on)
             }
         } else {
-            nav_sync_watchlist.apply {
+            binding.navigationDrawer.navSyncWatchlist.apply {
                 isChecked = false
                 text = getString(R.string.sync_watchlist_is_off)
             }
         }
 
-        nav_sync_watchlist.setOnClickListener {
+        binding.navigationDrawer.navSyncWatchlist.setOnClickListener {
             if (Prefs.with(applicationContext).readBoolean(IS_SYNC_WATCHLIST_ON, false)) {
                 Prefs.with(applicationContext).writeBoolean(IS_SYNC_WATCHLIST_ON, false)
-                nav_sync_watchlist.apply {
+                binding.navigationDrawer.navSyncWatchlist.apply {
                     isChecked = false
                     text = getString(R.string.sync_watchlist_is_off)
                 }
             } else {
                 Prefs.with(applicationContext).writeBoolean(IS_SYNC_WATCHLIST_ON, true)
-                nav_sync_watchlist.apply {
+                binding.navigationDrawer.navSyncWatchlist.apply {
                     isChecked = true
                     text = getString(R.string.sync_watchlist_is_on)
                 }
@@ -502,16 +500,16 @@ class MainActivity : AppCompatActivity() {
         val user = FirebaseAuth.getInstance().currentUser
 
         if (user == null) {
-            nav_logout.gone()
+            binding.navigationDrawer.navLogout.gone()
         } else {
             //nav_activate_account.showIf { !user.isEmailVerified }
             user.email?.let {
-                loginText.text = resources.getString(R.string.welcome_user).replace("{USERNAME}", it.substringBefore("@"))
-                nav_logout.show()
+                binding.navigationDrawer.loginText.text = resources.getString(R.string.welcome_user).replace("{USERNAME}", it.substringBefore("@"))
+                binding.navigationDrawer.navLogout.show()
             }
         }
 
-        loginText.setOnClickListener {
+        binding.navigationDrawer.loginText.setOnClickListener {
             if (user == null) {
                 val intent = Intent(this@MainActivity, LoginActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -520,7 +518,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        nav_logout.setOnClickListener {
+        binding.navigationDrawer.navLogout.setOnClickListener {
             displayPopWindowsForLogout()
         }
     }
@@ -533,11 +531,11 @@ class MainActivity : AppCompatActivity() {
             setMessage(R.string.logout_popup_window_title)
             setCancelable(false)
             setPositiveButton(getString(R.string.logout_from_the_app_text)) { _, _ ->
-                    FirebaseAuth.getInstance().signOut()
-                    loginText.text = getString(R.string.login)
-                    setUpNavigationLoginUI()
-                    nav_activate_account.gone()
-                }
+                FirebaseAuth.getInstance().signOut()
+                binding.navigationDrawer.loginText.text = getString(R.string.login)
+                setUpNavigationLoginUI()
+                binding.navigationDrawer.navActivateAccount.gone()
+            }
             setNegativeButton(getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
             create().show()
         }
@@ -545,42 +543,35 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("InflateParams")
     private fun submitMessage() {
-        val sliderView = LayoutInflater.from(this).inflate(R.layout.submit_question_layout, null)
+        val item = SubmitQuestionLayoutBinding.inflate(layoutInflater)
         val messageDialog: AlertDialog = AlertDialog.Builder(this).create()
         messageDialog.apply {
-            setView(sliderView)
+            setView(item.root)
             show()
         }
-        val emailInput: TextInputLayout = sliderView.findViewById(R.id.profile_input_email)
-        val emailET: EditText = sliderView.findViewById(R.id.profile_et_email)
-        val messageInput: TextInputLayout = sliderView.findViewById(R.id.profile_input_message)
-        val messageET: EditText = sliderView.findViewById(R.id.profile_et_message)
-        val nameET = sliderView.findViewById<EditText>(R.id.profile_et_name)
-        val submitMessageToCloud: Button = sliderView.findViewById(R.id.submit_message)
-        val declineMessage: Button = sliderView.findViewById(R.id.decline_message)
 
         showKeyboard()
 
         user?.email?.let {
-            emailET.setText(it)
-            nameET.requestFocus()
+            item.profileEtEmail.setText(it)
+            item.profileEtName.requestFocus()
         }
 
-        declineMessage.setOnClickListener { messageDialog.dismiss() }
+        item.declineMessage.setOnClickListener { messageDialog.dismiss() }
 
         // When user press done in keyboard
-        messageET.setOnEditorActionListener { v, actionId, event ->
+        item.profileEtMessage.setOnEditorActionListener { v, actionId, event ->
             var handled = false
             if (actionId == EditorInfo.IME_ACTION_GO) {
-                if (isValidEmailAddress(emailET.text.toString()) && messageET.text.isNotEmpty()) {
-                    val userName: String = if (nameET.text != null) {
-                        nameET.text.toString()
+                if (isValidEmailAddress(item.profileEtEmail.text.toString()) && !item.profileEtMessage.text.isNullOrEmpty()) {
+                    val userName: String = if (item.profileEtName.text != null) {
+                        item.profileEtName.text.toString()
                     } else {
                         ""
                     }
                     val df = SimpleDateFormat(FIREBASE_DATABASE_DATE_FORMAT, Locale.UK)
                     val date = df.format(Calendar.getInstance().time)
-                    val post = MessagePost(emailET.text.toString(), messageET.text.toString(), date, userName)
+                    val post = MessagePost(item.profileEtEmail.text.toString(), item.profileEtMessage.text.toString(), date, userName)
                     myRef.child(FIREBASE_MESSAGES_DATABASE_PATH_CHILD).push()
                         .setValue(post)
                         .addOnSuccessListener {
@@ -591,13 +582,13 @@ class MainActivity : AppCompatActivity() {
                             TanTinToast.Error(this).text(getString(R.string.message_fail)).typeface(typeface).show()
                         }
 
-                    sliderView.hideKeyboard()
+                    item.root.hideKeyboard()
 
                 } else {
-                    if (!isValidEmailAddress(emailET.text.toString())) {
-                        emailInput.error = getString(R.string.mail_error)
-                    } else if (messageET.text.isEmpty()) {
-                        messageInput.error = getString(R.string.message_short)
+                    if (!isValidEmailAddress(item.profileEtEmail.text.toString())) {
+                        item.profileInputEmail.error = getString(R.string.mail_error)
+                    } else if (!item.profileEtMessage.text.isNullOrEmpty()) {
+                        item.profileInputMessage.error = getString(R.string.message_short)
                     }
                 }
                 handled = true
@@ -605,16 +596,16 @@ class MainActivity : AppCompatActivity() {
             handled
         }
 
-        submitMessageToCloud.setOnClickListener {
-            if (isValidEmailAddress(emailET.text.toString()) && messageET.text.isNotEmpty()) {
-                val userName: String = if (nameET.text.isNullOrEmpty()) {
+        item.submitMessage.setOnClickListener {
+            if (isValidEmailAddress(item.profileEtEmail.text.toString()) && !item.profileEtMessage.text.isNullOrEmpty()) {
+                val userName: String = if (item.profileEtName.text.isNullOrEmpty()) {
                     ""
                 } else {
-                    nameET.text.toString()
+                    item.profileEtName.text.toString()
                 }
                 val df = SimpleDateFormat(FIREBASE_DATABASE_DATE_FORMAT, Locale.UK)
                 val date = df.format(Calendar.getInstance().time)
-                val post = MessagePost(emailET.text.toString(), messageET.text.toString(), date, userName)
+                val post = MessagePost(item.profileEtEmail.text.toString(), item.profileEtMessage.text.toString(), date, userName)
                 myRef.child(FIREBASE_MESSAGES_DATABASE_PATH_CHILD).push()
                     .setValue(post)
                     .addOnSuccessListener {
@@ -625,54 +616,54 @@ class MainActivity : AppCompatActivity() {
                         TanTinToast.Error(this).text(getString(R.string.message_fail)).typeface(typeface).show()
                     }
 
-                sliderView.hideKeyboard()
+                item.root.hideKeyboard()
             } else {
-                if (!isValidEmailAddress(emailET.text.toString())) {
-                    emailInput.error = getString(R.string.mail_error)
-                } else if (messageET.text.isEmpty()) {
-                    messageInput.error = getString(R.string.message_short)
+                if (!isValidEmailAddress(item.profileEtEmail.text.toString())) {
+                    item.profileInputEmail.error = getString(R.string.mail_error)
+                } else if (!item.profileEtMessage.text.isNullOrEmpty()) {
+                    item.profileInputMessage.error = getString(R.string.message_short)
                 }
             }
         }
     }
 
     private fun expandMoviesLayout() {
-        if (expandableLayoutMovies.isExpanded) {
-            expandableLayoutMovies.collapse()
-            movies_arrow.rotation = 90F
+        if (binding.navigationDrawer.expandableLayoutMovies.isExpanded) {
+            binding.navigationDrawer.expandableLayoutMovies.collapse()
+            binding.navigationDrawer.moviesArrow.rotation = 90F
         } else {
-            expandableLayoutMovies.expand()
-            movies_arrow.rotation = 270F
+            binding.navigationDrawer.expandableLayoutMovies.expand()
+            binding.navigationDrawer.moviesArrow.rotation = 270F
         }
     }
 
     private fun expandTvLayout() {
-        if (expandableLayoutTv.isExpanded) {
-            expandableLayoutTv.collapse()
-            tv_arrow.rotation = 90F
+        if (binding.navigationDrawer.expandableLayoutTv.isExpanded) {
+            binding.navigationDrawer.expandableLayoutTv.collapse()
+            binding.navigationDrawer.tvArrow.rotation = 90F
         } else {
-            expandableLayoutTv.expand()
-            tv_arrow.rotation = 270F
+            binding.navigationDrawer.expandableLayoutTv.expand()
+            binding.navigationDrawer.tvArrow.rotation = 270F
         }
     }
 
     private fun expandCommunicateLayout() {
-        if (expandableLayoutCommunicate.isExpanded) {
-            expandableLayoutCommunicate.collapse()
-            communication_arrow.rotation = 90F
+        if (binding.navigationDrawer.expandableLayoutCommunicate.isExpanded) {
+            binding.navigationDrawer.expandableLayoutCommunicate.collapse()
+            binding.navigationDrawer.communicationArrow.rotation = 90F
         } else {
-            expandableLayoutCommunicate.expand()
-            communication_arrow.rotation = 270F
+            binding.navigationDrawer.expandableLayoutCommunicate.expand()
+            binding.navigationDrawer.communicationArrow.rotation = 270F
         }
     }
 
     private fun expandSettings() {
-        if (expandableLayoutSettings.isExpanded) {
-            expandableLayoutSettings.collapse()
-            settings_arrow.rotation = 90F
+        if (binding.navigationDrawer.expandableLayoutSettings.isExpanded) {
+            binding.navigationDrawer.expandableLayoutSettings.collapse()
+            binding.navigationDrawer.settingsArrow.rotation = 90F
         } else {
-            expandableLayoutSettings.expand()
-            settings_arrow.rotation = 270F
+            binding.navigationDrawer.expandableLayoutSettings.expand()
+            binding.navigationDrawer.settingsArrow.rotation = 270F
         }
     }
 

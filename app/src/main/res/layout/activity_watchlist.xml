@@ -29,11 +29,11 @@
         android:layout_centerInParent="true"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
-        android:visibility="gone"
         android:fontFamily="@font/montserrat_bold"
         android:text="@string/no_watchlist_items"
         android:textColor="@color/white"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:visibility="gone" />
 
     <com.tuyenmonkey.mkloader.MKLoader
         android:id="@+id/loading_view"

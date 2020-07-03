@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     android:background="@color/mainBackground">
 
-    <include layout="@layout/main_toolbar" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/main_toolbar" />
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
@@ -17,7 +19,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsingToolbar"
+            android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
@@ -27,7 +29,7 @@
             app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
 
             <ImageView
-                android:id="@+id/movieImage"
+                android:id="@+id/movie_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/none"
@@ -39,7 +41,6 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="fill_vertical"
@@ -50,11 +51,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_margin="@dimen/main_margin">
+            android:layout_margin="@dimen/main_margin"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/movieTitle"
+                android:id="@+id/movie_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/main_margin"
@@ -67,7 +68,7 @@
                 android:visibility="gone" />
 
             <LinearLayout
-                android:id="@+id/quickInfo"
+                android:id="@+id/quick_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/main_margin"
@@ -81,7 +82,7 @@
                     android:layout_marginBottom="5dp">
 
                     <LinearLayout
-                        android:id="@+id/movieDetailsRating"
+                        android:id="@+id/movie_details_rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
@@ -94,7 +95,7 @@
                             app:srcCompat="@drawable/ic_star" />
 
                         <TextView
-                            android:id="@+id/movieRating"
+                            android:id="@+id/movie_rating"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -103,7 +104,7 @@
                             android:textColor="@color/white" />
 
                         <TextView
-                            android:id="@+id/totalVotes"
+                            android:id="@+id/total_votes"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -112,7 +113,7 @@
                             android:textColor="@color/white" />
 
                         <TextView
-                            android:id="@+id/reviewsText"
+                            android:id="@+id/reviews_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -135,7 +136,7 @@
                 </RelativeLayout>
 
                 <TextView
-                    android:id="@+id/movieGenres"
+                    android:id="@+id/movie_genres"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -145,7 +146,7 @@
                     android:visibility="gone" />
 
                 <TextView
-                    android:id="@+id/movieReleaseDate"
+                    android:id="@+id/movie_release_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -155,7 +156,7 @@
                     android:visibility="gone" />
 
                 <TextView
-                    android:id="@+id/movieDuration"
+                    android:id="@+id/movie_duration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -167,7 +168,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/summaryContainer"
+                android:id="@+id/summary_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/main_margin"
@@ -185,7 +186,7 @@
                     android:textSize="24sp" />
 
                 <TextView
-                    android:id="@+id/movieDetailsOverview"
+                    android:id="@+id/movie_details_overview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -196,7 +197,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/movieGrow"
+                android:id="@+id/movie_grow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/main_margin"
@@ -206,7 +207,7 @@
                 tools:visibility="visible">
 
                 <LinearLayout
-                    android:id="@+id/budgetContainer"
+                    android:id="@+id/budget_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -222,7 +223,7 @@
                         android:textSize="24sp" />
 
                     <TextView
-                        android:id="@+id/movieBudget"
+                        android:id="@+id/movie_budget"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
@@ -231,7 +232,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/boxOfficeContainer"
+                    android:id="@+id/box_office_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -254,7 +255,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/movieBoxOffice"
+                            android:id="@+id/movie_box_office"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="12dp"
@@ -263,14 +264,14 @@
                             tools:text="1000$" />
 
                         <TextView
-                            android:id="@+id/movieBoxOfficePercent"
+                            android:id="@+id/movie_box_office_percent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/montserrat_light"
                             android:textColor="@color/white" />
 
                         <ImageView
-                            android:id="@+id/percentImage"
+                            android:id="@+id/percent_image"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
@@ -283,7 +284,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/directorsContainer"
+                android:id="@+id/directors_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/main_margin"
@@ -301,7 +302,7 @@
                     android:textSize="24sp" />
 
                 <TextView
-                    android:id="@+id/movieDirectors"
+                    android:id="@+id/movie_directors"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -311,7 +312,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/actorsContainer"
+                android:id="@+id/actors_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/main_margin"
@@ -335,7 +336,7 @@
                     android:scrollbars="none">
 
                     <LinearLayout
-                        android:id="@+id/movieActors"
+                        android:id="@+id/movie_actors"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal" />
@@ -343,7 +344,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/videosContainer"
+                android:id="@+id/videos_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/main_margin"
@@ -367,7 +368,7 @@
                     android:scrollbars="none">
 
                     <LinearLayout
-                        android:id="@+id/movieVideos"
+                        android:id="@+id/movie_videos"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal" />
@@ -375,7 +376,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/similarMoviesContainer"
+                android:id="@+id/similar_movies_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/main_margin"
@@ -399,7 +400,7 @@
                     android:scrollbars="none">
 
                     <LinearLayout
-                        android:id="@+id/movieSimilar"
+                        android:id="@+id/movie_similar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal" />
@@ -407,7 +408,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/recommendationsMoviesContainer"
+                android:id="@+id/recommendations_movies_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/main_margin"
@@ -431,7 +432,7 @@
                     android:scrollbars="none">
 
                     <LinearLayout
-                        android:id="@+id/movieRecommendations"
+                        android:id="@+id/movie_recommendations"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal" />
@@ -439,7 +440,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/productionCompaniesLayout"
+                android:id="@+id/production_companies_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/info_layout_design"
@@ -457,7 +458,7 @@
                     android:textSize="24sp" />
 
                 <LinearLayout
-                    android:id="@+id/productionCompanies"
+                    android:id="@+id/production_companies"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />
@@ -467,7 +468,7 @@
     </androidx.core.widget.NestedScrollView>
 
     <com.tuyenmonkey.mkloader.MKLoader
-        android:id="@+id/progressBar"
+        android:id="@+id/progress_bar"
         style="?android:attr/progressBarStyle"
         android:layout_width="@dimen/loading_bar_size"
         android:layout_height="@dimen/loading_bar_size"

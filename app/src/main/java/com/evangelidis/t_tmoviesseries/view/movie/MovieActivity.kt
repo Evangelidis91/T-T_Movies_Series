@@ -5,13 +5,13 @@ import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.showTrailer
 import com.evangelidis.t_tmoviesseries.R
+import com.evangelidis.t_tmoviesseries.databinding.*
 import com.evangelidis.t_tmoviesseries.extensions.gone
 import com.evangelidis.t_tmoviesseries.extensions.show
 import com.evangelidis.t_tmoviesseries.model.*
@@ -32,8 +32,6 @@ import com.evangelidis.t_tmoviesseries.view.person.PersonActivity
 import com.evangelidis.t_tmoviesseries.view.search.SearchActivity
 import com.evangelidis.t_tmoviesseries.view.main.MainActivity
 import com.evangelidis.tantintoast.TanTinToast
-import kotlinx.android.synthetic.main.activity_movie.*
-import kotlinx.android.synthetic.main.main_toolbar.*
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.*
@@ -54,9 +52,11 @@ class MovieActivity : AppCompatActivity() {
 
     private var typeface: Typeface? = null
 
+    private val binding: ActivityMovieBinding by lazy { ActivityMovieBinding.inflate(layoutInflater) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_movie)
+        setContentView(binding.root)
 
         typeface = ResourcesCompat.getFont(this, R.font.montserrat_regular)
 
@@ -68,12 +68,12 @@ class MovieActivity : AppCompatActivity() {
 
         getDataFromDB()
 
-        imageToMain.setOnClickListener {
+        binding.toolbar.imageToMain.setOnClickListener {
             val intent = Intent(this@MovieActivity, MainActivity::class.java)
             startActivity(intent)
         }
 
-        search_img.setOnClickListener {
+        binding.toolbar.searchIcn.setOnClickListener {
             val intent = Intent(this@MovieActivity, SearchActivity::class.java)
             startActivity(intent)
         }
@@ -90,7 +90,7 @@ class MovieActivity : AppCompatActivity() {
 
         observeViewModel()
 
-        item_movie_watchlist.setOnClickListener {
+        binding.itemMovieWatchlist.setOnClickListener {
             val finder = watchlistList?.find { it.itemId == movieId }
             val wishList = WatchlistData()
             wishList.apply {
@@ -105,10 +105,10 @@ class MovieActivity : AppCompatActivity() {
             }
 
             if (finder == null) {
-                item_movie_watchlist.setImageResource(R.drawable.ic_enable_watchlist)
+                binding.itemMovieWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
                 insertDataToDatabase(wishList, mDb, mDbWorkerThread)
             } else {
-                item_movie_watchlist.setImageResource(R.drawable.ic_disable_watchlist)
+                binding.itemMovieWatchlist.setImageResource(R.drawable.ic_disable_watchlist)
                 removeDataFromDatabase(wishList, mDb, mDbWorkerThread)
             }
         }
@@ -127,7 +127,7 @@ class MovieActivity : AppCompatActivity() {
                 data.genres?.let {
                     setUpGenres(data.genres)
                 }
-                progressBar.gone()
+                binding.progressBar.gone()
             }
         })
 
@@ -165,99 +165,88 @@ class MovieActivity : AppCompatActivity() {
     }
 
     private fun setUpRecommendationMoviesUI(data: MoviesListResponse) {
-        movieRecommendations.removeAllViews()
+        binding.movieRecommendations.removeAllViews()
         data.results?.let {
             if (it.isNotEmpty()) {
                 for (result in it) {
-                    val parent = layoutInflater.inflate(R.layout.thumbnail_movie, movieRecommendations, false)
-                    val thumbnail: ImageView = parent.findViewById(R.id.thumbnail)
-                    val movieName: TextView = parent.findViewById(R.id.movie_name)
-                    val movieRate: TextView = parent.findViewById(R.id.movie_rate)
-                    movieName.text = result.title
-                    movieRate.text = getString(R.string.movie_rate).replace("{MOVIE_RATE}", result.voteAverage.toString())
+                    val item = ThumbnailMovieBinding.inflate(layoutInflater)
+                    item.movieName.text = result.title
+                    item.movieRate.text = getString(R.string.movie_rate).replace("{MOVIE_RATE}", result.voteAverage.toString())
 
-                    getGlideImage(this, IMAGE_SMALL_BASE_URL.plus(result.posterPath), thumbnail)
+                    getGlideImage(this, IMAGE_SMALL_BASE_URL.plus(result.posterPath), item.thumbnail)
 
-                    thumbnail.setOnClickListener {
+                    item.thumbnail.setOnClickListener {
                         val intent = Intent(this, MovieActivity::class.java)
                         intent.putExtra(Constants.MOVIE_ID, result.id)
                         startActivity(intent)
                     }
-                    movieRecommendations.addView(parent)
+                    binding.movieRecommendations.addView(item.root)
                 }
-                recommendationsMoviesContainer.show()
+                binding.recommendationsMoviesContainer.show()
             }
         }
     }
 
     private fun setUpSimilarMoviesUI(data: MoviesListResponse) {
-        movieSimilar.removeAllViews()
+        binding.movieSimilar.removeAllViews()
         data.results?.let {
             if (it.isNotEmpty()) {
                 for (similarResult in it) {
-                    val parent = layoutInflater.inflate(R.layout.thumbnail_movie, movieSimilar, false)
-                    val thumbnail: ImageView = parent.findViewById(R.id.thumbnail)
-                    val movieName: TextView = parent.findViewById(R.id.movie_name)
-                    val movieRate: TextView = parent.findViewById(R.id.movie_rate)
-                    movieName.text = similarResult.title
-                    movieRate.text = getString(R.string.movie_rate).replace("{MOVIE_RATE}", similarResult.voteAverage.toString())
+                    val item = ThumbnailMovieBinding.inflate(layoutInflater)
+                    item.movieName.text = similarResult.title
+                    item.movieRate.text = getString(R.string.movie_rate).replace("{MOVIE_RATE}", similarResult.voteAverage.toString())
 
-                    getGlideImage(this, IMAGE_SMALL_BASE_URL.plus(similarResult.posterPath), thumbnail)
+                    getGlideImage(this, IMAGE_SMALL_BASE_URL.plus(similarResult.posterPath), item.thumbnail)
 
-                    thumbnail.setOnClickListener {
+                    item.thumbnail.setOnClickListener {
                         val intent = Intent(this, MovieActivity::class.java)
                         intent.putExtra(Constants.MOVIE_ID, similarResult.id)
                         startActivity(intent)
                     }
-                    movieSimilar.addView(parent)
+                    binding.movieSimilar.addView(item.root)
                 }
-                similarMoviesContainer.show()
+                binding.similarMoviesContainer.show()
             }
         }
     }
 
     private fun setUpVideosUI(videos: List<Video>) {
-        movieVideos.removeAllViews()
+        binding.movieVideos.removeAllViews()
         videos.let {
             if (it.isNotEmpty()) {
                 for (video in it) {
-                    val parent = layoutInflater.inflate(R.layout.thumbnail_trailer, movieVideos, false)
-                    val thumbnail = parent.findViewById<ImageView>(R.id.thumbnail)
+                    val item = ThumbnailTrailerBinding.inflate(layoutInflater)
+                    getGlideImage(this, YOUTUBE_THUMBNAIL_URL.replace("%s", video.key.orEmpty()), item.thumbnail)
 
-                    getGlideImage(this, YOUTUBE_THUMBNAIL_URL.replace("%s", video.key.orEmpty()), thumbnail)
-
-                    thumbnail.setOnClickListener {
+                    item.thumbnail.setOnClickListener {
                         showTrailer(String.format(YOUTUBE_VIDEO_URL, video.key), applicationContext)
                     }
-                    movieVideos.addView(parent)
+                    binding.movieVideos.addView(item.root)
                 }
-                videosContainer.show()
+                binding.videosContainer.show()
             }
         }
     }
 
     private fun setUpActors(casts: List<MovieCast>?) {
-        movieActors.removeAllViews()
+        binding.movieActors.removeAllViews()
         casts?.let {
             if (it.isNotEmpty()) {
                 for (cast in it) {
-                    val parent = layoutInflater.inflate(R.layout.thumbnail_actors_list, movieActors, false)
-                    val thumbnail: ImageView = parent.findViewById(R.id.thumbnail)
-                    val actorName: TextView = parent.findViewById(R.id.actor_name)
-                    val actorCharacter: TextView = parent.findViewById(R.id.actor_character)
-                    actorName.text = cast.name
-                    actorCharacter.text = cast.character
+                    val item = ThumbnailActorsListBinding.inflate(layoutInflater)
+                    item.actorName.text = cast.name
+                    item.actorCharacter.text = cast.character
 
-                    getGlideImage(this, IMAGE_SMALL_BASE_URL.plus(cast.profilePath), thumbnail)
+                    getGlideImage(this, IMAGE_SMALL_BASE_URL.plus(cast.profilePath), item.thumbnail)
 
-                    thumbnail.setOnClickListener {
+                    item.thumbnail.setOnClickListener {
                         val intent = Intent(this@MovieActivity, PersonActivity::class.java)
                         intent.putExtra(Constants.PERSON_ID, cast.id)
                         startActivity(intent)
                     }
-                    movieActors.addView(parent)
+                    binding.movieActors.addView(item.root)
                 }
-                actorsContainer.show()
+                binding.actorsContainer.show()
             }
         }
     }
@@ -275,9 +264,9 @@ class MovieActivity : AppCompatActivity() {
         }
         if (directorsList.isNotEmpty()) {
             when (directorsList.size) {
-                1 -> movieDirectors.text = directorsList[0]
+                1 -> binding.movieDirectors.text = directorsList[0]
                 2 -> {
-                    movieDirectors.text = getString(R.string.multi_directors)
+                    binding.movieDirectors.text = getString(R.string.multi_directors)
                         .replace("{dir1}", directorsList[0])
                         .replace("{dir2}", directorsList[1])
                 }
@@ -289,54 +278,54 @@ class MovieActivity : AppCompatActivity() {
                     directorsString = directorsString?.substring(0, directorsString.length - 2)
                     directorsString += "and " + directorsList[directorsList.size]
 
-                    movieDirectors.text = directorsString
+                    binding.movieDirectors.text = directorsString
                 }
             }
-            directorsContainer.show()
+            binding.directorsContainer.show()
         }
     }
 
     private fun setUpUI(data: MovieDetailsResponse) {
         if (!data.backdropPath.isNullOrEmpty()) {
-            getGlideImage(this, IMAGE_POSTER_BASE_URL.plus(data.backdropPath), movieImage)
+            getGlideImage(this, IMAGE_POSTER_BASE_URL.plus(data.backdropPath), binding.movieImage)
         }
 
         data.title?.let {
-            toolbar_title.text = it
-            movieTitle.text = it
-            movieTitle.show()
+            binding.toolbar.toolbarTitle.text = it
+            binding.movieTitle.text = it
+            binding.movieTitle.show()
         }
 
-        movieRating.text = data.voteAverage.toString()
-        totalVotes.text = data.voteCount.toString()
+        binding.movieRating.text = data.voteAverage.toString()
+        binding.totalVotes.text = data.voteCount.toString()
 
         if (!data.releaseDate.isNullOrEmpty()) {
-            movieReleaseDate.text = changeDateFormat(data.releaseDate)
-            movieReleaseDate.show()
+            binding.movieReleaseDate.text = changeDateFormat(data.releaseDate)
+            binding.movieReleaseDate.show()
         }
 
         data.runtime?.let {
             if (it > 0) {
-                movieDuration.text = formatHoursAndMinutes(it)
-                movieDuration.show()
+                binding.movieDuration.text = formatHoursAndMinutes(it)
+                binding.movieDuration.show()
             }
         }
 
         if (!data.overview.isNullOrEmpty()) {
-            movieDetailsOverview.text = data.overview
-            summaryContainer.show()
+            binding.movieDetailsOverview.text = data.overview
+            binding.summaryContainer.show()
         }
 
         data.budget?.let {
             if (it > 0.0) {
-                movieGrow.show()
-                budgetContainer.show()
-                movieBudget.text = convertToRealNumber(it)
+                binding.movieGrow.show()
+                binding.budgetContainer.show()
+                binding.movieBudget.text = convertToRealNumber(it)
                 data.revenue?.let {
                     if (data.revenue > 0.0) {
-                        boxOfficeContainer.show()
-                        movieBoxOffice.text = convertToRealNumber(data.revenue)
-                        movieBoxOfficePercent.text = calculatePercentBoxOffice(data.budget, data.revenue)
+                        binding.boxOfficeContainer.show()
+                        binding.movieBoxOffice.text = convertToRealNumber(data.revenue)
+                        binding.movieBoxOfficePercent.text = calculatePercentBoxOffice(data.budget, data.revenue)
                     }
                 }
             }
@@ -344,16 +333,15 @@ class MovieActivity : AppCompatActivity() {
 
         data.productionCompanies?.let {
             if (it.isNotEmpty()) {
-                productionCompanies.removeAllViews()
+                binding.productionCompanies.removeAllViews()
                 for (company in it) {
-                    val parent = layoutInflater.inflate(R.layout.thumbnail_company, productionCompanies, false)
-                    val companyName: TextView = parent.findViewById(R.id.productionCompanyName)
+                    val item = ThumbnailCompanyBinding.inflate(layoutInflater)
                     company.name?.let {
-                        companyName.text = company.name
-                        productionCompanies.addView(parent)
+                        item.productionCompanyName.text = company.name
+                        binding.productionCompanies.addView(item.root)
                     }
                 }
-                productionCompaniesLayout.show()
+                binding.productionCompaniesLayout.show()
             }
         }
     }
@@ -378,7 +366,7 @@ class MovieActivity : AppCompatActivity() {
     private fun setWishListImage() {
         val finder = watchlistList?.find { it.itemId == movieId }
         if (finder != null) {
-            item_movie_watchlist.setImageResource(R.drawable.ic_enable_watchlist)
+            binding.itemMovieWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
         }
     }
 
@@ -397,8 +385,8 @@ class MovieActivity : AppCompatActivity() {
             genres.add(element.name.orEmpty())
         }
         if (genres.isNotEmpty()) {
-            movieGenres.text = genres.joinToString(separator = ", ")
-            movieGenres.show()
+            binding.movieGenres.text = genres.joinToString(separator = ", ")
+            binding.movieGenres.show()
         }
     }
 
@@ -412,11 +400,11 @@ class MovieActivity : AppCompatActivity() {
         val percentValue = ((100 * (second - first)) / first).roundToInt()
         return when {
             percentValue > 0 -> {
-                percentImage.setImageDrawable(resources.getDrawable(R.drawable.ic_percent_up))
+                binding.percentImage.setImageDrawable(resources.getDrawable(R.drawable.ic_percent_up))
                 getString(R.string.percent_number_up).replace("{PERCENT_VALUE}", percentValue.toString())
             }
             percentValue < 0 -> {
-                percentImage.setImageDrawable(resources.getDrawable(R.drawable.ic_percent_down))
+                binding.percentImage.setImageDrawable(resources.getDrawable(R.drawable.ic_percent_down))
                 getString(R.string.percent_number_down).replace("{PERCENT_VALUE}", percentValue.toString())
             }
             else -> {

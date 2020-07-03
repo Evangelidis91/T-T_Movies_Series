@@ -3,11 +3,11 @@ package com.evangelidis.t_tmoviesseries.view.person
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.evangelidis.t_tmoviesseries.R
+import com.evangelidis.t_tmoviesseries.databinding.ActivityPersonBinding
+import com.evangelidis.t_tmoviesseries.databinding.ThumbnailActorsMovieBinding
 import com.evangelidis.t_tmoviesseries.extensions.gone
 import com.evangelidis.t_tmoviesseries.extensions.show
 import com.evangelidis.t_tmoviesseries.model.PersonCombinedResponse
@@ -26,8 +26,6 @@ import com.evangelidis.t_tmoviesseries.view.biography.BiographyActivity
 import com.evangelidis.t_tmoviesseries.view.main.MainActivity
 import com.evangelidis.t_tmoviesseries.view.movie.MovieActivity
 import com.evangelidis.t_tmoviesseries.view.tvshow.TvShowActivity
-import kotlinx.android.synthetic.main.activity_person.*
-import kotlinx.android.synthetic.main.main_toolbar.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -36,9 +34,11 @@ class PersonActivity : AppCompatActivity() {
     private var personId: Int = 0
     private lateinit var viewModel: ViewModelPerson
 
+    private val binding: ActivityPersonBinding by lazy { ActivityPersonBinding.inflate(layoutInflater) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_person)
+        setContentView(binding.root)
 
         personId = intent.getIntExtra(PERSON_ID, personId)
 
@@ -47,12 +47,12 @@ class PersonActivity : AppCompatActivity() {
         viewModel.getPersonDetails(personId)
         viewModel.getPersonCombinedCredits(personId)
 
-        imageToMain.setOnClickListener {
+        binding.toolbar.imageToMain.setOnClickListener {
             val intent = Intent(this@PersonActivity, MainActivity::class.java)
             startActivity(intent)
         }
 
-        search_img.setOnClickListener {
+        binding.toolbar.searchIcn.setOnClickListener {
             val intent = Intent(this@PersonActivity, SearchActivity::class.java)
             startActivity(intent)
         }
@@ -64,7 +64,7 @@ class PersonActivity : AppCompatActivity() {
         viewModel.personDetails.observe(this, Observer { data ->
             data?.let {
                 setUpPersonInfoUI(data)
-                progressBar.gone()
+                binding.progressBar.gone()
             }
         })
 
@@ -77,40 +77,40 @@ class PersonActivity : AppCompatActivity() {
 
     private fun setUpPersonInfoUI(data: PersonDetailsResponse) {
         data.name?.let {
-            toolbar_title.text = it
-            actorName.text = it
+            binding.toolbar.toolbarTitle.text = it
+            binding.actorName.text = it
         }
 
         if (!data.knownForDepartment.isNullOrEmpty()) {
-            knowingLabel.text = getString(R.string.known_for).replace("{x}", data.knownForDepartment)
-            knowingLabel.show()
+            binding.knowingLabel.text = getString(R.string.known_for).replace("{x}", data.knownForDepartment)
+            binding.knowingLabel.show()
         }
 
         data.profilePath?.let {
-            getGlideImage(this, IMAGE_SMALL_BASE_URL.plus(it), actorImage)
+            getGlideImage(this, IMAGE_SMALL_BASE_URL.plus(it), binding.actorImage)
         }
 
         data.gender?.let {
             when (it) {
-                1 -> gender.text = getString(R.string.gender_female)
-                2 -> gender.text = getString(R.string.gender_male)
-                else -> gender.text = getString(R.string.gender_no)
+                1 -> binding.gender.text = getString(R.string.gender_female)
+                2 -> binding.gender.text = getString(R.string.gender_male)
+                else -> binding.gender.text = getString(R.string.gender_no)
             }
         }
 
         data.placeOfBirth?.let {
-            placeOfBirth.text = it
+            binding.placeOfBirth.text = it
         }
 
         if (!data.biography.isNullOrEmpty()) {
-            biographyContent.text = data.biography
-            biographyLayout.setOnClickListener {
+            binding.biographyContent.text = data.biography
+            binding.biographyLayout.setOnClickListener {
                 val intent = Intent(this@PersonActivity, BiographyActivity::class.java)
                 intent.putExtra(BIOGRAPHY_TEXT, data.biography)
                 intent.putExtra(ACTOR_NAME, data.name)
                 startActivity(intent)
             }
-            biographyLayout.show()
+            binding.biographyLayout.show()
         }
         setUpActorDates(data)
     }
@@ -122,18 +122,18 @@ class PersonActivity : AppCompatActivity() {
             if (data.deathday.isNullOrEmpty()) {
                 val date = sdf.parse(it)
                 val age = getDiffYears(date, currentDate)
-                born.text = getString(R.string.person_single_born)
+                binding.born.text = getString(R.string.person_single_born)
                     .replace("{DATE}", changeDateFormat(it))
                     .replace("{AGE}", age.toString())
             } else {
                 val dateBorn = sdf.parse(it)
                 val dateDied = sdf.parse(data.deathday)
                 val age = getDiffYears(dateBorn, dateDied)
-                born.text = getString(R.string.person_born).replace("{DATE}", it)
-                deathday.text = getString(R.string.person_death)
+                binding.born.text = getString(R.string.person_born).replace("{DATE}", it)
+                binding.deathday.text = getString(R.string.person_death)
                     .replace("{DEATH_DATE}", changeDateFormat(data.deathday))
                     .replace("{AGE}", age.toString())
-                deathday.show()
+                binding.deathday.show()
             }
         }
     }
@@ -155,28 +155,23 @@ class PersonActivity : AppCompatActivity() {
     }
 
     private fun setUpCombinedCreditsList(data: PersonCombinedResponse) {
-        actorMovies.removeAllViews()
+        binding.actorMovies.removeAllViews()
         data.cast?.let {
             if (it.isNotEmpty()) {
                 for (result in it) {
-                    val parent = layoutInflater.inflate(R.layout.thumbnail_actors_movie, actorMovies, false)
-                    val movieImg = parent.findViewById<ImageView>(R.id.movie_img)
-                    val movieName = parent.findViewById<TextView>(R.id.movie_name)
-                    val actorCharacter = parent.findViewById<TextView>(R.id.actor_character)
-                    val movieYear = parent.findViewById<TextView>(R.id.movie_year)
-
+                    val item = ThumbnailActorsMovieBinding.inflate(layoutInflater)
                     if (result.mediaType == "movie") {
-                        movieName.text = result.title
-                        actorCharacter.text = result.character
-                        movieImg.setOnClickListener {
+                        item.movieName.text = result.title
+                        item.actorCharacter.text = result.character
+                        item.movieImg.setOnClickListener {
                             val intent = Intent(this@PersonActivity, MovieActivity::class.java)
                             intent.putExtra(MOVIE_ID, result.id)
                             startActivity(intent)
                         }
                     } else if (result.mediaType == "tv") {
-                        movieName.text = result.name
-                        actorCharacter.gone()
-                        parent.setOnClickListener {
+                        item.movieName.text = result.name
+                        item.actorCharacter.gone()
+                        item.root.setOnClickListener {
                             val intent = Intent(this@PersonActivity, TvShowActivity::class.java)
                             intent.putExtra(TV_SHOW_ID, result.id)
                             startActivity(intent)
@@ -184,15 +179,15 @@ class PersonActivity : AppCompatActivity() {
                     }
 
                     if (!(result.releaseDate.isNullOrEmpty())) {
-                        movieYear.show()
-                        movieYear.text = result.releaseDate.substring(0, 4)
+                        item.movieYear.show()
+                        item.movieYear.text = result.releaseDate.substring(0, 4)
                     }
 
-                    getGlideImage(this, IMAGE_SMALL_BASE_URL.plus(result.posterPath), movieImg)
+                    getGlideImage(this, IMAGE_SMALL_BASE_URL.plus(result.posterPath), item.movieImg)
 
-                    actorMovies.addView(parent)
+                    binding.actorMovies.addView(item.root)
                 }
-                filmographyContainer.show()
+                binding.filmographyContainer.show()
             }
         }
     }
