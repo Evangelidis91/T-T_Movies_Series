@@ -136,5 +136,4 @@ class ViewModelTvShow : ViewModel() {
                 })
         )
     }
-
 }

@@ -14,7 +14,6 @@ interface ApiComponent {
 
     fun inject(service: TMDBService)
 
-
     fun inject(viewModel: ViewModelMain)
 
     fun inject(viewModel: ViewModelMovie)
@@ -25,5 +24,5 @@ interface ApiComponent {
 
     fun inject(viewModel: ViewModelSearch)
 
-    fun inject(ViewModel : ViewModelSeasons)
+    fun inject(ViewModel: ViewModelSeasons)
 }

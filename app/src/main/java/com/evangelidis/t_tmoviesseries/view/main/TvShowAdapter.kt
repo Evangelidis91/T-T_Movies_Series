@@ -3,18 +3,16 @@ package com.evangelidis.t_tmoviesseries.view.main
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.evangelidis.t_tmoviesseries.utils.ItemsManager.getGenres
-import com.evangelidis.t_tmoviesseries.callbacks.OnTvShowClickCallback
 import com.evangelidis.t_tmoviesseries.R
+import com.evangelidis.t_tmoviesseries.callbacks.OnTvShowClickCallback
 import com.evangelidis.t_tmoviesseries.databinding.ItemTvBinding
 import com.evangelidis.t_tmoviesseries.model.Genre
 import com.evangelidis.t_tmoviesseries.model.TvShow
 import com.evangelidis.t_tmoviesseries.room.DatabaseQueries
 import com.evangelidis.t_tmoviesseries.room.WatchlistData
-import com.evangelidis.t_tmoviesseries.room.WatchlistDataBase
 import com.evangelidis.t_tmoviesseries.utils.Constants.CATEGORY_TV
-import com.evangelidis.t_tmoviesseries.utils.Constants.DATABASE_THREAD
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_SMALL_BASE_URL
+import com.evangelidis.t_tmoviesseries.utils.ItemsManager.getGenres
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.getGlideImage
 
 class TvShowAdapter(

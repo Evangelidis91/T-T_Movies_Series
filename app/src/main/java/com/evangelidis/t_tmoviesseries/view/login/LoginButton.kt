@@ -114,7 +114,7 @@ class LoginButton : View {
             textSize = dpToPixels(64)
             textAlign = Align.CENTER
         }
-        //signUpPaint.setAlpha(255);
+        // signUpPaint.setAlpha(255);
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -212,7 +212,7 @@ class LoginButton : View {
     fun startAnimation() {
         val start = startButtonRight
         val animator = ObjectAnimator.ofFloat(0f, 1f)
-        //animator.setInterpolator(new AccelerateInterpolator());
+        // animator.setInterpolator(new AccelerateInterpolator());
         animator.addUpdateListener { animation: ValueAnimator ->
             val fraction = animation.animatedValue as Float
             val currentAngle = fraction * (Math.PI.toFloat() / 2) // in radians
@@ -322,7 +322,7 @@ class LoginButton : View {
                     currentRight -= hideButton.toFloat()
                 }
 
-                //move texts
+                // move texts
                 if (!isLogin) {
                     signUpOrX += hideButton.toFloat()
                     currentSignUpTextX += hideButton.toFloat()
@@ -405,7 +405,6 @@ class LoginButton : View {
 
     private fun dpToPixels(dp: Int) = resources.displayMetrics.density * dp
 
-
     fun setOnButtonSwitched(callback: OnButtonSwitchedListener?) {
         this.callback = callback
     }
@@ -422,7 +421,7 @@ class LoginButton : View {
                 return@setOnTouchListener true
             } else if (!isLogin && loginTextOutline.contains(x, y)) {
                 if (event.action == KeyEvent.ACTION_UP) {
-                    //onLoginListener.login()
+                    // onLoginListener.login()
                 }
                 return@setOnTouchListener true
             } else if (isLogin && signUpTextOutline.contains(x, y)) {

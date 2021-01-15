@@ -1,14 +1,14 @@
 package com.evangelidis.t_tmoviesseries.view.splashscreen
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import com.evangelidis.t_tmoviesseries.utils.Constants.SPLASHSCREEN_TIME
+import androidx.appcompat.app.AppCompatActivity
 import com.evangelidis.t_tmoviesseries.R
-import com.evangelidis.t_tmoviesseries.view.login.LoginActivity
 import com.evangelidis.t_tmoviesseries.utils.Constants.IS_NOTIFICATION_ON
+import com.evangelidis.t_tmoviesseries.utils.Constants.SPLASHSCREEN_TIME
+import com.evangelidis.t_tmoviesseries.view.login.LoginActivity
 import es.dmoral.prefs.Prefs
 
 class SplashScreenActivity : AppCompatActivity() {
@@ -24,7 +24,7 @@ class SplashScreenActivity : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_FULLSCREEN
                 or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
 
-        if (!Prefs.with(applicationContext).contains(IS_NOTIFICATION_ON)){
+        if (!Prefs.with(applicationContext).contains(IS_NOTIFICATION_ON)) {
             Prefs.with(applicationContext).writeBoolean(IS_NOTIFICATION_ON, true)
         }
 

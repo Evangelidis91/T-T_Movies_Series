@@ -3,15 +3,13 @@ package com.evangelidis.t_tmoviesseries.view.search
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.evangelidis.t_tmoviesseries.callbacks.OnTrendingClickCallback
 import com.evangelidis.t_tmoviesseries.R
+import com.evangelidis.t_tmoviesseries.callbacks.OnTrendingClickCallback
 import com.evangelidis.t_tmoviesseries.databinding.ItemSearchBinding
 import com.evangelidis.t_tmoviesseries.extensions.gone
 import com.evangelidis.t_tmoviesseries.model.Multisearch
 import com.evangelidis.t_tmoviesseries.room.DatabaseQueries
 import com.evangelidis.t_tmoviesseries.room.WatchlistData
-import com.evangelidis.t_tmoviesseries.room.WatchlistDataBase
-import com.evangelidis.t_tmoviesseries.utils.Constants
 import com.evangelidis.t_tmoviesseries.utils.Constants.CATEGORY_MOVIE
 import com.evangelidis.t_tmoviesseries.utils.Constants.CATEGORY_PERSON
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_SMALL_BASE_URL

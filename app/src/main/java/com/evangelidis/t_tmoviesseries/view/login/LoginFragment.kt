@@ -13,13 +13,13 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
-import com.evangelidis.t_tmoviesseries.view.main.MainActivity
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.databinding.EnterEmailLayoutBinding
 import com.evangelidis.t_tmoviesseries.databinding.FragmentLoginBinding
 import com.evangelidis.t_tmoviesseries.view.login.LoginRegisterMethods.isEmailValid
 import com.evangelidis.t_tmoviesseries.view.login.LoginRegisterMethods.isPasswordValid
 import com.evangelidis.t_tmoviesseries.view.login.LoginRegisterMethods.verifyAvailableNetwork
+import com.evangelidis.t_tmoviesseries.view.main.MainActivity
 import com.evangelidis.tantintoast.TanTinToast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference

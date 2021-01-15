@@ -72,7 +72,6 @@ class ViewModelMain : ViewModel() {
         fetchAiringTodayTvShows(i)
     }
 
-
     private fun fetchMovieGenres() {
         disposable.add(
             tmdbService.getMoviesGenres()
@@ -101,7 +100,6 @@ class ViewModelMain : ViewModel() {
                     }
 
                     override fun onError(e: Throwable) {
-
                     }
                 })
         )
@@ -198,7 +196,6 @@ class ViewModelMain : ViewModel() {
                     override fun onError(e: Throwable) {
                         loadError.value = true
                     }
-
                 })
         )
     }
@@ -218,7 +215,6 @@ class ViewModelMain : ViewModel() {
                     override fun onError(e: Throwable) {
                         loadError.value = true
                     }
-
                 })
         )
     }

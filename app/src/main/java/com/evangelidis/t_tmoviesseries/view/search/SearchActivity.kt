@@ -3,7 +3,6 @@ package com.evangelidis.t_tmoviesseries.view.search
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
-import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
@@ -11,15 +10,13 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.evangelidis.t_tmoviesseries.callbacks.OnTrendingClickCallback
 import com.evangelidis.t_tmoviesseries.R
+import com.evangelidis.t_tmoviesseries.callbacks.OnTrendingClickCallback
 import com.evangelidis.t_tmoviesseries.databinding.ActivitySearchBinding
 import com.evangelidis.t_tmoviesseries.extensions.gone
 import com.evangelidis.t_tmoviesseries.extensions.show
 import com.evangelidis.t_tmoviesseries.model.Multisearch
 import com.evangelidis.t_tmoviesseries.room.DatabaseQueries
-import com.evangelidis.t_tmoviesseries.room.WatchlistDataBase
-import com.evangelidis.t_tmoviesseries.utils.Constants.DATABASE_THREAD
 import com.evangelidis.t_tmoviesseries.utils.Constants.MOVIE_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.PERSON_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_ID
@@ -131,7 +128,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun getDataFromDB() {
-        DatabaseQueries.getSavedItems(this){watchlistData->
+        DatabaseQueries.getSavedItems(this) { watchlistData ->
             if (!watchlistData.isNullOrEmpty()) {
                 trendsAdapter.updateWatchlist(watchlistData)
             }

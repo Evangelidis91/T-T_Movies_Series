@@ -1,0 +1,64 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <Blacklist></Blacklist>
+  <Whitelist>
+    <ID>ComplexMethod:MovieActivity.kt$MovieActivity$setUpUI</ID>
+    <ID>ComplexMethod:TvShowActivity.kt$TvShowActivity$setUpUI</ID>
+    <ID>ConstructorParameterNaming:TvShowSeasonResponse.kt$TvShowSeasonResponse$@SerializedName("_id") val _id: String?</ID>
+    <ID>FunctionParameterNaming:ApiComponent.kt$ApiComponent$ViewModel: ViewModelSeasons</ID>
+    <ID>LongMethod:LoginButton.kt$LoginButton$startAnimation</ID>
+    <ID>LongMethod:LoginButton.kt$LoginButton.&lt;no name provided&gt;$onAnimationEnd</ID>
+    <ID>LongMethod:MainActivity.kt$MainActivity$setupNavigationViewClickListeners</ID>
+    <ID>LongMethod:MainActivity.kt$MainActivity$submitMessage</ID>
+    <ID>LongMethod:SearchAdapter.kt$SearchAdapter.SearchViewHolder$bind</ID>
+    <ID>LongMethod:TvShowActivity.kt$TvShowActivity$setUpUI</ID>
+    <ID>MagicNumber:LoginActivity.kt$LoginActivity$90f</ID>
+    <ID>MagicNumber:LoginActivity.kt$LoginActivity.&lt;no name provided&gt;$90f</ID>
+    <ID>MagicNumber:LoginButton.kt$LoginButton$16</ID>
+    <ID>MagicNumber:LoginButton.kt$LoginButton$255</ID>
+    <ID>MagicNumber:LoginButton.kt$LoginButton$28</ID>
+    <ID>MagicNumber:LoginButton.kt$LoginButton$32</ID>
+    <ID>MagicNumber:LoginButton.kt$LoginButton$360f</ID>
+    <ID>MagicNumber:LoginButton.kt$LoginButton$37</ID>
+    <ID>MagicNumber:LoginButton.kt$LoginButton$457</ID>
+    <ID>MagicNumber:LoginButton.kt$LoginButton$5</ID>
+    <ID>MagicNumber:LoginButton.kt$LoginButton$50</ID>
+    <ID>MagicNumber:LoginButton.kt$LoginButton$64</ID>
+    <ID>MagicNumber:LoginButton.kt$LoginButton$7</ID>
+    <ID>MagicNumber:LoginButton.kt$LoginButton$8</ID>
+    <ID>MagicNumber:LoginButton.kt$LoginButton$92</ID>
+    <ID>MagicNumber:LoginButton.kt$LoginButton.&lt;no name provided&gt;$.2</ID>
+    <ID>MagicNumber:LoginButton.kt$LoginButton.&lt;no name provided&gt;$125</ID>
+    <ID>MagicNumber:LoginButton.kt$LoginButton.&lt;no name provided&gt;$16</ID>
+    <ID>MagicNumber:LoginButton.kt$LoginButton.&lt;no name provided&gt;$255</ID>
+    <ID>MagicNumber:LoginButton.kt$LoginButton.&lt;no name provided&gt;$300</ID>
+    <ID>MagicNumber:LoginButton.kt$LoginButton.&lt;no name provided&gt;$500</ID>
+    <ID>MagicNumber:LoginButton.kt$LoginButton.&lt;no name provided&gt;$64</ID>
+    <ID>MagicNumber:LoginButton.kt$LoginButton.&lt;no name provided&gt;$7.0</ID>
+    <ID>MagicNumber:LoginRegisterMethods.kt$LoginRegisterMethods$6</ID>
+    <ID>MagicNumber:MainActivity.kt$MainActivity$270F</ID>
+    <ID>MagicNumber:MainActivity.kt$MainActivity$90F</ID>
+    <ID>MagicNumber:MovieActivity.kt$MovieActivity$100</ID>
+    <ID>MagicNumber:MovieActivity.kt$MovieActivity$340</ID>
+    <ID>MagicNumber:MovieActivity.kt$MovieActivity$60</ID>
+    <ID>MagicNumber:MyBounceInterpolator.kt$MyBounceInterpolator$10.0</ID>
+    <ID>MagicNumber:PersonActivity.kt$PersonActivity$4</ID>
+    <ID>MagicNumber:SearchActivity.kt$SearchActivity$5</ID>
+    <ID>MagicNumber:TvShowActivity.kt$TvShowActivity$4</ID>
+    <ID>NestedBlockDepth:ItemsManager.kt$ItemsManager$getGenres</ID>
+    <ID>NestedBlockDepth:MovieActivity.kt$MovieActivity$setUpDirectors</ID>
+    <ID>NestedBlockDepth:MovieActivity.kt$MovieActivity$setUpUI</ID>
+    <ID>NestedBlockDepth:PersonActivity.kt$PersonActivity$setUpCombinedCreditsList</ID>
+    <ID>NestedBlockDepth:SignUpFragment.kt$SignUpFragment$performSignUp</ID>
+    <ID>NestedBlockDepth:TvShowActivity.kt$TvShowActivity$setUpDirectors</ID>
+    <ID>NestedBlockDepth:TvShowActivity.kt$TvShowActivity$setUpUI</ID>
+    <ID>NoConsecutiveBlankLines:com.evangelidis.t_tmoviesseries.view.watchlist.WatchlistAdapter.kt:22</ID>
+    <ID>TooGenericExceptionCaught:InternetStatus.kt$InternetStatus$e: Exception</ID>
+    <ID>TooManyFunctions:TMDBApi.kt$TMDBApi$TMDBApi</ID>
+    <ID>TooManyFunctions:TMDBService.kt$TMDBService$TMDBService</ID>
+    <ID>TooManyFunctions:ViewExtensions.kt$com.evangelidis.t_tmoviesseries.extensions.ViewExtensions.kt</ID>
+    <ID>TooManyFunctions:ViewModelMain.kt$ViewModelMain$ViewModelMain</ID>
+    <ID>UnusedPrivateMember:SearchActivity.kt$SearchActivity$x</ID>
+    <ID>UnusedPrivateMember:ViewModelMovie.kt$ViewModelMovie$private fun fetchMovieGenres()</ID>
+  </Whitelist>
+</SmellBaseline>

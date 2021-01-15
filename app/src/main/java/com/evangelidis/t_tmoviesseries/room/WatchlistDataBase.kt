@@ -15,13 +15,12 @@ abstract class WatchlistDataBase : RoomDatabase() {
         private var instance: WatchlistDataBase? = null
 
         fun getInstance(context: Context): WatchlistDataBase? {
-            if (instance == null){
-                synchronized(WatchlistDataBase::class){
+            if (instance == null) {
+                synchronized(WatchlistDataBase::class) {
                     instance = Room.databaseBuilder(context, WatchlistDataBase::class.java, ROOM_DATABASE_NAME).build()
                 }
             }
             return instance
         }
-
     }
 }

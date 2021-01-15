@@ -2,14 +2,11 @@ package com.evangelidis.t_tmoviesseries.view.movie
 
 import android.content.Intent
 import android.graphics.Typeface
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.evangelidis.t_tmoviesseries.utils.ItemsManager.showTrailer
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.databinding.*
 import com.evangelidis.t_tmoviesseries.extensions.gone
@@ -19,16 +16,16 @@ import com.evangelidis.t_tmoviesseries.room.*
 import com.evangelidis.t_tmoviesseries.utils.Constants
 import com.evangelidis.t_tmoviesseries.utils.Constants.CATEGORY_DIRECTOR
 import com.evangelidis.t_tmoviesseries.utils.Constants.CATEGORY_MOVIE
-import com.evangelidis.t_tmoviesseries.utils.Constants.DATABASE_THREAD
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_POSTER_BASE_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_SMALL_BASE_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.YOUTUBE_THUMBNAIL_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.YOUTUBE_VIDEO_URL
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.changeDateFormat
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.getGlideImage
+import com.evangelidis.t_tmoviesseries.utils.ItemsManager.showTrailer
+import com.evangelidis.t_tmoviesseries.view.main.MainActivity
 import com.evangelidis.t_tmoviesseries.view.person.PersonActivity
 import com.evangelidis.t_tmoviesseries.view.search.SearchActivity
-import com.evangelidis.t_tmoviesseries.view.main.MainActivity
 import com.evangelidis.tantintoast.TanTinToast
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -43,7 +40,6 @@ class MovieActivity : AppCompatActivity() {
     private var watchlistList: List<WatchlistData>? = null
 
     private lateinit var movie: MovieDetailsResponse
-
 
     private var typeface: Typeface? = null
 
@@ -338,7 +334,7 @@ class MovieActivity : AppCompatActivity() {
     }
 
     private fun getDataFromDB() {
-        DatabaseQueries.getSavedItems(this){ watchlistData ->
+        DatabaseQueries.getSavedItems(this) { watchlistData ->
             if (!watchlistData.isNullOrEmpty()) {
                 watchlistList = watchlistData
                 setWishListImage()
@@ -360,7 +356,6 @@ class MovieActivity : AppCompatActivity() {
             .replace("{hour}", (hours)) + getString(R.string.minutes_format)
             .replace("{min}", minutes)
     }
-
 
     private fun setUpGenres(data: List<Genre>) {
         val genres: ArrayList<String> = arrayListOf()

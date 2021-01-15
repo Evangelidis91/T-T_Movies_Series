@@ -18,7 +18,7 @@ import es.dmoral.prefs.Prefs
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        if (Prefs.with(applicationContext).readBoolean(IS_NOTIFICATION_ON, false)){
+        if (Prefs.with(applicationContext).readBoolean(IS_NOTIFICATION_ON, false)) {
             remoteMessage.notification?.let {
                 sendNotification(it.body, it.title)
             }
