@@ -4,4 +4,5 @@ class MessagePost(
     var email: String,
     var messageBody: String,
     var date: String,
-    var name: String)
+    var name: String
+)

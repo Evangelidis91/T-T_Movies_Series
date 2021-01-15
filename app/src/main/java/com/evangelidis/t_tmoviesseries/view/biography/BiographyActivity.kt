@@ -1,14 +1,14 @@
 package com.evangelidis.t_tmoviesseries.view.biography
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.databinding.ActivityBiographyBinding
 import com.evangelidis.t_tmoviesseries.utils.Constants.ACTOR_NAME
 import com.evangelidis.t_tmoviesseries.utils.Constants.BIOGRAPHY_TEXT
-import com.evangelidis.t_tmoviesseries.view.search.SearchActivity
 import com.evangelidis.t_tmoviesseries.view.main.MainActivity
+import com.evangelidis.t_tmoviesseries.view.search.SearchActivity
 
 class BiographyActivity : AppCompatActivity() {
 

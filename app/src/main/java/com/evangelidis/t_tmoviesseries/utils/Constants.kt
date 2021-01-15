@@ -53,5 +53,4 @@ object Constants {
 
     const val BIOGRAPHY_TEXT = "biography_text"
     const val ACTOR_NAME = "actor_name"
-
 }

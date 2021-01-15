@@ -6,7 +6,6 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
-import android.os.Handler
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
@@ -23,15 +22,11 @@ import com.evangelidis.t_tmoviesseries.callbacks.OnTvShowClickCallback
 import com.evangelidis.t_tmoviesseries.databinding.ActivityMainBinding
 import com.evangelidis.t_tmoviesseries.databinding.SubmitQuestionLayoutBinding
 import com.evangelidis.t_tmoviesseries.extensions.*
-import com.evangelidis.t_tmoviesseries.view.login.LoginActivity
-import com.evangelidis.t_tmoviesseries.view.login.LoginRegisterMethods
 import com.evangelidis.t_tmoviesseries.model.MessagePost
 import com.evangelidis.t_tmoviesseries.model.Movie
 import com.evangelidis.t_tmoviesseries.model.TvShow
 import com.evangelidis.t_tmoviesseries.room.DatabaseQueries
-import com.evangelidis.t_tmoviesseries.room.WatchlistDataBase
 import com.evangelidis.t_tmoviesseries.utils.Constants.AIRING_TODAY_TV
-import com.evangelidis.t_tmoviesseries.utils.Constants.DATABASE_THREAD
 import com.evangelidis.t_tmoviesseries.utils.Constants.FIREBASE_DATABASE_DATE_FORMAT
 import com.evangelidis.t_tmoviesseries.utils.Constants.FIREBASE_MESSAGES_DATABASE_PATH
 import com.evangelidis.t_tmoviesseries.utils.Constants.FIREBASE_MESSAGES_DATABASE_PATH_CHILD
@@ -49,6 +44,8 @@ import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.UPCOMING_MOVIES
 import com.evangelidis.t_tmoviesseries.utils.InternetStatus
 import com.evangelidis.t_tmoviesseries.utils.Tracking
+import com.evangelidis.t_tmoviesseries.view.login.LoginActivity
+import com.evangelidis.t_tmoviesseries.view.login.LoginRegisterMethods
 import com.evangelidis.t_tmoviesseries.view.movie.MovieActivity
 import com.evangelidis.t_tmoviesseries.view.search.SearchActivity
 import com.evangelidis.t_tmoviesseries.view.tvshow.TvShowActivity
@@ -129,7 +126,6 @@ class MainActivity : AppCompatActivity() {
         viewModel.getTvShowGenres()
         viewModel.getPopularMovies(1)
 
-
         binding.appBar.mainView.moviesList.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = moviesListAdapter
@@ -177,13 +173,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getDataFromDB() {
-        DatabaseQueries.getSavedItems(this){watchlistData ->
+        DatabaseQueries.getSavedItems(this) { watchlistData ->
             watchlistData?.let {
                 moviesListAdapter.updateWatchlist(it)
                 tvShowAdapter.updateWatchlist(it)
             }
         }
-
     }
 
     private fun observeViewModel() {
@@ -485,7 +480,7 @@ class MainActivity : AppCompatActivity() {
         if (user == null) {
             binding.navigationDrawer.navLogout.gone()
         } else {
-            //nav_activate_account.showIf { !user.isEmailVerified }
+            // nav_activate_account.showIf { !user.isEmailVerified }
             user.email?.let {
                 binding.navigationDrawer.loginText.text = resources.getString(R.string.welcome_user).replace("{USERNAME}", it.substringBefore("@"))
                 binding.navigationDrawer.navLogout.show()
@@ -566,7 +561,6 @@ class MainActivity : AppCompatActivity() {
                         }
 
                     item.root.hideKeyboard()
-
                 } else {
                     if (!isValidEmailAddress(item.profileEtEmail.text.toString())) {
                         item.profileInputEmail.error = getString(R.string.mail_error)

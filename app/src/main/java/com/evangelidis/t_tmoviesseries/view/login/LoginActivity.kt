@@ -20,7 +20,7 @@ class LoginActivity : AppCompatActivity() {
     private var isLogin = true
     private var mAuth: FirebaseAuth? = null
 
-    private val binding :ActivityLoginBinding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
+    private val binding: ActivityLoginBinding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

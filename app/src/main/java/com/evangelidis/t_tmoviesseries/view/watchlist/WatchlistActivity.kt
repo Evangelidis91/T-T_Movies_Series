@@ -2,8 +2,8 @@ package com.evangelidis.t_tmoviesseries.view.watchlist
 
 import android.content.Intent
 import android.graphics.Typeface
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.evangelidis.t_tmoviesseries.R
@@ -72,7 +72,7 @@ class WatchlistActivity : AppCompatActivity() {
     }
 
     private fun getDataFromDB() {
-        DatabaseQueries.getSavedItems(this){ watchlistData ->
+        DatabaseQueries.getSavedItems(this) { watchlistData ->
             if (!watchlistData.isNullOrEmpty()) {
                 binding.emptyWatchlistText.gone()
                 binding.watchlistList.apply {
@@ -81,7 +81,6 @@ class WatchlistActivity : AppCompatActivity() {
                 }
                 watchlistAdapter.appendWatchlistData(watchlistData.reversed())
                 binding.loadingView.gone()
-
             } else {
                 binding.emptyWatchlistText.show()
             }

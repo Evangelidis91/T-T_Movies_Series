@@ -3,16 +3,15 @@ package com.evangelidis.t_tmoviesseries.view.main
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.evangelidis.t_tmoviesseries.utils.ItemsManager.getGenres
-import com.evangelidis.t_tmoviesseries.callbacks.OnMoviesClickCallback
 import com.evangelidis.t_tmoviesseries.R
+import com.evangelidis.t_tmoviesseries.callbacks.OnMoviesClickCallback
 import com.evangelidis.t_tmoviesseries.databinding.ItemMovieBinding
 import com.evangelidis.t_tmoviesseries.model.Genre
 import com.evangelidis.t_tmoviesseries.model.Movie
 import com.evangelidis.t_tmoviesseries.room.*
 import com.evangelidis.t_tmoviesseries.utils.Constants.CATEGORY_MOVIE
-import com.evangelidis.t_tmoviesseries.utils.Constants.DATABASE_THREAD
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_SMALL_BASE_URL
+import com.evangelidis.t_tmoviesseries.utils.ItemsManager.getGenres
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.getGlideImage
 
 class MoviesListAdapter(
@@ -20,7 +19,6 @@ class MoviesListAdapter(
     private var movieCallback: OnMoviesClickCallback,
     private var watchlistList: MutableList<WatchlistData>
 ) : RecyclerView.Adapter<MoviesListAdapter.MoviesViewHolder>() {
-
 
     private var genresList: ArrayList<Genre> = arrayListOf()
 

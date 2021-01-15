@@ -1,8 +1,8 @@
 package com.evangelidis.t_tmoviesseries.view.seasons
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.evangelidis.t_tmoviesseries.databinding.ActivitySeasonsBinding

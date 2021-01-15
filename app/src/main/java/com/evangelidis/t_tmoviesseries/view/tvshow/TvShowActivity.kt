@@ -1,14 +1,10 @@
 package com.evangelidis.t_tmoviesseries.view.tvshow
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.evangelidis.t_tmoviesseries.utils.ItemsManager.showTrailer
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.databinding.*
 import com.evangelidis.t_tmoviesseries.extensions.gone
@@ -17,7 +13,6 @@ import com.evangelidis.t_tmoviesseries.model.*
 import com.evangelidis.t_tmoviesseries.room.*
 import com.evangelidis.t_tmoviesseries.utils.Constants.CATEGORY_DIRECTOR
 import com.evangelidis.t_tmoviesseries.utils.Constants.CATEGORY_TV
-import com.evangelidis.t_tmoviesseries.utils.Constants.DATABASE_THREAD
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_POSTER_BASE_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_SMALL_BASE_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.PERSON_ID
@@ -27,10 +22,11 @@ import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_NAME
 import com.evangelidis.t_tmoviesseries.utils.Constants.YOUTUBE_THUMBNAIL_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.YOUTUBE_VIDEO_URL
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.getGlideImage
+import com.evangelidis.t_tmoviesseries.utils.ItemsManager.showTrailer
+import com.evangelidis.t_tmoviesseries.view.main.MainActivity
 import com.evangelidis.t_tmoviesseries.view.person.PersonActivity
 import com.evangelidis.t_tmoviesseries.view.search.SearchActivity
 import com.evangelidis.t_tmoviesseries.view.seasons.SeasonsActivity
-import com.evangelidis.t_tmoviesseries.view.main.MainActivity
 import java.util.ArrayList
 
 class TvShowActivity : AppCompatActivity() {
@@ -43,14 +39,13 @@ class TvShowActivity : AppCompatActivity() {
 
     private var watchlistList: List<WatchlistData>? = null
 
-    private val binding :ActivityTvShowBinding by lazy { ActivityTvShowBinding.inflate(layoutInflater) }
+    private val binding: ActivityTvShowBinding by lazy { ActivityTvShowBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         tvShowId = intent.getIntExtra(TV_SHOW_ID, tvShowId)
-
 
         getDataFromDB()
 
@@ -191,7 +186,7 @@ class TvShowActivity : AppCompatActivity() {
             }
         }
 
-        if(!data.episodeRunTime.isNullOrEmpty()) {
+        if (!data.episodeRunTime.isNullOrEmpty()) {
             data.episodeRunTime.first().let {
                 binding.tvShowEpisodeDuration.text = getString(R.string.minutes_format).replace("{min}", it.toString())
                 binding.tvShowEpisodeDuration.show()
@@ -272,7 +267,7 @@ class TvShowActivity : AppCompatActivity() {
                         showTrailer(String.format(YOUTUBE_VIDEO_URL, trailer.key), applicationContext)
                     }
 
-                    getGlideImage(this, YOUTUBE_THUMBNAIL_URL.replace("%s",trailer.key.orEmpty()), item.thumbnail)
+                    getGlideImage(this, YOUTUBE_THUMBNAIL_URL.replace("%s", trailer.key.orEmpty()), item.thumbnail)
                     binding.tvShowTrailers.addView(item.root)
                 }
                 binding.tvShowTrailersContainer.show()
@@ -363,7 +358,7 @@ class TvShowActivity : AppCompatActivity() {
     }
 
     private fun getDataFromDB() {
-        DatabaseQueries.getSavedItems(this){watchlistData->
+        DatabaseQueries.getSavedItems(this) { watchlistData ->
             if (!watchlistData.isNullOrEmpty()) {
                 watchlistList = watchlistData
                 setWishListImage()

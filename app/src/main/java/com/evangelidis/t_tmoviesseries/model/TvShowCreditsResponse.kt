@@ -28,7 +28,6 @@ data class TvShowCast(
     val profilePath: String?
 )
 
-
 data class TvShowCrew(
     @SerializedName("credit_id")
     val creditId: String?,

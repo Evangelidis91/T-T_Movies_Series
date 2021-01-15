@@ -10,8 +10,6 @@ import com.evangelidis.t_tmoviesseries.databinding.ItemSearchBinding
 import com.evangelidis.t_tmoviesseries.extensions.show
 import com.evangelidis.t_tmoviesseries.room.DatabaseQueries
 import com.evangelidis.t_tmoviesseries.room.WatchlistData
-import com.evangelidis.t_tmoviesseries.room.WatchlistDataBase
-import com.evangelidis.t_tmoviesseries.utils.Constants.DATABASE_THREAD
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_SMALL_BASE_URL
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.getGlideImage
 
@@ -20,7 +18,6 @@ class WatchlistAdapter(
     var callback: OnWatchlistClickCallback,
     var context: Context
 ) : RecyclerView.Adapter<WatchlistAdapter.WatchlistViewHolder>() {
-    
 
     fun appendWatchlistData(watchlist: List<WatchlistData>) {
         watchlistList.clear()

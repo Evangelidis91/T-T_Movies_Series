@@ -1,8 +1,8 @@
 package com.evangelidis.t_tmoviesseries.view.person
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.evangelidis.t_tmoviesseries.R
@@ -21,10 +21,10 @@ import com.evangelidis.t_tmoviesseries.utils.Constants.PERSON_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_ID
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.changeDateFormat
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.getGlideImage
-import com.evangelidis.t_tmoviesseries.view.search.SearchActivity
 import com.evangelidis.t_tmoviesseries.view.biography.BiographyActivity
 import com.evangelidis.t_tmoviesseries.view.main.MainActivity
 import com.evangelidis.t_tmoviesseries.view.movie.MovieActivity
+import com.evangelidis.t_tmoviesseries.view.search.SearchActivity
 import com.evangelidis.t_tmoviesseries.view.tvshow.TvShowActivity
 import java.text.SimpleDateFormat
 import java.util.*

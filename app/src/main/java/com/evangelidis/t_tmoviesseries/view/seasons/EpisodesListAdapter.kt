@@ -39,7 +39,6 @@ class EpisodesListAdapter(private val episodes: MutableList<Episode>) :
                 .replace("{NUMBER}", episode.episodeNumber.toString())
                 .replace("{TITLE}", episode.name.orEmpty())
 
-
             episode.stillPath?.let {
                 getGlideImage(itemView.context, IMAGE_SMALL_BASE_URL.plus(it), binding.episodePoster)
                 binding.episodePoster.show()

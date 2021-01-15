@@ -26,7 +26,6 @@ class ViewModelSearch : ViewModel() {
     val multisearch = MutableLiveData<MultisearchResponse>()
     val loadError = MutableLiveData<Boolean>()
 
-
     fun getTrendings(pageNumber: Int) {
         fetchTrendings(pageNumber)
     }
@@ -68,5 +67,4 @@ class ViewModelSearch : ViewModel() {
                 })
         )
     }
-
 }
