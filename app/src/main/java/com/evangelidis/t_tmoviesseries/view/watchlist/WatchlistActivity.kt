@@ -1,5 +1,6 @@
 package com.evangelidis.t_tmoviesseries.view.watchlist
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,14 @@ import com.evangelidis.t_tmoviesseries.view.search.SearchActivity
 import com.evangelidis.t_tmoviesseries.view.tvshow.TvShowActivity
 
 class WatchlistActivity : AppCompatActivity(), WatchListItemCallback {
+
+    companion object {
+        const val TV = "TV"
+        const val Movie = "Movie"
+
+        fun createIntent(context: Context): Intent =
+            Intent(context, WatchlistActivity::class.java)
+    }
 
     private val watchlistAdapter by lazy { WatchlistAdapter(this) }
     private val binding: ActivityWatchlistBinding by lazy { ActivityWatchlistBinding.inflate(layoutInflater) }
