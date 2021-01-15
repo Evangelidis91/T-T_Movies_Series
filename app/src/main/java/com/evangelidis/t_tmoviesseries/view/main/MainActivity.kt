@@ -395,8 +395,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.navigationDrawer.navWatchlist.setOnClickListener {
-            val intent = Intent(this@MainActivity, WatchlistActivity::class.java)
-            startActivity(intent)
+            startActivity(WatchlistActivity.createIntent(this))
         }
 
         binding.navigationDrawer.navSend.setOnClickListener { submitMessage() }

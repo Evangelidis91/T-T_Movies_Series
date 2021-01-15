@@ -13,14 +13,11 @@ import com.evangelidis.t_tmoviesseries.room.WatchlistData
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_SMALL_BASE_URL
 import com.evangelidis.t_tmoviesseries.utils.InternetStatus
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.getGlideImage
+import com.evangelidis.t_tmoviesseries.view.watchlist.WatchlistActivity.Companion.Movie
+import com.evangelidis.t_tmoviesseries.view.watchlist.WatchlistActivity.Companion.TV
 import com.evangelidis.tantintoast.TanTinToast
 
 class WatchlistAdapter(var callback: WatchListItemCallback) : RecyclerView.Adapter<WatchlistAdapter.WatchlistViewHolder>() {
-
-    companion object {
-        const val TV = "TV"
-        const val Movie = "Movie"
-    }
 
     private val watchList = mutableListOf<WatchlistData>()
 
