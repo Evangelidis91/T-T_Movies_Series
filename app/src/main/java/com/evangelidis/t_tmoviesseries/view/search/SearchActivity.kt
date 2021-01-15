@@ -17,7 +17,7 @@ import com.evangelidis.t_tmoviesseries.databinding.ActivitySearchBinding
 import com.evangelidis.t_tmoviesseries.extensions.gone
 import com.evangelidis.t_tmoviesseries.extensions.show
 import com.evangelidis.t_tmoviesseries.model.Multisearch
-import com.evangelidis.t_tmoviesseries.room.DbWorkerThread
+import com.evangelidis.t_tmoviesseries.room.DatabaseQueries
 import com.evangelidis.t_tmoviesseries.room.WatchlistDataBase
 import com.evangelidis.t_tmoviesseries.utils.Constants.DATABASE_THREAD
 import com.evangelidis.t_tmoviesseries.utils.Constants.MOVIE_ID
@@ -63,10 +63,6 @@ class SearchActivity : AppCompatActivity() {
 
     private val trendsList = mutableListOf<Multisearch>()
 
-    private var mDb: WatchlistDataBase? = null
-    private lateinit var mDbWorkerThread: DbWorkerThread
-    private val mUiHandler = Handler()
-
     private var typeface: Typeface? = null
 
     val binding: ActivitySearchBinding by lazy { ActivitySearchBinding.inflate(layoutInflater) }
@@ -76,10 +72,6 @@ class SearchActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         typeface = ResourcesCompat.getFont(this, R.font.montserrat_regular)
-
-        mDbWorkerThread = DbWorkerThread(DATABASE_THREAD)
-        mDbWorkerThread.start()
-        mDb = WatchlistDataBase.getInstance(this)
 
         getDataFromDB()
 
@@ -139,14 +131,10 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun getDataFromDB() {
-        val task = Runnable {
-            val watchlistData = mDb?.todoDao()?.getAll()
-            mUiHandler.post {
-                if (!watchlistData.isNullOrEmpty()) {
-                    trendsAdapter.updateWatchlist(watchlistData)
-                }
+        DatabaseQueries.getSavedItems(this){watchlistData->
+            if (!watchlistData.isNullOrEmpty()) {
+                trendsAdapter.updateWatchlist(watchlistData)
             }
         }
-        mDbWorkerThread.postTask(task)
     }
 }

@@ -7,16 +7,12 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
-import android.view.LayoutInflater
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
-import android.widget.EditText
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,7 +28,7 @@ import com.evangelidis.t_tmoviesseries.view.login.LoginRegisterMethods
 import com.evangelidis.t_tmoviesseries.model.MessagePost
 import com.evangelidis.t_tmoviesseries.model.Movie
 import com.evangelidis.t_tmoviesseries.model.TvShow
-import com.evangelidis.t_tmoviesseries.room.DbWorkerThread
+import com.evangelidis.t_tmoviesseries.room.DatabaseQueries
 import com.evangelidis.t_tmoviesseries.room.WatchlistDataBase
 import com.evangelidis.t_tmoviesseries.utils.Constants.AIRING_TODAY_TV
 import com.evangelidis.t_tmoviesseries.utils.Constants.DATABASE_THREAD
@@ -58,8 +54,6 @@ import com.evangelidis.t_tmoviesseries.view.search.SearchActivity
 import com.evangelidis.t_tmoviesseries.view.tvshow.TvShowActivity
 import com.evangelidis.t_tmoviesseries.view.watchlist.WatchlistActivity
 import com.evangelidis.tantintoast.TanTinToast
-import com.google.android.material.navigation.NavigationView
-import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
@@ -107,10 +101,6 @@ class MainActivity : AppCompatActivity() {
 
     var listOfRetrievedPages = arrayListOf(1)
 
-    private var mDb: WatchlistDataBase? = null
-    private lateinit var mDbWorkerThread: DbWorkerThread
-    private val mUiHandler = Handler()
-
     private var typeface: Typeface? = null
 
     private val binding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
@@ -131,10 +121,6 @@ class MainActivity : AppCompatActivity() {
         binding.navigationDrawer.expandableLayoutTv.collapse()
         binding.navigationDrawer.expandableLayoutCommunicate.expand()
         binding.navigationDrawer.expandableLayoutSettings.collapse()
-
-        mDbWorkerThread = DbWorkerThread(DATABASE_THREAD)
-        mDbWorkerThread.start()
-        mDb = WatchlistDataBase.getInstance(this)
 
         getDataFromDB()
 
@@ -191,16 +177,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getDataFromDB() {
-        val task = Runnable {
-            val watchlistData = mDb?.todoDao()?.getAll()
-            mUiHandler.post {
-                watchlistData?.let {
-                    moviesListAdapter.updateWatchlist(it)
-                    tvShowAdapter.updateWatchlist(it)
-                }
+        DatabaseQueries.getSavedItems(this){watchlistData ->
+            watchlistData?.let {
+                moviesListAdapter.updateWatchlist(it)
+                tvShowAdapter.updateWatchlist(it)
             }
         }
-        mDbWorkerThread.postTask(task)
+
     }
 
     private fun observeViewModel() {

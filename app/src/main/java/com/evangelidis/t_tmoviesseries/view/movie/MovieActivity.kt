@@ -16,8 +16,6 @@ import com.evangelidis.t_tmoviesseries.extensions.gone
 import com.evangelidis.t_tmoviesseries.extensions.show
 import com.evangelidis.t_tmoviesseries.model.*
 import com.evangelidis.t_tmoviesseries.room.*
-import com.evangelidis.t_tmoviesseries.room.DatabaseManager.insertDataToDatabase
-import com.evangelidis.t_tmoviesseries.room.DatabaseManager.removeDataFromDatabase
 import com.evangelidis.t_tmoviesseries.utils.Constants
 import com.evangelidis.t_tmoviesseries.utils.Constants.CATEGORY_DIRECTOR
 import com.evangelidis.t_tmoviesseries.utils.Constants.CATEGORY_MOVIE
@@ -46,9 +44,6 @@ class MovieActivity : AppCompatActivity() {
 
     private lateinit var movie: MovieDetailsResponse
 
-    private var mDb: WatchlistDataBase? = null
-    private lateinit var mDbWorkerThread: DbWorkerThread
-    private val mUiHandler = Handler()
 
     private var typeface: Typeface? = null
 
@@ -61,10 +56,6 @@ class MovieActivity : AppCompatActivity() {
         typeface = ResourcesCompat.getFont(this, R.font.montserrat_regular)
 
         movieId = intent.getIntExtra(Constants.MOVIE_ID, movieId)
-
-        mDbWorkerThread = DbWorkerThread(DATABASE_THREAD)
-        mDbWorkerThread.start()
-        mDb = WatchlistDataBase.getInstance(this)
 
         getDataFromDB()
 
@@ -106,10 +97,10 @@ class MovieActivity : AppCompatActivity() {
 
             if (finder == null) {
                 binding.itemMovieWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
-                insertDataToDatabase(wishList, mDb, mDbWorkerThread)
+                DatabaseQueries.saveItem(this, wishList)
             } else {
                 binding.itemMovieWatchlist.setImageResource(R.drawable.ic_disable_watchlist)
-                removeDataFromDatabase(wishList, mDb, mDbWorkerThread)
+                DatabaseQueries.removeItem(this, wishList.itemId)
             }
         }
     }
@@ -347,20 +338,12 @@ class MovieActivity : AppCompatActivity() {
     }
 
     private fun getDataFromDB() {
-        Handler().postDelayed(
-            {
-                val task = Runnable {
-                    val watchlistData = mDb?.todoDao()?.getAll()
-                    mUiHandler.post {
-                        if (!watchlistData.isNullOrEmpty()) {
-                            watchlistList = watchlistData
-                            setWishListImage()
-                        }
-                    }
-                }
-                mDbWorkerThread.postTask(task)
-            }, 800
-        )
+        DatabaseQueries.getSavedItems(this){ watchlistData ->
+            if (!watchlistData.isNullOrEmpty()) {
+                watchlistList = watchlistData
+                setWishListImage()
+            }
+        }
     }
 
     private fun setWishListImage() {

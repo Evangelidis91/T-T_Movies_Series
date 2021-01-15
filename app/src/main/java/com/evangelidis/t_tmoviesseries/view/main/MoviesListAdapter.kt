@@ -10,8 +10,6 @@ import com.evangelidis.t_tmoviesseries.databinding.ItemMovieBinding
 import com.evangelidis.t_tmoviesseries.model.Genre
 import com.evangelidis.t_tmoviesseries.model.Movie
 import com.evangelidis.t_tmoviesseries.room.*
-import com.evangelidis.t_tmoviesseries.room.DatabaseManager.insertDataToDatabase
-import com.evangelidis.t_tmoviesseries.room.DatabaseManager.removeDataFromDatabase
 import com.evangelidis.t_tmoviesseries.utils.Constants.CATEGORY_MOVIE
 import com.evangelidis.t_tmoviesseries.utils.Constants.DATABASE_THREAD
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_SMALL_BASE_URL
@@ -23,8 +21,6 @@ class MoviesListAdapter(
     private var watchlistList: MutableList<WatchlistData>
 ) : RecyclerView.Adapter<MoviesListAdapter.MoviesViewHolder>() {
 
-    private var mDb: WatchlistDataBase? = null
-    private lateinit var mDbWorkerThread: DbWorkerThread
 
     private var genresList: ArrayList<Genre> = arrayListOf()
 
@@ -50,10 +46,7 @@ class MoviesListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
-        mDbWorkerThread = DbWorkerThread(DATABASE_THREAD)
-        mDbWorkerThread.start()
-        mDb = WatchlistDataBase.getInstance(parent.context)
-        return MoviesViewHolder(ItemMovieBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+        return MoviesViewHolder(ItemMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun getItemCount() = moviesListData.count()
@@ -88,29 +81,30 @@ class MoviesListAdapter(
             }
 
             binding.itemMovieWatchlist.setOnClickListener {
-                val wishList = WatchlistData()
-                wishList.itemId = movie.id
-                wishList.category = CATEGORY_MOVIE
-                wishList.name = movie.title.orEmpty()
-                wishList.posterPath = movie.posterPath.orEmpty()
-                wishList.releasedDate = movie.releaseDate.orEmpty()
-                movie.voteAverage?.let {
-                    wishList.rate = it
+                val watchItem = WatchlistData().apply {
+                    itemId = movie.id
+                    category = CATEGORY_MOVIE
+                    name = movie.title.orEmpty()
+                    posterPath = movie.posterPath.orEmpty()
+                    releasedDate = movie.releaseDate.orEmpty()
+                    movie.voteAverage?.let {
+                        rate = it
+                    }
                 }
 
                 if (watchlistList.isNullOrEmpty()) {
-                    insertDataToDatabase(wishList, mDb, mDbWorkerThread)
-                    watchlistList.add(wishList)
+                    DatabaseQueries.saveItem(binding.root.context, watchItem)
+                    watchlistList.add(watchItem)
                     binding.itemMovieWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
                 } else {
                     val finder = watchlistList.find { it.itemId == movie.id && it.category == CATEGORY_MOVIE }
                     if (finder != null) {
                         binding.itemMovieWatchlist.setImageResource(R.drawable.ic_disable_watchlist)
-                        removeDataFromDatabase(wishList, mDb, mDbWorkerThread)
-                        watchlistList.remove(wishList)
+                        DatabaseQueries.removeItem(binding.root.context, watchItem.itemId)
+                        watchlistList.remove(watchItem)
                     } else {
-                        insertDataToDatabase(wishList, mDb, mDbWorkerThread)
-                        watchlistList.add(wishList)
+                        DatabaseQueries.saveItem(binding.root.context, watchItem)
+                        watchlistList.add(watchItem)
                         binding.itemMovieWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
                     }
                 }
