@@ -8,8 +8,7 @@ import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.callbacks.OnWatchlistClickCallback
 import com.evangelidis.t_tmoviesseries.databinding.ItemSearchBinding
 import com.evangelidis.t_tmoviesseries.extensions.show
-import com.evangelidis.t_tmoviesseries.room.DatabaseManager.removeDataFromDatabase
-import com.evangelidis.t_tmoviesseries.room.DbWorkerThread
+import com.evangelidis.t_tmoviesseries.room.DatabaseQueries
 import com.evangelidis.t_tmoviesseries.room.WatchlistData
 import com.evangelidis.t_tmoviesseries.room.WatchlistDataBase
 import com.evangelidis.t_tmoviesseries.utils.Constants.DATABASE_THREAD
@@ -22,8 +21,6 @@ class WatchlistAdapter(
     var context: Context
 ) : RecyclerView.Adapter<WatchlistAdapter.WatchlistViewHolder>() {
     
-    private var mDb: WatchlistDataBase? = null
-    private lateinit var mDbWorkerThread: DbWorkerThread
 
     fun appendWatchlistData(watchlist: List<WatchlistData>) {
         watchlistList.clear()
@@ -32,9 +29,6 @@ class WatchlistAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WatchlistViewHolder {
-        mDbWorkerThread = DbWorkerThread(DATABASE_THREAD)
-        mDbWorkerThread.start()
-        mDb = WatchlistDataBase.getInstance(parent.context)
         return WatchlistViewHolder(ItemSearchBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
@@ -60,7 +54,7 @@ class WatchlistAdapter(
             getGlideImage(itemView.context, IMAGE_SMALL_BASE_URL.plus(watchlist.posterPath), binding.itemPoster)
 
             binding.itemWatchlist.setOnClickListener {
-                removeDataFromDatabase(watchlist, mDb, mDbWorkerThread)
+                DatabaseQueries.removeItem(binding.root.context, watchlist.itemId)
                 remove(position)
             }
         }

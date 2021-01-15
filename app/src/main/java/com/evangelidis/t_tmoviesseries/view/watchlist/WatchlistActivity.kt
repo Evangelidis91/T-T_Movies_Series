@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.evangelidis.t_tmoviesseries.R
@@ -12,11 +11,8 @@ import com.evangelidis.t_tmoviesseries.callbacks.OnWatchlistClickCallback
 import com.evangelidis.t_tmoviesseries.databinding.ActivityWatchlistBinding
 import com.evangelidis.t_tmoviesseries.extensions.gone
 import com.evangelidis.t_tmoviesseries.extensions.show
-import com.evangelidis.t_tmoviesseries.room.DbWorkerThread
-import com.evangelidis.t_tmoviesseries.room.WatchlistData
-import com.evangelidis.t_tmoviesseries.room.WatchlistDataBase
+import com.evangelidis.t_tmoviesseries.room.*
 import com.evangelidis.t_tmoviesseries.utils.Constants
-import com.evangelidis.t_tmoviesseries.utils.Constants.DATABASE_THREAD
 import com.evangelidis.t_tmoviesseries.utils.InternetStatus
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.underline
 import com.evangelidis.t_tmoviesseries.view.main.MainActivity
@@ -50,9 +46,6 @@ class WatchlistActivity : AppCompatActivity() {
     }
 
     private val watchlistAdapter = WatchlistAdapter(arrayListOf(), watchlistCallback, this)
-    private var mDb: WatchlistDataBase? = null
-    private lateinit var mDbWorkerThread: DbWorkerThread
-    private val mUiHandler = Handler()
 
     private var typeface: Typeface? = null
 
@@ -60,12 +53,8 @@ class WatchlistActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_watchlist)
+        setContentView(binding.root)
         typeface = ResourcesCompat.getFont(this, R.font.montserrat_regular)
-
-        mDbWorkerThread = DbWorkerThread(DATABASE_THREAD)
-        mDbWorkerThread.start()
-        mDb = WatchlistDataBase.getInstance(this)
 
         binding.toolbar.toolbarTitle.text = getString(R.string.my_watchlist).underline()
 
@@ -82,39 +71,26 @@ class WatchlistActivity : AppCompatActivity() {
         getDataFromDB()
     }
 
-    override fun onResume() {
-        super.onResume()
-        binding.loadingView.show()
-        getDataFromDB()
-    }
-
     private fun getDataFromDB() {
-        Handler().postDelayed(
-            {
-                val task = Runnable {
-                    val watchlistData = mDb?.todoDao()?.getAll()
-                    mUiHandler.post {
-                        if (!watchlistData.isNullOrEmpty()) {
-                            binding.emptyWatchlistText.gone()
-                            binding.watchlistList.apply {
-                                layoutManager = LinearLayoutManager(context)
-                                adapter = watchlistAdapter
-                            }
-                            watchlistAdapter.appendWatchlistData(watchlistData.reversed())
-
-                        } else {
-                            binding.emptyWatchlistText.show()
-                        }
-                        binding.loadingView.gone()
-                    }
+        DatabaseQueries.getSavedItems(this){ watchlistData ->
+            if (!watchlistData.isNullOrEmpty()) {
+                binding.emptyWatchlistText.gone()
+                binding.watchlistList.apply {
+                    layoutManager = LinearLayoutManager(context)
+                    adapter = watchlistAdapter
                 }
-                mDbWorkerThread.postTask(task)
-            },
-            400
-        )
+                watchlistAdapter.appendWatchlistData(watchlistData.reversed())
+                binding.loadingView.gone()
+
+            } else {
+                binding.emptyWatchlistText.show()
+            }
+            binding.loadingView.gone()
+        }
     }
 
     fun displayEmptyList() {
+        binding.watchlistList.gone()
         binding.emptyWatchlistText.show()
     }
 }

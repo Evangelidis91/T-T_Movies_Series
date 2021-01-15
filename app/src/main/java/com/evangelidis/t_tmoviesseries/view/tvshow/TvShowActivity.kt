@@ -15,8 +15,6 @@ import com.evangelidis.t_tmoviesseries.extensions.gone
 import com.evangelidis.t_tmoviesseries.extensions.show
 import com.evangelidis.t_tmoviesseries.model.*
 import com.evangelidis.t_tmoviesseries.room.*
-import com.evangelidis.t_tmoviesseries.room.DatabaseManager.insertDataToDatabase
-import com.evangelidis.t_tmoviesseries.room.DatabaseManager.removeDataFromDatabase
 import com.evangelidis.t_tmoviesseries.utils.Constants.CATEGORY_DIRECTOR
 import com.evangelidis.t_tmoviesseries.utils.Constants.CATEGORY_TV
 import com.evangelidis.t_tmoviesseries.utils.Constants.DATABASE_THREAD
@@ -45,10 +43,6 @@ class TvShowActivity : AppCompatActivity() {
 
     private var watchlistList: List<WatchlistData>? = null
 
-    private var mDb: WatchlistDataBase? = null
-    private lateinit var mDbWorkerThread: DbWorkerThread
-    private val mUiHandler = Handler()
-
     private val binding :ActivityTvShowBinding by lazy { ActivityTvShowBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,9 +51,6 @@ class TvShowActivity : AppCompatActivity() {
 
         tvShowId = intent.getIntExtra(TV_SHOW_ID, tvShowId)
 
-        mDbWorkerThread = DbWorkerThread(DATABASE_THREAD)
-        mDbWorkerThread.start()
-        mDb = WatchlistDataBase.getInstance(this)
 
         getDataFromDB()
 
@@ -79,10 +70,10 @@ class TvShowActivity : AppCompatActivity() {
 
             if (finder == null) {
                 binding.itemTvWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
-                insertDataToDatabase(wishList, mDb, mDbWorkerThread)
+                DatabaseQueries.saveItem(this, wishList)
             } else {
                 binding.itemTvWatchlist.setImageResource(R.drawable.ic_disable_watchlist)
-                removeDataFromDatabase(wishList, mDb, mDbWorkerThread)
+                DatabaseQueries.removeItem(this, wishList.itemId)
             }
         }
 
@@ -372,21 +363,12 @@ class TvShowActivity : AppCompatActivity() {
     }
 
     private fun getDataFromDB() {
-        Handler().postDelayed(
-            {
-                val task = Runnable {
-                    val watchlistData = mDb?.todoDao()?.getAll()
-                    mUiHandler.post {
-                        if (!watchlistData.isNullOrEmpty()) {
-                            watchlistList = watchlistData
-                            setWishListImage()
-                        }
-                    }
-                }
-                mDbWorkerThread.postTask(task)
-            },
-            800
-        )
+        DatabaseQueries.getSavedItems(this){watchlistData->
+            if (!watchlistData.isNullOrEmpty()) {
+                watchlistList = watchlistData
+                setWishListImage()
+            }
+        }
     }
 
     private fun setWishListImage() {

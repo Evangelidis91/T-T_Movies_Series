@@ -1,10 +1,7 @@
 package com.evangelidis.t_tmoviesseries.view.main
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.getGenres
 import com.evangelidis.t_tmoviesseries.callbacks.OnTvShowClickCallback
@@ -12,9 +9,7 @@ import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.databinding.ItemTvBinding
 import com.evangelidis.t_tmoviesseries.model.Genre
 import com.evangelidis.t_tmoviesseries.model.TvShow
-import com.evangelidis.t_tmoviesseries.room.DatabaseManager.insertDataToDatabase
-import com.evangelidis.t_tmoviesseries.room.DatabaseManager.removeDataFromDatabase
-import com.evangelidis.t_tmoviesseries.room.DbWorkerThread
+import com.evangelidis.t_tmoviesseries.room.DatabaseQueries
 import com.evangelidis.t_tmoviesseries.room.WatchlistData
 import com.evangelidis.t_tmoviesseries.room.WatchlistDataBase
 import com.evangelidis.t_tmoviesseries.utils.Constants.CATEGORY_TV
@@ -29,8 +24,6 @@ class TvShowAdapter(
 ) : RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
 
     private var genresList: ArrayList<Genre> = arrayListOf()
-    private var mDb: WatchlistDataBase? = null
-    private lateinit var mDbWorkerThread: DbWorkerThread
 
     fun updateData(newData: MutableList<TvShow>) {
         tvShowListData.clear()
@@ -54,9 +47,6 @@ class TvShowAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TvShowViewHolder {
-        mDbWorkerThread = DbWorkerThread(DATABASE_THREAD)
-        mDbWorkerThread.start()
-        mDb = WatchlistDataBase.getInstance(parent.context)
         return TvShowViewHolder(ItemTvBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
@@ -96,29 +86,30 @@ class TvShowAdapter(
             }
 
             binding.itemTvWatchlist.setOnClickListener {
-                val wishList = WatchlistData()
-                wishList.itemId = tv.id
-                wishList.category = CATEGORY_TV
-                wishList.name = tv.name.orEmpty()
-                wishList.posterPath = tv.posterPath.orEmpty()
-                wishList.releasedDate = tv.firstAirDate.orEmpty()
-                tv.voteAverage?.let {
-                    wishList.rate = it
+                val watchItem = WatchlistData().apply {
+                    itemId = tv.id
+                    category = CATEGORY_TV
+                    name = tv.name.orEmpty()
+                    posterPath = tv.posterPath.orEmpty()
+                    releasedDate = tv.firstAirDate.orEmpty()
+                    tv.voteAverage?.let {
+                        rate = it
+                    }
                 }
 
                 if (watchlistList.isNullOrEmpty()) {
-                    insertDataToDatabase(wishList, mDb, mDbWorkerThread)
-                    watchlistList.add(wishList)
+                    DatabaseQueries.saveItem(binding.root.context, watchItem)
+                    watchlistList.add(watchItem)
                     binding.itemTvWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
                 } else {
                     val finder = watchlistList.find { it.itemId == tv.id && it.category == CATEGORY_TV }
                     if (finder != null) {
                         binding.itemTvWatchlist.setImageResource(R.drawable.ic_disable_watchlist)
-                        removeDataFromDatabase(wishList, mDb, mDbWorkerThread)
-                        watchlistList.remove(wishList)
+                        DatabaseQueries.removeItem(binding.root.context, watchItem.itemId)
+                        watchlistList.remove(watchItem)
                     } else {
-                        insertDataToDatabase(wishList, mDb, mDbWorkerThread)
-                        watchlistList.add(wishList)
+                        DatabaseQueries.saveItem(binding.root.context, watchItem)
+                        watchlistList.add(watchItem)
                         binding.itemTvWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
                     }
                 }

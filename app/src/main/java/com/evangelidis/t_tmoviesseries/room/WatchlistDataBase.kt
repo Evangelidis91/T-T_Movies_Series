@@ -9,24 +9,19 @@ import com.evangelidis.t_tmoviesseries.utils.Constants.ROOM_DATABASE_NAME
 @Database(entities = [WatchlistData::class], version = 2)
 abstract class WatchlistDataBase : RoomDatabase() {
 
-    abstract fun todoDao(): TodoDao
+    abstract fun itemDao(): ItemDao
 
     companion object {
-        private var INSTANCE: WatchlistDataBase? = null
+        private var instance: WatchlistDataBase? = null
 
         fun getInstance(context: Context): WatchlistDataBase? {
-            if (INSTANCE == null){
+            if (instance == null){
                 synchronized(WatchlistDataBase::class){
-                    INSTANCE = Room.databaseBuilder(context.applicationContext,
-                        WatchlistDataBase::class.java, ROOM_DATABASE_NAME)
-                        .build()
+                    instance = Room.databaseBuilder(context, WatchlistDataBase::class.java, ROOM_DATABASE_NAME).build()
                 }
             }
-            return INSTANCE
+            return instance
         }
 
-        fun destroyInstance(){
-            INSTANCE = null
-        }
     }
 }

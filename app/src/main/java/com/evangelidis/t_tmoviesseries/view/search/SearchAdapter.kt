@@ -8,9 +8,7 @@ import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.databinding.ItemSearchBinding
 import com.evangelidis.t_tmoviesseries.extensions.gone
 import com.evangelidis.t_tmoviesseries.model.Multisearch
-import com.evangelidis.t_tmoviesseries.room.DatabaseManager.insertDataToDatabase
-import com.evangelidis.t_tmoviesseries.room.DatabaseManager.removeDataFromDatabase
-import com.evangelidis.t_tmoviesseries.room.DbWorkerThread
+import com.evangelidis.t_tmoviesseries.room.DatabaseQueries
 import com.evangelidis.t_tmoviesseries.room.WatchlistData
 import com.evangelidis.t_tmoviesseries.room.WatchlistDataBase
 import com.evangelidis.t_tmoviesseries.utils.Constants
@@ -25,8 +23,6 @@ class SearchAdapter(
     var watchlistList: MutableList<WatchlistData>
 ) : RecyclerView.Adapter<SearchAdapter.SearchViewHolder>() {
 
-    private var mDb: WatchlistDataBase? = null
-    private lateinit var mDbWorkerThread: DbWorkerThread
     private var category: String? = null
 
     fun appendTrendings(trendings: MutableList<Multisearch>) {
@@ -43,9 +39,6 @@ class SearchAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
-        mDbWorkerThread = DbWorkerThread(Constants.DATABASE_THREAD)
-        mDbWorkerThread.start()
-        mDb = WatchlistDataBase.getInstance(parent.context)
         return SearchViewHolder(ItemSearchBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
@@ -115,17 +108,17 @@ class SearchAdapter(
                 }
 
                 if (watchlistList.isNullOrEmpty()) {
-                    insertDataToDatabase(wishList, mDb, mDbWorkerThread)
+                    DatabaseQueries.saveItem(binding.root.context, wishList)
                     watchlistList.add(wishList)
                     binding.itemWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
                 } else {
                     val finder = watchlistList.find { it.itemId == trend.id && it.category == category }
                     if (finder != null) {
                         binding.itemWatchlist.setImageResource(R.drawable.ic_disable_watchlist)
-                        removeDataFromDatabase(wishList, mDb, mDbWorkerThread)
+                        DatabaseQueries.removeItem(binding.root.context, wishList.itemId)
                         watchlistList.remove(wishList)
                     } else {
-                        insertDataToDatabase(wishList, mDb, mDbWorkerThread)
+                        DatabaseQueries.saveItem(binding.root.context, wishList)
                         watchlistList.add(wishList)
                         binding.itemWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
                     }

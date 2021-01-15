@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.Query
 
 @Dao
-interface TodoDao {
+interface ItemDao {
     @Query("SELECT * FROM watchlistData")
     fun getAll(): MutableList<WatchlistData>
 
@@ -14,7 +14,4 @@ interface TodoDao {
 
     @Query("DELETE FROM watchlistData WHERE itemId = :itemId")
     fun deleteByUserId(itemId: Int)
-
-    //@Query("DELETE from watchlistData")
-    //fun deleteAll()
 }
