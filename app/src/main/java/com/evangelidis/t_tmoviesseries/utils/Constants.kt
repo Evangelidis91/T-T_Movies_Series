@@ -50,7 +50,4 @@ object Constants {
 
     const val TOTAL_SEASONS = "total_seasons"
     const val TV_SHOW_NAME = "tv_show_name"
-
-    const val BIOGRAPHY_TEXT = "biography_text"
-    const val ACTOR_NAME = "actor_name"
 }
