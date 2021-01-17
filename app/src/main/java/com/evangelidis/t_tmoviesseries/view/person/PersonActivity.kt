@@ -51,8 +51,7 @@ class PersonActivity : AppCompatActivity() {
         }
 
         binding.toolbar.searchIcn.setOnClickListener {
-            val intent = Intent(this@PersonActivity, SearchActivity::class.java)
-            startActivity(intent)
+            startActivity(SearchActivity.createIntent(this))
         }
 
         observeViewModel()

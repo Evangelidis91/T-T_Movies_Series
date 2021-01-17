@@ -78,8 +78,7 @@ class TvShowActivity : AppCompatActivity() {
         }
 
         binding.toolbar.searchIcn.setOnClickListener {
-            val intent = Intent(this@TvShowActivity, SearchActivity::class.java)
-            startActivity(intent)
+            startActivity(SearchActivity.createIntent(this))
         }
 
         binding.tvShowAllSeasons.setOnClickListener {

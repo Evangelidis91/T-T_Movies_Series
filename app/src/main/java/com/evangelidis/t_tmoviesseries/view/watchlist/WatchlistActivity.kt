@@ -54,7 +54,7 @@ class WatchlistActivity : AppCompatActivity(), WatchListItemCallback {
                 startActivity(Intent(this@WatchlistActivity, MainActivity::class.java))
             }
             searchIcn.setOnClickListener {
-                startActivity(Intent(this@WatchlistActivity, SearchActivity::class.java))
+                startActivity(SearchActivity.createIntent(this@WatchlistActivity))
             }
         }
     }

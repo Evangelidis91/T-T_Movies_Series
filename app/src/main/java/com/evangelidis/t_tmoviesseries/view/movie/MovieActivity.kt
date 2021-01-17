@@ -61,8 +61,7 @@ class MovieActivity : AppCompatActivity() {
         }
 
         binding.toolbar.searchIcn.setOnClickListener {
-            val intent = Intent(this@MovieActivity, SearchActivity::class.java)
-            startActivity(intent)
+            startActivity(SearchActivity.createIntent(this))
         }
 
         viewModel = ViewModelProviders.of(this).get(ViewModelMovie::class.java)

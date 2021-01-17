@@ -42,7 +42,7 @@ class BiographyActivity : AppCompatActivity() {
                 startActivity(Intent(this@BiographyActivity, MainActivity::class.java))
             }
             searchIcn.setOnClickListener {
-                startActivity(Intent(this@BiographyActivity, SearchActivity::class.java))
+                startActivity(SearchActivity.createIntent(this@BiographyActivity))
             }
         }
     }

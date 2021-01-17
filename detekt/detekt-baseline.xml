@@ -11,8 +11,8 @@
     <ID>LongMethod:LoginButton.kt$LoginButton.&lt;no name provided&gt;$onAnimationEnd</ID>
     <ID>LongMethod:MainActivity.kt$MainActivity$setupNavigationViewClickListeners</ID>
     <ID>LongMethod:MainActivity.kt$MainActivity$submitMessage</ID>
-    <ID>LongMethod:SearchAdapter.kt$SearchAdapter.SearchViewHolder$bind</ID>
     <ID>LongMethod:TvShowActivity.kt$TvShowActivity$setUpUI</ID>
+    <ID>LongParameterList:SearchAdapter.kt$SearchAdapter$(imageView: ImageView, id: Int, category: String, title: String?, posterPath: String?, releaseDate: String?, voteAverage: Double?)</ID>
     <ID>MagicNumber:LoginActivity.kt$LoginActivity$90f</ID>
     <ID>MagicNumber:LoginActivity.kt$LoginActivity.&lt;no name provided&gt;$90f</ID>
     <ID>MagicNumber:LoginButton.kt$LoginButton$16</ID>
@@ -44,7 +44,6 @@
     <ID>MagicNumber:MovieActivity.kt$MovieActivity$60</ID>
     <ID>MagicNumber:MyBounceInterpolator.kt$MyBounceInterpolator$10.0</ID>
     <ID>MagicNumber:PersonActivity.kt$PersonActivity$4</ID>
-    <ID>MagicNumber:SearchActivity.kt$SearchActivity$5</ID>
     <ID>MagicNumber:TvShowActivity.kt$TvShowActivity$4</ID>
     <ID>MatchingDeclarationName:WatchlistCallback.kt$WatchListItemCallback</ID>
     <ID>NestedBlockDepth:ItemsManager.kt$ItemsManager$getGenres</ID>
@@ -59,7 +58,6 @@
     <ID>TooManyFunctions:TMDBService.kt$TMDBService$TMDBService</ID>
     <ID>TooManyFunctions:ViewExtensions.kt$com.evangelidis.t_tmoviesseries.extensions.ViewExtensions.kt</ID>
     <ID>TooManyFunctions:ViewModelMain.kt$ViewModelMain$ViewModelMain</ID>
-    <ID>UnusedPrivateMember:SearchActivity.kt$SearchActivity$x</ID>
     <ID>UnusedPrivateMember:ViewModelMovie.kt$ViewModelMovie$private fun fetchMovieGenres()</ID>
   </Whitelist>
 </SmellBaseline>
