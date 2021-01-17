@@ -137,8 +137,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.appBar.searchIcn.setOnClickListener {
-            val intent = Intent(this@MainActivity, SearchActivity::class.java)
-            startActivity(intent)
+            startActivity(SearchActivity.createIntent(this))
         }
 
         observeViewModel()

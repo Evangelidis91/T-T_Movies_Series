@@ -3,6 +3,7 @@ package com.evangelidis.t_tmoviesseries.view.search
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.evangelidis.t_tmoviesseries.di.DaggerApiComponent
+import com.evangelidis.t_tmoviesseries.model.GenresResponse
 import com.evangelidis.t_tmoviesseries.model.MultisearchResponse
 import com.evangelidis.t_tmoviesseries.model.api.TMDBService
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -22,26 +23,36 @@ class ViewModelSearch : ViewModel() {
         DaggerApiComponent.create().inject(this)
     }
 
-    val trendings = MutableLiveData<MultisearchResponse>()
-    val multisearch = MutableLiveData<MultisearchResponse>()
+    val trends = MutableLiveData<MultisearchResponse>()
+    val multiSearch = MutableLiveData<MultisearchResponse>()
+    val genresMovieData = MutableLiveData<GenresResponse>()
+    val genresTvShowData = MutableLiveData<GenresResponse> ()
     val loadError = MutableLiveData<Boolean>()
 
-    fun getTrendings(pageNumber: Int) {
-        fetchTrendings(pageNumber)
+    fun getTrends(pageNumber: Int) {
+        fetchTrends(pageNumber)
     }
 
-    fun getMultisearchResult(query: String, pageNumber: Int) {
-        fetchMultisearch(query, pageNumber)
+    fun getMultiSearchResult(query: String, pageNumber: Int) {
+        fetchMultiSearch(query, pageNumber)
     }
 
-    private fun fetchTrendings(pageNumber: Int) {
+    fun getMoviesGenres() {
+        fetchMovieGenres()
+    }
+
+    fun getTvShowGenres() {
+        fetchTvShowGenres()
+    }
+
+    private fun fetchTrends(pageNumber: Int) {
         disposable.add(
             tmdbService.getTrendings(pageNumber)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<MultisearchResponse>() {
                     override fun onSuccess(t: MultisearchResponse) {
-                        trendings.value = t
+                        trends.value = t
                     }
 
                     override fun onError(e: Throwable) {
@@ -51,19 +62,51 @@ class ViewModelSearch : ViewModel() {
         )
     }
 
-    private fun fetchMultisearch(query: String, pageNumber: Int) {
+    private fun fetchMultiSearch(query: String, pageNumber: Int) {
         disposable.add(
             tmdbService.getMultiSearchResult(query, pageNumber)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<MultisearchResponse>() {
                     override fun onSuccess(t: MultisearchResponse) {
-                        multisearch.value = t
+                        multiSearch.value = t
                     }
 
                     override fun onError(e: Throwable) {
                         loadError.value = true
                     }
+                })
+        )
+    }
+
+    private fun fetchMovieGenres() {
+        disposable.add(
+            tmdbService.getMoviesGenres()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<GenresResponse>() {
+                    override fun onSuccess(t: GenresResponse) {
+                        genresMovieData.value = t
+                        loadError.value = false
+                    }
+
+                    override fun onError(e: Throwable) {}
+                })
+        )
+    }
+
+    private fun fetchTvShowGenres() {
+        disposable.add(
+            tmdbService.getTvGenres()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<GenresResponse>() {
+                    override fun onSuccess(t: GenresResponse) {
+                        genresTvShowData.value = t
+                        loadError.value = false
+                    }
+
+                    override fun onError(e: Throwable) {}
                 })
         )
     }
