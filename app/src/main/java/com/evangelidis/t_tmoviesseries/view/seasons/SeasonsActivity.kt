@@ -56,14 +56,6 @@ class SeasonsActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun setAdapter() {
-        listOfSeasons.sortBy { it.seasonNumber }
-        for (x in 0 until listOfSeasons.size) {
-            adapter.addFragment(SeasonEpisodesFragment(listOfSeasons[x]), listOfSeasons[x].seasonNumber.toString())
-            binding.viewpager.adapter = adapter
-        }
-    }
-
     private fun observeViewModel() {
         viewModel.tvShowSeasonDetails.observe(this, Observer { data ->
             data?.let {
@@ -73,5 +65,13 @@ class SeasonsActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun setAdapter() {
+        listOfSeasons.sortBy { it.seasonNumber }
+        for (x in 0 until listOfSeasons.size) {
+            adapter.addFragment(SeasonEpisodesFragment(listOfSeasons[x]), listOfSeasons[x].seasonNumber.toString())
+            binding.viewpager.adapter = adapter
+        }
     }
 }
