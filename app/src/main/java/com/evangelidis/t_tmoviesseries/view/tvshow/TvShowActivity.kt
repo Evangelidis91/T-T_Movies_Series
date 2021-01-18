@@ -16,9 +16,7 @@ import com.evangelidis.t_tmoviesseries.utils.Constants.CATEGORY_TV
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_POSTER_BASE_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_SMALL_BASE_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.PERSON_ID
-import com.evangelidis.t_tmoviesseries.utils.Constants.TOTAL_SEASONS
 import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_ID
-import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_NAME
 import com.evangelidis.t_tmoviesseries.utils.Constants.YOUTUBE_THUMBNAIL_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.YOUTUBE_VIDEO_URL
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.getGlideImage
@@ -82,13 +80,7 @@ class TvShowActivity : AppCompatActivity() {
         }
 
         binding.tvShowAllSeasons.setOnClickListener {
-            val intent = Intent(this@TvShowActivity, SeasonsActivity::class.java)
-            intent.apply {
-                putExtra(TOTAL_SEASONS, totalSeasonsNumber)
-                putExtra(TV_SHOW_NAME, binding.tvShowTitle.text)
-                putExtra(TV_SHOW_ID, tvShowId)
-            }
-            startActivity(intent)
+            startActivity(SeasonsActivity.createIntent(this, totalSeasonsNumber, tvShowId, binding.tvShowTitle.text.toString()))
         }
 
         viewModel = ViewModelProviders.of(this).get(ViewModelTvShow::class.java)

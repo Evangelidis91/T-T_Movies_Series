@@ -1,5 +1,7 @@
 package com.evangelidis.t_tmoviesseries.view.seasons
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -7,29 +9,33 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.evangelidis.t_tmoviesseries.databinding.ActivitySeasonsBinding
 import com.evangelidis.t_tmoviesseries.model.TvShowSeasonResponse
-import com.evangelidis.t_tmoviesseries.utils.Constants.TOTAL_SEASONS
-import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_ID
-import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_NAME
 
 class SeasonsActivity : AppCompatActivity() {
 
-    private var numberOfSeasons = 1
-    private var tvShowId = 0
+    companion object {
+        const val TOTAL_SEASONS = "TOTAL_SEASONS"
+        const val TV_SHOW_ID = "TV_SHOW_ID"
+        const val TV_SHOW_NAME = "TV_SHOW_NAME"
+
+        fun createIntent(context: Context, seasonsNumber: Int, showId: Int, name: String): Intent =
+            Intent(context, SeasonsActivity::class.java)
+                .putExtra(TOTAL_SEASONS, seasonsNumber)
+                .putExtra(TV_SHOW_ID, showId)
+                .putExtra(TV_SHOW_NAME, name)
+    }
 
     private lateinit var viewModel: ViewModelSeasons
-
     private var listOfSeasons: MutableList<TvShowSeasonResponse> = mutableListOf()
 
-    val adapter = SeasonsViewPagerAdapter(supportFragmentManager)
-
+    private val adapter = SeasonsViewPagerAdapter(supportFragmentManager)
     private val binding: ActivitySeasonsBinding by lazy { ActivitySeasonsBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        numberOfSeasons = intent.getIntExtra(TOTAL_SEASONS, 1)
-        tvShowId = intent.getIntExtra(TV_SHOW_ID, tvShowId)
+        val numberOfSeasons = intent.getIntExtra(TOTAL_SEASONS, 1)
+        val tvShowId = intent.getIntExtra(TV_SHOW_ID, 1)
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -43,7 +49,7 @@ class SeasonsActivity : AppCompatActivity() {
             viewModel.getTvShowSeasonDetails(tvShowId, x)
         }
 
-        observeViewModel()
+        observeViewModel(numberOfSeasons)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -56,7 +62,7 @@ class SeasonsActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun observeViewModel() {
+    private fun observeViewModel(numberOfSeasons: Int) {
         viewModel.tvShowSeasonDetails.observe(this, Observer { data ->
             data?.let {
                 listOfSeasons.add(it)
