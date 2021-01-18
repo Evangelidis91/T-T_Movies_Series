@@ -19,7 +19,6 @@ class ViewModelSeasons : ViewModel() {
     private val disposable = CompositeDisposable()
 
     val tvShowSeasonDetails = MutableLiveData<TvShowSeasonResponse>()
-
     val loadError = MutableLiveData<Boolean>()
 
     init {

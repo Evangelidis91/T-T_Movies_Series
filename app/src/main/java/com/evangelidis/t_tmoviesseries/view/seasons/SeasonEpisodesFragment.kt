@@ -12,11 +12,11 @@ import com.evangelidis.t_tmoviesseries.model.TvShowSeasonResponse
 class SeasonEpisodesFragment(seasonDetailsResponse: TvShowSeasonResponse) : Fragment() {
 
     private var seasonDetails = seasonDetailsResponse
-    private var episodesListAdapter: EpisodesListAdapter? = null
+    private var episodesListAdapter = EpisodesListAdapter()
     private val binding: FragmentSeasonEpisodesBinding by lazy { FragmentSeasonEpisodesBinding.inflate(layoutInflater) }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        episodesListAdapter = EpisodesListAdapter(seasonDetails.episodes)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        episodesListAdapter.episodes = seasonDetails.episodes
         binding.episodesList.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = episodesListAdapter

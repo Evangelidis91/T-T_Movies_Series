@@ -38,6 +38,7 @@ object Constants {
 
     const val IMAGE_POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500"
     const val IMAGE_SMALL_BASE_URL = "https://image.tmdb.org/t/p/w154"
+    const val IMAGE_MEDIUM_BASE_URL = "https://image.tmdb.org/t/p/w300"
     const val YOUTUBE_VIDEO_URL = "https://www.youtube.com/watch?v=%s"
     const val YOUTUBE_THUMBNAIL_URL = "https://img.youtube.com/vi/%s/0.jpg"
 
