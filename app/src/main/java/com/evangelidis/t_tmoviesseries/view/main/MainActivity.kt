@@ -33,7 +33,6 @@ import com.evangelidis.t_tmoviesseries.utils.Constants.FIREBASE_MESSAGES_DATABAS
 import com.evangelidis.t_tmoviesseries.utils.Constants.IS_LOGIN_SKIPPED
 import com.evangelidis.t_tmoviesseries.utils.Constants.IS_NOTIFICATION_ON
 import com.evangelidis.t_tmoviesseries.utils.Constants.IS_SYNC_WATCHLIST_ON
-import com.evangelidis.t_tmoviesseries.utils.Constants.MOVIE_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.ON_THE_AIR_TV
 import com.evangelidis.t_tmoviesseries.utils.Constants.PLAYING_NOW_MOVIES
 import com.evangelidis.t_tmoviesseries.utils.Constants.POPULAR_MOVIES
@@ -65,9 +64,7 @@ class MainActivity : AppCompatActivity() {
         OnMoviesClickCallback {
         override fun onClick(movie: Movie) {
             if (InternetStatus.getInstance(applicationContext).isOnline) {
-                val intent = Intent(this@MainActivity, MovieActivity::class.java)
-                intent.putExtra(MOVIE_ID, movie.id)
-                startActivity(intent)
+                startActivity(MovieActivity.createIntent(this@MainActivity, movie.id))
             } else {
                 TanTinToast.Warning(this@MainActivity).text(getString(R.string.no_internet)).typeface(typeface).show()
             }

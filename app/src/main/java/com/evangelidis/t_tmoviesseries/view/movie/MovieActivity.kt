@@ -1,5 +1,6 @@
 package com.evangelidis.t_tmoviesseries.view.movie
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
@@ -9,19 +10,19 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.databinding.*
-import com.evangelidis.t_tmoviesseries.extensions.gone
-import com.evangelidis.t_tmoviesseries.extensions.show
+import com.evangelidis.t_tmoviesseries.extensions.*
 import com.evangelidis.t_tmoviesseries.model.*
 import com.evangelidis.t_tmoviesseries.room.*
-import com.evangelidis.t_tmoviesseries.utils.Constants
 import com.evangelidis.t_tmoviesseries.utils.Constants.CATEGORY_DIRECTOR
 import com.evangelidis.t_tmoviesseries.utils.Constants.CATEGORY_MOVIE
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_POSTER_BASE_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_SMALL_BASE_URL
+import com.evangelidis.t_tmoviesseries.utils.Constants.PERSON_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.YOUTUBE_THUMBNAIL_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.YOUTUBE_VIDEO_URL
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.changeDateFormat
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.getGlideImage
+import com.evangelidis.t_tmoviesseries.utils.ItemsManager.getImageTopRadius
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.showTrailer
 import com.evangelidis.t_tmoviesseries.view.main.MainActivity
 import com.evangelidis.t_tmoviesseries.view.person.PersonActivity
@@ -35,7 +36,14 @@ import kotlin.math.roundToInt
 
 class MovieActivity : AppCompatActivity() {
 
-    private var movieId = 0
+    companion object {
+        const val MOVIE_ID = "MOVIE_ID"
+
+        fun createIntent(context: Context, movieId: Int): Intent =
+            Intent(context, MovieActivity::class.java)
+                .putExtra(MOVIE_ID, movieId)
+    }
+
     private lateinit var viewModel: ViewModelMovie
     private var watchlistList: List<WatchlistData>? = null
 
@@ -51,18 +59,7 @@ class MovieActivity : AppCompatActivity() {
 
         typeface = ResourcesCompat.getFont(this, R.font.montserrat_regular)
 
-        movieId = intent.getIntExtra(Constants.MOVIE_ID, movieId)
-
-        getDataFromDB()
-
-        binding.toolbar.imageToMain.setOnClickListener {
-            val intent = Intent(this@MovieActivity, MainActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.toolbar.searchIcn.setOnClickListener {
-            startActivity(SearchActivity.createIntent(this))
-        }
+        val movieId = intent.getIntExtra(MOVIE_ID, 0)
 
         viewModel = ViewModelProviders.of(this).get(ViewModelMovie::class.java)
 
@@ -74,28 +71,19 @@ class MovieActivity : AppCompatActivity() {
             getMovieRecommendation(movieId)
         }
 
+        getDataFromDB(movieId)
+        setToolbar()
         observeViewModel()
+    }
 
-        binding.itemMovieWatchlist.setOnClickListener {
-            val finder = watchlistList?.find { it.itemId == movieId }
-            val wishList = WatchlistData()
-            wishList.apply {
-                itemId = movieId
-                category = CATEGORY_MOVIE
-                name = movie.title.orEmpty()
-                posterPath = movie.posterPath.orEmpty()
-                releasedDate = movie.releaseDate.orEmpty()
+    private fun setToolbar() {
+        with(binding.toolbar) {
+            imageToMain.setOnClickListener {
+                val intent = Intent(this@MovieActivity, MainActivity::class.java)
+                startActivity(intent)
             }
-            movie.voteAverage?.let {
-                wishList.rate = it
-            }
-
-            if (finder == null) {
-                binding.itemMovieWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
-                DatabaseQueries.saveItem(this, wishList)
-            } else {
-                binding.itemMovieWatchlist.setImageResource(R.drawable.ic_disable_watchlist)
-                DatabaseQueries.removeItem(this, wishList.itemId)
+            searchIcn.setOnClickListener {
+                startActivity(SearchActivity.createIntent(this@MovieActivity))
             }
         }
     }
@@ -111,9 +99,8 @@ class MovieActivity : AppCompatActivity() {
                 movie = it
                 setUpUI(data)
                 data.genres?.let {
-                    setUpGenres(data.genres)
+                    setUpGenres(it)
                 }
-                binding.progressBar.gone()
             }
         })
 
@@ -126,26 +113,34 @@ class MovieActivity : AppCompatActivity() {
 
         viewModel.movieVideos.observe(this, Observer { data ->
             data.results?.let {
-                setUpVideosUI(data.results)
+                setUpVideosUI(it)
             }
         })
 
         viewModel.movieSimilar.observe(this, Observer { data ->
             data?.let {
-                setUpSimilarMoviesUI(data)
+                setUpSimilarMoviesUI(it)
             }
         })
 
         viewModel.movieRecommendation.observe(this, Observer { data ->
             data?.let {
-                setUpRecommendationMoviesUI(data)
+                setUpRecommendationMoviesUI(it)
             }
         })
 
-        viewModel.loadError.observe(this, Observer { data ->
-            data?.let {
+        viewModel.loadError.observe(this, Observer {
+            if (it) {
                 TanTinToast.Warning(this).text(getString(R.string.error_for_data)).typeface(typeface).show()
                 finish()
+            }
+        })
+
+        viewModel.loading.observe(this, Observer {
+            if (it) {
+                binding.progressBar.show()
+            } else {
+                binding.progressBar.gone()
             }
         })
     }
@@ -156,16 +151,13 @@ class MovieActivity : AppCompatActivity() {
             if (it.isNotEmpty()) {
                 for (result in it) {
                     val item = ThumbnailMovieBinding.inflate(layoutInflater)
+                    getImageTopRadius(this, IMAGE_SMALL_BASE_URL.plus(result.posterPath), item.thumbnail)
                     item.movieName.text = result.title
                     item.movieRate.text = getString(R.string.movie_rate).replace("{MOVIE_RATE}", result.voteAverage.toString())
-
-                    getGlideImage(this, IMAGE_SMALL_BASE_URL.plus(result.posterPath), item.thumbnail)
-
                     item.thumbnail.setOnClickListener {
-                        val intent = Intent(this, MovieActivity::class.java)
-                        intent.putExtra(Constants.MOVIE_ID, result.id)
-                        startActivity(intent)
+                        startActivity(createIntent(this, result.id))
                     }
+                    item.root.updatePadding(left = 20, right = 20, bottom = 20)
                     binding.movieRecommendations.addView(item.root)
                 }
                 binding.recommendationsMoviesContainer.show()
@@ -179,16 +171,13 @@ class MovieActivity : AppCompatActivity() {
             if (it.isNotEmpty()) {
                 for (similarResult in it) {
                     val item = ThumbnailMovieBinding.inflate(layoutInflater)
+                    getImageTopRadius(this, IMAGE_SMALL_BASE_URL.plus(similarResult.posterPath), item.thumbnail)
                     item.movieName.text = similarResult.title
-                    item.movieRate.text = getString(R.string.movie_rate).replace("{MOVIE_RATE}", similarResult.voteAverage.toString())
-
-                    getGlideImage(this, IMAGE_SMALL_BASE_URL.plus(similarResult.posterPath), item.thumbnail)
-
+                    item.movieRate.text = similarResult.voteAverage.toString()
                     item.thumbnail.setOnClickListener {
-                        val intent = Intent(this, MovieActivity::class.java)
-                        intent.putExtra(Constants.MOVIE_ID, similarResult.id)
-                        startActivity(intent)
+                        startActivity(createIntent(this, similarResult.id))
                     }
+                    item.root.updatePadding(left = 20, right = 20, bottom = 20)
                     binding.movieSimilar.addView(item.root)
                 }
                 binding.similarMoviesContainer.show()
@@ -204,7 +193,7 @@ class MovieActivity : AppCompatActivity() {
                     val item = ThumbnailTrailerBinding.inflate(layoutInflater)
                     getGlideImage(this, YOUTUBE_THUMBNAIL_URL.replace("%s", video.key.orEmpty()), item.thumbnail)
 
-                    item.thumbnail.setOnClickListener {
+                    item.root.setOnClickListener {
                         showTrailer(String.format(YOUTUBE_VIDEO_URL, video.key), applicationContext)
                     }
                     binding.movieVideos.addView(item.root)
@@ -220,16 +209,15 @@ class MovieActivity : AppCompatActivity() {
             if (it.isNotEmpty()) {
                 for (cast in it) {
                     val item = ThumbnailActorsListBinding.inflate(layoutInflater)
+                    getImageTopRadius(this, IMAGE_SMALL_BASE_URL.plus(cast.profilePath), item.thumbnail)
                     item.actorName.text = cast.name
                     item.actorCharacter.text = cast.character
-
-                    getGlideImage(this, IMAGE_SMALL_BASE_URL.plus(cast.profilePath), item.thumbnail)
-
                     item.thumbnail.setOnClickListener {
                         val intent = Intent(this@MovieActivity, PersonActivity::class.java)
-                        intent.putExtra(Constants.PERSON_ID, cast.id)
+                        intent.putExtra(PERSON_ID, cast.id)
                         startActivity(intent)
                     }
+                    item.root.updatePadding(left = 20, right = 20, bottom = 20)
                     binding.movieActors.addView(item.root)
                 }
                 binding.actorsContainer.show()
@@ -285,8 +273,8 @@ class MovieActivity : AppCompatActivity() {
         binding.movieRating.text = data.voteAverage.toString()
         binding.totalVotes.text = data.voteCount.toString()
 
-        if (!data.releaseDate.isNullOrEmpty()) {
-            binding.movieReleaseDate.text = changeDateFormat(data.releaseDate)
+        data.releaseDate?.let {
+            binding.movieReleaseDate.text = changeDateFormat(it)
             binding.movieReleaseDate.show()
         }
 
@@ -297,8 +285,8 @@ class MovieActivity : AppCompatActivity() {
             }
         }
 
-        if (!data.overview.isNullOrEmpty()) {
-            binding.movieDetailsOverview.text = data.overview
+        data.overview?.let {
+            binding.movieDetailsOverview.text = it
             binding.summaryContainer.show()
         }
 
@@ -317,6 +305,10 @@ class MovieActivity : AppCompatActivity() {
             }
         }
 
+        if (data.adult.orFalse()) {
+            binding.adultImage.show()
+        }
+
         data.productionCompanies?.let {
             if (it.isNotEmpty()) {
                 binding.productionCompanies.removeAllViews()
@@ -332,19 +324,42 @@ class MovieActivity : AppCompatActivity() {
         }
     }
 
-    private fun getDataFromDB() {
+    private fun getDataFromDB(movieId: Int) {
         DatabaseQueries.getSavedItems(this) { watchlistData ->
             if (!watchlistData.isNullOrEmpty()) {
                 watchlistList = watchlistData
-                setWishListImage()
+                setWishListImage(movieId)
             }
         }
     }
 
-    private fun setWishListImage() {
-        val finder = watchlistList?.find { it.itemId == movieId }
-        if (finder != null) {
+    private fun setWishListImage(movieId: Int) {
+        if (watchlistList?.find { it.itemId == movieId } != null) {
             binding.itemMovieWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
+        }
+
+        binding.itemMovieWatchlist.setOnClickListener {
+            val wishList = WatchlistData().apply {
+                itemId = movieId
+                category = CATEGORY_MOVIE
+                name = movie.title.orEmpty()
+                posterPath = movie.posterPath.orEmpty()
+                releasedDate = movie.releaseDate.orEmpty()
+            }
+            movie.voteAverage?.let {
+                wishList.rate = it
+            }
+
+            if (watchlistList?.find { it.itemId == movieId } == null) {
+                DatabaseQueries.saveItem(this, wishList) {
+                    binding.itemMovieWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
+                }
+            } else {
+                DatabaseQueries.removeItem(this, wishList.itemId) {
+                    binding.itemMovieWatchlist.setImageResource(R.drawable.ic_disable_watchlist)
+                }
+            }
+            getDataFromDB(movieId)
         }
     }
 

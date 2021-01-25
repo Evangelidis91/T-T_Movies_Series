@@ -70,7 +70,7 @@
     <string name="summary">Summary</string>
     <string name="directors">Directors</string>
     <string name="budget">Budget</string>
-    <string name="box_office">Box Office</string>
+    <string name="box_office">Revenue</string>
     <string name="actors">Actors</string>
     <string name="videos">Videos</string>
     <string name="similar_movies">Similar Movies</string>

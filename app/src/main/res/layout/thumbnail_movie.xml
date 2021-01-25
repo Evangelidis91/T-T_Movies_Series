@@ -1,34 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginEnd="10dp"
-    android:clickable="true"
-    android:focusable="true"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/thumbnail"
-        android:layout_width="120dp"
-        android:layout_height="150dp"
-        android:contentDescription="@string/none" />
+        android:layout_width="130dp"
+        android:layout_height="195dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/movie_name"
-        android:layout_width="120dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/montserrat_light"
-        android:gravity="center"
-        android:textColor="@color/white" />
+        android:background="@drawable/item_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/thumbnail">
 
-    <TextView
-        android:id="@+id/movie_rate"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/montserrat_light"
-        android:gravity="center"
-        android:textColor="#80ffffff" />
+        <TextView
+            android:id="@+id/movie_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/montserrat_regular"
+            android:gravity="center"
+            android:maxLines="2"
+            android:lines="2"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Godzilla" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/movie_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:fontFamily="@font/montserrat_light"
+            android:textColor="#80ffffff"
+            app:layout_constraintBottom_toBottomOf="@id/start_icn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/start_icn"
+            app:layout_constraintTop_toTopOf="@id/start_icn"
+            tools:text="5.2" />
+
+        <ImageView
+            android:id="@+id/start_icn"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="2dp"
+            app:layout_constraintEnd_toStartOf="@id/movie_rate"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintTop_toBottomOf="@id/movie_name"
+            app:srcCompat="@drawable/ic_star" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

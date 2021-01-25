@@ -18,7 +18,6 @@ class ViewModelMovie : ViewModel() {
 
     private val disposable = CompositeDisposable()
 
-    val genresMovieData = MutableLiveData<GenresResponse>()
     val movieDetails = MutableLiveData<MovieDetailsResponse>()
     val movieCredits = MutableLiveData<MovieCredits>()
     val movieVideos = MutableLiveData<VideosResponse>()
@@ -51,24 +50,8 @@ class ViewModelMovie : ViewModel() {
         fetchMovieRecommendation(id)
     }
 
-    private fun fetchMovieGenres() {
-        disposable.add(
-            tmdbService.getMoviesGenres()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<GenresResponse>() {
-                    override fun onSuccess(t: GenresResponse) {
-                        genresMovieData.value = t
-                        loadError.value = false
-                        loading.value = false
-                    }
-
-                    override fun onError(e: Throwable) {}
-                })
-        )
-    }
-
     private fun fetchMovieDetails(id: Int) {
+        loading.value = true
         disposable.add(
             tmdbService.getMovieDetails(id)
                 .subscribeOn(Schedulers.newThread())
@@ -76,16 +59,20 @@ class ViewModelMovie : ViewModel() {
                 .subscribeWith(object : DisposableSingleObserver<MovieDetailsResponse>() {
                     override fun onSuccess(t: MovieDetailsResponse) {
                         movieDetails.value = t
+                        loadError.value = false
+                        loading.value = false
                     }
 
                     override fun onError(e: Throwable) {
                         loadError.value = true
+                        loading.value = false
                     }
                 })
         )
     }
 
     private fun fetchMovieCredits(id: Int) {
+        loading.value = true
         disposable.add(
             tmdbService.getMovieCredits(id)
                 .subscribeOn(Schedulers.newThread())
@@ -93,16 +80,20 @@ class ViewModelMovie : ViewModel() {
                 .subscribeWith(object : DisposableSingleObserver<MovieCredits>() {
                     override fun onSuccess(t: MovieCredits) {
                         movieCredits.value = t
+                        loadError.value = false
+                        loading.value = false
                     }
 
                     override fun onError(e: Throwable) {
                         loadError.value = true
+                        loading.value = false
                     }
                 })
         )
     }
 
     private fun fetchMovieVideos(id: Int) {
+        loading.value = true
         disposable.add(
             tmdbService.getMovieVideos(id)
                 .subscribeOn(Schedulers.newThread())
@@ -110,16 +101,20 @@ class ViewModelMovie : ViewModel() {
                 .subscribeWith(object : DisposableSingleObserver<VideosResponse>() {
                     override fun onSuccess(t: VideosResponse) {
                         movieVideos.value = t
+                        loadError.value = false
+                        loading.value = false
                     }
 
                     override fun onError(e: Throwable) {
                         loadError.value = true
+                        loading.value = false
                     }
                 })
         )
     }
 
     private fun fetchMovieSimilar(id: Int) {
+        loading.value = true
         disposable.add(
             tmdbService.getMovieSimilar(id)
                 .subscribeOn(Schedulers.newThread())
@@ -127,16 +122,20 @@ class ViewModelMovie : ViewModel() {
                 .subscribeWith(object : DisposableSingleObserver<MoviesListResponse>() {
                     override fun onSuccess(t: MoviesListResponse) {
                         movieSimilar.value = t
+                        loadError.value = false
+                        loading.value = false
                     }
 
                     override fun onError(e: Throwable) {
                         loadError.value = true
+                        loading.value = false
                     }
                 })
         )
     }
 
     private fun fetchMovieRecommendation(id: Int) {
+        loading.value = true
         disposable.add(
             tmdbService.getMovieRecommendations(id)
                 .subscribeOn(Schedulers.newThread())
@@ -144,10 +143,13 @@ class ViewModelMovie : ViewModel() {
                 .subscribeWith(object : DisposableSingleObserver<MoviesListResponse>() {
                     override fun onSuccess(t: MoviesListResponse) {
                         movieRecommendation.value = t
+                        loadError.value = false
+                        loading.value = false
                     }
 
                     override fun onError(e: Throwable) {
                         loadError.value = true
+                        loading.value = false
                     }
                 })
         )

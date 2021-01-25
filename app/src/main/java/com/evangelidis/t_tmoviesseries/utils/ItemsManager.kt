@@ -8,6 +8,8 @@ import android.text.style.UnderlineSpan
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CenterInside
+import com.bumptech.glide.load.resource.bitmap.GranularRoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.model.Genre
@@ -44,6 +46,16 @@ object ItemsManager {
             .load(url)
             .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
             .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
+            .into(target)
+    }
+
+    fun getImageTopRadius(context: Context, url: String, target: ImageView) {
+        Glide.with(context)
+            .load(url)
+            .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .transform(CenterInside(), GranularRoundedCorners(context.resources.getDimension(R.dimen.image_top_radius), context.resources.getDimension(R.dimen.image_top_radius), 0f, 0f))
             .skipMemoryCache(true)
             .into(target)
     }
