@@ -79,9 +79,7 @@ class WatchlistActivity : AppCompatActivity(), WatchListItemCallback {
     }
 
     override fun navigateToMovie(itemId: Int) {
-        val intent = Intent(this, MovieActivity::class.java)
-        intent.putExtra(Constants.MOVIE_ID, itemId)
-        startActivity(intent)
+        startActivity(MovieActivity.createIntent(this, itemId))
     }
 
     override fun navigateToTvShow(itemId: Int) {

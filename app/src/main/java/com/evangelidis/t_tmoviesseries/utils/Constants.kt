@@ -4,7 +4,7 @@ object Constants {
 
     const val SPLASHSCREEN_TIME = 2500L
     const val INPUT_DATE_FORMAT = "yyyy-MM-dd"
-    const val OUTPUT_DATE_FORMAT = "dd-MMM-yyyy"
+    const val OUTPUT_DATE_FORMAT = "dd/MMM/yyyy"
     const val FIREBASE_DATABASE_DATE_FORMAT = "dd/MMM/yy HH:mm"
     const val FIREBASE_NEW_USER_DATE_FORMAT = "dd/M/yyyy hh:mm:ss"
     const val FIREBASE_USER_DATABASE_PATH = "users"

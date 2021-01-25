@@ -14,7 +14,6 @@ import com.evangelidis.t_tmoviesseries.model.PersonCombinedResponse
 import com.evangelidis.t_tmoviesseries.model.PersonDetailsResponse
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_SMALL_BASE_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.INPUT_DATE_FORMAT
-import com.evangelidis.t_tmoviesseries.utils.Constants.MOVIE_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.PERSON_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_ID
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.changeDateFormat
@@ -158,9 +157,9 @@ class PersonActivity : AppCompatActivity() {
                         item.movieName.text = result.title
                         item.actorCharacter.text = result.character
                         item.movieImg.setOnClickListener {
-                            val intent = Intent(this@PersonActivity, MovieActivity::class.java)
-                            intent.putExtra(MOVIE_ID, result.id)
-                            startActivity(intent)
+                            result.id?.let {
+                                startActivity(MovieActivity.createIntent(this, it))
+                            }
                         }
                     } else if (result.mediaType == "tv") {
                         item.movieName.text = result.name

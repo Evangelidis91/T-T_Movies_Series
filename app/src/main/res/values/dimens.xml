@@ -23,4 +23,6 @@
     <dimen name="bottom_width">100dp</dimen>
     <dimen name="bottom_height">86dp</dimen>
 
+    <dimen name="image_top_radius">6dp</dimen>
+
 </resources>
