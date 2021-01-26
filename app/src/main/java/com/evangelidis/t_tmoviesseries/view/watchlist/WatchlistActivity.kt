@@ -10,7 +10,6 @@ import com.evangelidis.t_tmoviesseries.databinding.ActivityWatchlistBinding
 import com.evangelidis.t_tmoviesseries.extensions.gone
 import com.evangelidis.t_tmoviesseries.extensions.show
 import com.evangelidis.t_tmoviesseries.room.*
-import com.evangelidis.t_tmoviesseries.utils.Constants
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.underline
 import com.evangelidis.t_tmoviesseries.view.main.MainActivity
 import com.evangelidis.t_tmoviesseries.view.movie.MovieActivity
@@ -83,8 +82,6 @@ class WatchlistActivity : AppCompatActivity(), WatchListItemCallback {
     }
 
     override fun navigateToTvShow(itemId: Int) {
-        val intent = Intent(this, TvShowActivity::class.java)
-        intent.putExtra(Constants.TV_SHOW_ID, itemId)
-        startActivity(intent)
+        startActivity(TvShowActivity.createIntent(this, itemId))
     }
 }

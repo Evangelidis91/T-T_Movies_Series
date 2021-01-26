@@ -39,7 +39,6 @@ import com.evangelidis.t_tmoviesseries.utils.Constants.POPULAR_MOVIES
 import com.evangelidis.t_tmoviesseries.utils.Constants.POPULAR_TV
 import com.evangelidis.t_tmoviesseries.utils.Constants.TOP_RATED_MOVIES
 import com.evangelidis.t_tmoviesseries.utils.Constants.TOP_RATED_TV
-import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.UPCOMING_MOVIES
 import com.evangelidis.t_tmoviesseries.utils.InternetStatus
 import com.evangelidis.t_tmoviesseries.utils.Tracking
@@ -75,9 +74,7 @@ class MainActivity : AppCompatActivity() {
         OnTvShowClickCallback {
         override fun onClick(tvShow: TvShow) {
             if (InternetStatus.getInstance(applicationContext).isOnline) {
-                val intent = Intent(this@MainActivity, TvShowActivity::class.java)
-                intent.putExtra(TV_SHOW_ID, tvShow.id)
-                startActivity(intent)
+                startActivity(TvShowActivity.createIntent(this@MainActivity, tvShow.id))
             } else {
                 TanTinToast.Warning(this@MainActivity).text(getString(R.string.no_internet)).typeface(typeface).show()
             }

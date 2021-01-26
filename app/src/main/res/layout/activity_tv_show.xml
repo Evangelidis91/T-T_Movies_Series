@@ -44,6 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="fill_vertical"
+        android:layout_marginBottom="?attr/actionBarSize"
         android:fitsSystemWindows="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -73,114 +74,126 @@
                 android:text="@string/tv_show"
                 android:textColor="@color/white" />
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/info_layout_design"
-                android:orientation="vertical">
+                android:layout_marginBottom="@dimen/main_margin"
+                android:background="@drawable/info_layout_design">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                <ImageView
+                    android:id="@+id/star_image"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:layout_marginStart="5dp"
-                    android:layout_marginBottom="5dp">
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_star" />
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_show_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:fontFamily="@font/montserrat_light"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="@id/star_image"
+                    app:layout_constraintStart_toEndOf="@id/star_image"
+                    app:layout_constraintTop_toTopOf="@id/star_image"
+                    tools:text="7.5" />
 
-                        <ImageView
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:layout_gravity="center"
-                            android:contentDescription="@string/none"
-                            app:srcCompat="@drawable/ic_star" />
+                <TextView
+                    android:id="@+id/tv_show_total_votes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:fontFamily="@font/montserrat_light"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_show_rating"
+                    app:layout_constraintStart_toEndOf="@id/tv_show_rating"
+                    app:layout_constraintTop_toTopOf="@id/tv_show_rating"
+                    tools:text="7830" />
 
-                        <TextView
-                            android:id="@+id/tv_show_rating"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="4dp"
-                            android:layout_marginEnd="12dp"
-                            android:fontFamily="@font/montserrat_light"
-                            android:textColor="@color/white" />
+                <TextView
+                    android:id="@+id/reviews_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="@string/reviews"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_show_total_votes"
+                    app:layout_constraintStart_toEndOf="@id/tv_show_total_votes"
+                    app:layout_constraintTop_toTopOf="@id/tv_show_total_votes" />
 
-                        <TextView
-                            android:id="@+id/tv_show_total_votes"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="5dp"
-                            android:fontFamily="@font/montserrat_light"
-                            android:textColor="@color/white" />
-
-                        <TextView
-                            android:id="@+id/reviews_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="4dp"
-                            android:fontFamily="@font/montserrat_regular"
-                            android:text="@string/reviews"
-                            android:textColor="@color/white" />
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/item_tv_watchlist"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_margin="5dp"
-                        android:contentDescription="@string/none"
-                        android:scaleType="fitCenter"
-                        app:srcCompat="@drawable/ic_disable_watchlist" />
-
-                </RelativeLayout>
+                <ImageView
+                    android:id="@+id/item_tv_watchlist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_margin="5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_disable_watchlist" />
 
                 <TextView
                     android:id="@+id/tv_show_genres"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
                     android:fontFamily="@font/montserrat_light"
                     android:textColor="@color/white"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/star_image"
+                    tools:text="Mystery, Comedy"
+                    tools:visibility="visible" />
 
                 <TextView
                     android:id="@+id/tv_show_release_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
                     android:fontFamily="@font/montserrat_light"
                     android:textColor="@color/white"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_show_genres"
+                    tools:text="2019 -"
+                    tools:visibility="visible" />
 
                 <TextView
                     android:id="@+id/tv_show_episode_duration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
                     android:fontFamily="@font/montserrat_light"
                     android:textColor="@color/white"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_show_release_date"
+                    tools:text="45min"
+                    tools:visibility="visible" />
 
                 <TextView
                     android:id="@+id/tv_show_all_seasons"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_show_episode_duration"
                     android:fontFamily="@font/montserrat_bold"
                     android:textColor="@color/white"
                     android:textSize="17sp"
-                    android:visibility="gone" />
-            </LinearLayout>
+                    android:visibility="gone"
+                    tools:text="3 seasons"
+                    tools:visibility="visible" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
                 android:id="@+id/tv_show_summary_container"
@@ -371,7 +384,6 @@
                 android:id="@+id/tv_show_production_companies_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
                 android:background="@drawable/info_layout_design"
                 android:orientation="vertical"
                 android:visibility="gone"
@@ -380,15 +392,17 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
                     android:fontFamily="@font/montserrat_regular"
                     android:text="@string/production_companies"
                     android:textColor="@color/white"
                     android:textSize="24sp" />
 
                 <LinearLayout
-                    android:id="@+id/tv_show_production_companies"
+                    android:id="@+id/production_companies"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
                     android:orientation="vertical" />
             </LinearLayout>
 

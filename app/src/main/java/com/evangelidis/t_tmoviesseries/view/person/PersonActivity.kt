@@ -15,7 +15,6 @@ import com.evangelidis.t_tmoviesseries.model.PersonDetailsResponse
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_SMALL_BASE_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.INPUT_DATE_FORMAT
 import com.evangelidis.t_tmoviesseries.utils.Constants.PERSON_ID
-import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_ID
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.changeDateFormat
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.getGlideImage
 import com.evangelidis.t_tmoviesseries.view.biography.BiographyActivity
@@ -165,9 +164,9 @@ class PersonActivity : AppCompatActivity() {
                         item.movieName.text = result.name
                         item.actorCharacter.gone()
                         item.root.setOnClickListener {
-                            val intent = Intent(this@PersonActivity, TvShowActivity::class.java)
-                            intent.putExtra(TV_SHOW_ID, result.id)
-                            startActivity(intent)
+                            result.id?.let {
+                                startActivity(TvShowActivity.createIntent(this, it))
+                            }
                         }
                     }
 
