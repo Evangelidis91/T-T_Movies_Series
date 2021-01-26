@@ -72,24 +72,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/main_margin"
-                android:background="@drawable/info_layout_design"
-                android:orientation="vertical">
+                android:background="@drawable/info_layout_design">
 
                 <ImageView
                     android:id="@+id/star_image"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
+                    android:layout_marginStart="5dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/none"
                     app:srcCompat="@drawable/ic_star" />
 
                 <TextView
                     android:id="@+id/movie_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:layout_marginStart="4dp"
                     app:layout_constraintTop_toTopOf="@id/star_image"
                     app:layout_constraintStart_toEndOf="@id/star_image"
@@ -105,7 +102,6 @@
                     app:layout_constraintTop_toTopOf="@id/movie_rating"
                     app:layout_constraintStart_toEndOf="@id/movie_rating"
                     app:layout_constraintBottom_toBottomOf="@id/movie_rating"
-                    android:layout_gravity="center"
                     android:layout_marginStart="20dp"
                     android:fontFamily="@font/montserrat_light"
                     android:textColor="@color/white"
@@ -115,7 +111,6 @@
                     android:id="@+id/reviews_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:layout_marginStart="4dp"
                     app:layout_constraintTop_toTopOf="@id/total_votes"
                     app:layout_constraintStart_toEndOf="@id/total_votes"
@@ -132,8 +127,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_margin="5dp"
-                    android:contentDescription="@string/none"
-                    android:scaleType="fitCenter"
                     app:srcCompat="@drawable/ic_disable_watchlist" />
 
                 <TextView
@@ -487,6 +480,7 @@
                     android:id="@+id/production_companies"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
                     android:orientation="vertical" />
             </LinearLayout>
 

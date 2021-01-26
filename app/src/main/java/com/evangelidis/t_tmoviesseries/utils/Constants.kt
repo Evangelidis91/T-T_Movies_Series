@@ -13,11 +13,9 @@ object Constants {
 
     const val ROOM_DATABASE_NAME = "watchlist.db"
     const val ROOM_WATCHLIST_TABLE_NAME = "watchlistData"
-    const val DATABASE_THREAD = "dbWorkerThread"
     const val CATEGORY_MOVIE = "Movie"
     const val CATEGORY_TV = "TV"
     const val CATEGORY_DIRECTOR = "Director"
-    const val CATEGORY_PERSON = "Person"
 
     const val BASE_URL = "https://api.themoviedb.org/3/"
     const val LANGUAGE = "en-US"
@@ -45,7 +43,5 @@ object Constants {
     const val IS_LOGGED_IN = "isLogged"
     const val IS_LOGIN_SKIPPED = "isLoginSkipped"
 
-    const val MOVIE_ID = "movie_id"
-    const val TV_SHOW_ID = "tv_show_id"
     const val PERSON_ID = "person_id"
 }

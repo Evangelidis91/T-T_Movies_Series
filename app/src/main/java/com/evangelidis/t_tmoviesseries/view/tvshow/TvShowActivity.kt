@@ -1,5 +1,6 @@
 package com.evangelidis.t_tmoviesseries.view.tvshow
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.databinding.*
 import com.evangelidis.t_tmoviesseries.extensions.gone
 import com.evangelidis.t_tmoviesseries.extensions.show
+import com.evangelidis.t_tmoviesseries.extensions.updatePadding
 import com.evangelidis.t_tmoviesseries.model.*
 import com.evangelidis.t_tmoviesseries.room.*
 import com.evangelidis.t_tmoviesseries.utils.Constants.CATEGORY_DIRECTOR
@@ -16,10 +18,10 @@ import com.evangelidis.t_tmoviesseries.utils.Constants.CATEGORY_TV
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_POSTER_BASE_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_SMALL_BASE_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.PERSON_ID
-import com.evangelidis.t_tmoviesseries.utils.Constants.TV_SHOW_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.YOUTUBE_THUMBNAIL_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.YOUTUBE_VIDEO_URL
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.getGlideImage
+import com.evangelidis.t_tmoviesseries.utils.ItemsManager.getImageTopRadius
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.showTrailer
 import com.evangelidis.t_tmoviesseries.view.main.MainActivity
 import com.evangelidis.t_tmoviesseries.view.person.PersonActivity
@@ -29,7 +31,14 @@ import java.util.ArrayList
 
 class TvShowActivity : AppCompatActivity() {
 
-    private var tvShowId = 0
+    companion object {
+        const val TV_SHOW_ID = "TV_SHOW_ID"
+
+        fun createIntent(context: Context, tvShowId: Int): Intent =
+            Intent(context, TvShowActivity::class.java)
+                .putExtra(TV_SHOW_ID, tvShowId)
+    }
+
     private lateinit var viewModel: ViewModelTvShow
     private lateinit var tvShow: TvShowDetailsResponse
 
@@ -43,9 +52,10 @@ class TvShowActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        tvShowId = intent.getIntExtra(TV_SHOW_ID, tvShowId)
+        val tvShowId = intent.getIntExtra(TV_SHOW_ID, 0)
 
-        getDataFromDB()
+        getDataFromDB(tvShowId)
+        setToolbar()
 
         binding.itemTvWatchlist.setOnClickListener {
             val finder = watchlistList?.find { it.itemId == tvShowId }
@@ -68,15 +78,7 @@ class TvShowActivity : AppCompatActivity() {
                 binding.itemTvWatchlist.setImageResource(R.drawable.ic_disable_watchlist)
                 DatabaseQueries.removeItem(this, wishList.itemId)
             }
-        }
-
-        binding.toolbar.imageToMain.setOnClickListener {
-            val intent = Intent(this@TvShowActivity, MainActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.toolbar.searchIcn.setOnClickListener {
-            startActivity(SearchActivity.createIntent(this))
+            getDataFromDB(tvShowId)
         }
 
         binding.tvShowAllSeasons.setOnClickListener {
@@ -93,6 +95,18 @@ class TvShowActivity : AppCompatActivity() {
         }
 
         observeViewModel()
+    }
+
+    private fun setToolbar() {
+        binding.toolbar.apply {
+            imageToMain.setOnClickListener {
+                val intent = Intent(this@TvShowActivity, MainActivity::class.java)
+                startActivity(intent)
+            }
+            searchIcn.setOnClickListener {
+                startActivity(SearchActivity.createIntent(this@TvShowActivity))
+            }
+        }
     }
 
     private fun observeViewModel() {
@@ -152,7 +166,7 @@ class TvShowActivity : AppCompatActivity() {
         data.voteCount?.let {
             if (it > 0) {
                 binding.tvShowRating.text = data.voteAverage.toString()
-                binding.tvShowTotalVotes.text = getString(R.string.reviews_number).replace("{REVIEWS_NUMBER}", it.toString())
+                binding.tvShowTotalVotes.text = it.toString()
             }
         }
 
@@ -200,12 +214,12 @@ class TvShowActivity : AppCompatActivity() {
 
         data.productionCompanies?.let {
             if (it.isNotEmpty()) {
-                binding.tvShowProductionCompanies.removeAllViews()
+                binding.productionCompanies.removeAllViews()
                 for (company in it) {
                     val item = ThumbnailCompanyBinding.inflate(layoutInflater)
                     company.name?.let {
                         item.productionCompanyName.text = company.name
-                        binding.tvShowProductionCompanies.addView(item.root)
+                        binding.productionCompanies.addView(item.root)
                     }
                 }
                 binding.tvShowProductionCompaniesLayout.show()
@@ -229,6 +243,7 @@ class TvShowActivity : AppCompatActivity() {
             if (it.isNotEmpty()) {
                 for (cast in it) {
                     val item = ThumbnailActorsListBinding.inflate(layoutInflater)
+                    getImageTopRadius(this, IMAGE_SMALL_BASE_URL.plus(cast.profilePath), item.thumbnail)
                     item.actorName.text = cast.name
                     item.actorCharacter.text = cast.character
                     item.thumbnail.requestLayout()
@@ -237,9 +252,7 @@ class TvShowActivity : AppCompatActivity() {
                         intent.putExtra(PERSON_ID, cast.id)
                         startActivity(intent)
                     }
-
-                    getGlideImage(this, IMAGE_SMALL_BASE_URL.plus(cast.profilePath), item.thumbnail)
-
+                    item.root.updatePadding(left = 20, right = 20, bottom = 20)
                     binding.tvShowActors.addView(item.root)
                 }
                 binding.tvShowActorsContainer.show()
@@ -308,16 +321,15 @@ class TvShowActivity : AppCompatActivity() {
                 binding.tvShowSimilar.removeAllViews()
                 for (x in it) {
                     val item = ThumbnailMovieBinding.inflate(layoutInflater)
+                    getImageTopRadius(this, IMAGE_SMALL_BASE_URL.plus(x.posterPath), item.thumbnail)
                     item.movieName.text = x.name
                     item.movieRate.text = getString(R.string.movie_rate).replace("{MOVIE_RATE}", x.voteAverage.toString())
                     item.thumbnail.requestLayout()
                     item.thumbnail.setOnClickListener {
-                        val intent = Intent(this@TvShowActivity, TvShowActivity::class.java)
-                        intent.putExtra(TV_SHOW_ID, x.id)
-                        startActivity(intent)
+                        startActivity(createIntent(this, x.id))
                     }
 
-                    getGlideImage(this, IMAGE_SMALL_BASE_URL.plus(x.posterPath), item.thumbnail)
+                    item.root.updatePadding(left = 20, right = 20, bottom = 20)
                     binding.tvShowSimilar.addView(item.root)
                 }
                 binding.tvShowSimilarContainer.show()
@@ -331,16 +343,15 @@ class TvShowActivity : AppCompatActivity() {
                 binding.tvShowRecommendations.removeAllViews()
                 for (x in it) {
                     val item = ThumbnailMovieBinding.inflate(layoutInflater)
+                    getImageTopRadius(this, IMAGE_SMALL_BASE_URL.plus(x.posterPath), item.thumbnail)
                     item.movieName.text = x.name
                     item.movieRate.text = getString(R.string.movie_rate).replace("{MOVIE_RATE}", x.voteAverage.toString())
                     item.thumbnail.requestLayout()
                     item.thumbnail.setOnClickListener {
-                        val intent = Intent(this@TvShowActivity, TvShowActivity::class.java)
-                        intent.putExtra(TV_SHOW_ID, x.id)
-                        startActivity(intent)
+                        startActivity(createIntent(this, x.id))
                     }
 
-                    getGlideImage(this, IMAGE_SMALL_BASE_URL.plus(x.posterPath), item.thumbnail)
+                    item.root.updatePadding(left = 20, right = 20, bottom = 20)
                     binding.tvShowRecommendations.addView(item.root)
                 }
                 binding.tvShowRecommendationsContainer.show()
@@ -348,16 +359,16 @@ class TvShowActivity : AppCompatActivity() {
         }
     }
 
-    private fun getDataFromDB() {
+    private fun getDataFromDB(tvShowId: Int) {
         DatabaseQueries.getSavedItems(this) { watchlistData ->
             if (!watchlistData.isNullOrEmpty()) {
                 watchlistList = watchlistData
-                setWishListImage()
+                setWishListImage(tvShowId)
             }
         }
     }
 
-    private fun setWishListImage() {
+    private fun setWishListImage(tvShowId: Int) {
         val finder = watchlistList?.find { it.itemId == tvShowId }
         if (finder != null) {
             binding.itemTvWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
