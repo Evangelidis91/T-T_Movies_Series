@@ -17,7 +17,6 @@ import com.evangelidis.t_tmoviesseries.extensions.gone
 import com.evangelidis.t_tmoviesseries.extensions.show
 import com.evangelidis.t_tmoviesseries.model.Multisearch
 import com.evangelidis.t_tmoviesseries.room.DatabaseQueries
-import com.evangelidis.t_tmoviesseries.utils.Constants.PERSON_ID
 import com.evangelidis.t_tmoviesseries.view.movie.MovieActivity
 import com.evangelidis.t_tmoviesseries.view.person.PersonActivity
 import com.evangelidis.t_tmoviesseries.view.tvshow.TvShowActivity
@@ -125,8 +124,6 @@ class SearchActivity : AppCompatActivity(), SearchCallback {
     }
 
     override fun navigateToPerson(itemId: Int) {
-        val intent = Intent(this, PersonActivity::class.java)
-        intent.putExtra(PERSON_ID, itemId)
-        startActivity(intent)
+        startActivity(PersonActivity.createIntent(this, itemId))
     }
 }
