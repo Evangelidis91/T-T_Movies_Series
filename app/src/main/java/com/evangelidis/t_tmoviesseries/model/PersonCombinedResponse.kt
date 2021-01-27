@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class PersonCombinedResponse(
     @SerializedName("cast")
-    val cast: List<PersonCast>?,
+    val cast: MutableList<PersonCast>?,
     @SerializedName("crew")
     val crew: List<PersonCrew>?,
     @SerializedName("id")
@@ -27,7 +27,7 @@ data class PersonCast(
     @SerializedName("genre_ids")
     val genreIds: List<Int>?,
     @SerializedName("id")
-    val id: Int?,
+    val id: Int,
     @SerializedName("media_type")
     val mediaType: String?,
     @SerializedName("name")

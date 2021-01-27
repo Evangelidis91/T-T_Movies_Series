@@ -42,6 +42,4 @@ object Constants {
 
     const val IS_LOGGED_IN = "isLogged"
     const val IS_LOGIN_SKIPPED = "isLoginSkipped"
-
-    const val PERSON_ID = "person_id"
 }

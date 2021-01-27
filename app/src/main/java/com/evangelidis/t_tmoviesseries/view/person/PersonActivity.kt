@@ -1,5 +1,6 @@
 package com.evangelidis.t_tmoviesseries.view.person
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -10,13 +11,14 @@ import com.evangelidis.t_tmoviesseries.databinding.ActivityPersonBinding
 import com.evangelidis.t_tmoviesseries.databinding.ThumbnailActorsMovieBinding
 import com.evangelidis.t_tmoviesseries.extensions.gone
 import com.evangelidis.t_tmoviesseries.extensions.show
-import com.evangelidis.t_tmoviesseries.model.PersonCombinedResponse
+import com.evangelidis.t_tmoviesseries.extensions.updatePadding
+import com.evangelidis.t_tmoviesseries.model.PersonCast
 import com.evangelidis.t_tmoviesseries.model.PersonDetailsResponse
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_SMALL_BASE_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.INPUT_DATE_FORMAT
-import com.evangelidis.t_tmoviesseries.utils.Constants.PERSON_ID
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.changeDateFormat
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.getGlideImage
+import com.evangelidis.t_tmoviesseries.utils.ItemsManager.getImageTopRadius
 import com.evangelidis.t_tmoviesseries.view.biography.BiographyActivity
 import com.evangelidis.t_tmoviesseries.view.main.MainActivity
 import com.evangelidis.t_tmoviesseries.view.movie.MovieActivity
@@ -27,7 +29,16 @@ import java.util.*
 
 class PersonActivity : AppCompatActivity() {
 
-    private var personId: Int = 0
+    companion object {
+        const val PERSON_ID = "PERSON_ID"
+        const val MEDIA_MOVIE = "movie"
+        const val MEDIA_TV_SHOW = "tv"
+
+        fun createIntent(context: Context, movieId: Int): Intent =
+            Intent(context, PersonActivity::class.java)
+                .putExtra(PERSON_ID, movieId)
+    }
+
     private lateinit var viewModel: ViewModelPerson
 
     private val binding: ActivityPersonBinding by lazy { ActivityPersonBinding.inflate(layoutInflater) }
@@ -36,36 +47,41 @@ class PersonActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        personId = intent.getIntExtra(PERSON_ID, personId)
+        val personId = intent.getIntExtra(PERSON_ID, 0)
 
         viewModel = ViewModelProviders.of(this).get(ViewModelPerson::class.java)
-
         viewModel.getPersonDetails(personId)
         viewModel.getPersonCombinedCredits(personId)
 
-        binding.toolbar.imageToMain.setOnClickListener {
-            val intent = Intent(this@PersonActivity, MainActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.toolbar.searchIcn.setOnClickListener {
-            startActivity(SearchActivity.createIntent(this))
-        }
-
+        setToolbar()
         observeViewModel()
+    }
+
+    private fun setToolbar() {
+        binding.toolbar.apply {
+            imageToMain.setOnClickListener {
+                val intent = Intent(this@PersonActivity, MainActivity::class.java)
+                startActivity(intent)
+            }
+            searchIcn.setOnClickListener {
+                startActivity(SearchActivity.createIntent(this@PersonActivity))
+            }
+        }
     }
 
     private fun observeViewModel() {
         viewModel.personDetails.observe(this, Observer { data ->
             data?.let {
                 setUpPersonInfoUI(data)
+                setUpActorDates(data)
                 binding.progressBar.gone()
             }
         })
 
         viewModel.personCombinedCredits.observe(this, Observer { data ->
-            data?.let {
-                setUpCombinedCreditsList(data)
+            data.cast?.let {
+                data.cast.sortByDescending { it.popularity }
+                setUpCombinedCreditsList(data.cast)
             }
         })
     }
@@ -104,7 +120,6 @@ class PersonActivity : AppCompatActivity() {
             }
             binding.biographyLayout.show()
         }
-        setUpActorDates(data)
     }
 
     private fun setUpActorDates(data: PersonDetailsResponse) {
@@ -146,41 +161,30 @@ class PersonActivity : AppCompatActivity() {
         return cal
     }
 
-    private fun setUpCombinedCreditsList(data: PersonCombinedResponse) {
+    private fun setUpCombinedCreditsList(data: MutableList<PersonCast>) {
         binding.actorMovies.removeAllViews()
-        data.cast?.let {
-            if (it.isNotEmpty()) {
-                for (result in it) {
-                    val item = ThumbnailActorsMovieBinding.inflate(layoutInflater)
-                    if (result.mediaType == "movie") {
-                        item.movieName.text = result.title
-                        item.actorCharacter.text = result.character
-                        item.movieImg.setOnClickListener {
-                            result.id?.let {
-                                startActivity(MovieActivity.createIntent(this, it))
-                            }
-                        }
-                    } else if (result.mediaType == "tv") {
-                        item.movieName.text = result.name
-                        item.actorCharacter.gone()
-                        item.root.setOnClickListener {
-                            result.id?.let {
-                                startActivity(TvShowActivity.createIntent(this, it))
-                            }
-                        }
-                    }
-
-                    if (!(result.releaseDate.isNullOrEmpty())) {
-                        item.movieYear.show()
-                        item.movieYear.text = result.releaseDate.substring(0, 4)
-                    }
-
-                    getGlideImage(this, IMAGE_SMALL_BASE_URL.plus(result.posterPath), item.movieImg)
-
-                    binding.actorMovies.addView(item.root)
+        if (data.isNotEmpty()) {
+            for (result in data) {
+                val item = ThumbnailActorsMovieBinding.inflate(layoutInflater)
+                getImageTopRadius(this, IMAGE_SMALL_BASE_URL.plus(result.posterPath), item.movieImg)
+                item.actorCharacter.text = result.character
+                item.movieName.text = result.title ?: result.name
+                result.voteAverage?.let {
+                    item.movieRate.text = it.toString()
                 }
-                binding.filmographyContainer.show()
+                if (result.mediaType == MEDIA_MOVIE) {
+                    item.movieImg.setOnClickListener {
+                        startActivity(MovieActivity.createIntent(this, result.id))
+                    }
+                } else if (result.mediaType == MEDIA_TV_SHOW) {
+                    item.root.setOnClickListener {
+                        startActivity(TvShowActivity.createIntent(this, result.id))
+                    }
+                }
+                item.root.updatePadding(left = 20, right = 20, bottom = 20)
+                binding.actorMovies.addView(item.root)
             }
+            binding.filmographyContainer.show()
         }
     }
 }

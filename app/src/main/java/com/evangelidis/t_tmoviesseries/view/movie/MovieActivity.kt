@@ -17,7 +17,6 @@ import com.evangelidis.t_tmoviesseries.utils.Constants.CATEGORY_DIRECTOR
 import com.evangelidis.t_tmoviesseries.utils.Constants.CATEGORY_MOVIE
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_POSTER_BASE_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.IMAGE_SMALL_BASE_URL
-import com.evangelidis.t_tmoviesseries.utils.Constants.PERSON_ID
 import com.evangelidis.t_tmoviesseries.utils.Constants.YOUTUBE_THUMBNAIL_URL
 import com.evangelidis.t_tmoviesseries.utils.Constants.YOUTUBE_VIDEO_URL
 import com.evangelidis.t_tmoviesseries.utils.ItemsManager.changeDateFormat
@@ -213,9 +212,9 @@ class MovieActivity : AppCompatActivity() {
                     item.actorName.text = cast.name
                     item.actorCharacter.text = cast.character
                     item.thumbnail.setOnClickListener {
-                        val intent = Intent(this@MovieActivity, PersonActivity::class.java)
-                        intent.putExtra(PERSON_ID, cast.id)
-                        startActivity(intent)
+                        cast.id?.let {
+                            startActivity(PersonActivity.createIntent(this, it))
+                        }
                     }
                     item.root.updatePadding(left = 20, right = 20, bottom = 20)
                     binding.movieActors.addView(item.root)
