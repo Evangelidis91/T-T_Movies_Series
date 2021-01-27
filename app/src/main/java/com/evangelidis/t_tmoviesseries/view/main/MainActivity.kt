@@ -17,14 +17,10 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.evangelidis.t_tmoviesseries.R
-import com.evangelidis.t_tmoviesseries.callbacks.OnMoviesClickCallback
-import com.evangelidis.t_tmoviesseries.callbacks.OnTvShowClickCallback
 import com.evangelidis.t_tmoviesseries.databinding.ActivityMainBinding
 import com.evangelidis.t_tmoviesseries.databinding.SubmitQuestionLayoutBinding
 import com.evangelidis.t_tmoviesseries.extensions.*
 import com.evangelidis.t_tmoviesseries.model.MessagePost
-import com.evangelidis.t_tmoviesseries.model.Movie
-import com.evangelidis.t_tmoviesseries.model.TvShow
 import com.evangelidis.t_tmoviesseries.room.DatabaseQueries
 import com.evangelidis.t_tmoviesseries.utils.Constants.AIRING_TODAY_TV
 import com.evangelidis.t_tmoviesseries.utils.Constants.FIREBASE_DATABASE_DATE_FORMAT
@@ -57,33 +53,11 @@ import es.dmoral.prefs.Prefs
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MainActivity : AppCompatActivity() {
-
-    private var movieCallback: OnMoviesClickCallback = object :
-        OnMoviesClickCallback {
-        override fun onClick(movie: Movie) {
-            if (InternetStatus.getInstance(applicationContext).isOnline) {
-                startActivity(MovieActivity.createIntent(this@MainActivity, movie.id))
-            } else {
-                TanTinToast.Warning(this@MainActivity).text(getString(R.string.no_internet)).typeface(typeface).show()
-            }
-        }
-    }
-
-    private var tvShowCallback: OnTvShowClickCallback = object :
-        OnTvShowClickCallback {
-        override fun onClick(tvShow: TvShow) {
-            if (InternetStatus.getInstance(applicationContext).isOnline) {
-                startActivity(TvShowActivity.createIntent(this@MainActivity, tvShow.id))
-            } else {
-                TanTinToast.Warning(this@MainActivity).text(getString(R.string.no_internet)).typeface(typeface).show()
-            }
-        }
-    }
+class MainActivity : AppCompatActivity(), MainCallback {
 
     lateinit var viewModel: ViewModelMain
-    private val moviesListAdapter = MoviesListAdapter(arrayListOf(), movieCallback, mutableListOf())
-    private val tvShowAdapter = TvShowAdapter(arrayListOf(), tvShowCallback, mutableListOf())
+    private val moviesListAdapter = MoviesListAdapter(this)
+    private val tvShowAdapter = TvShowAdapter(this)
     private var sortBy = POPULAR_MOVIES
 
     private lateinit var database: FirebaseDatabase
@@ -108,10 +82,12 @@ class MainActivity : AppCompatActivity() {
 
         binding.appBar.toolbarTitle.text = getString(R.string.popular_movies)
 
-        binding.navigationDrawer.expandableLayoutMovies.collapse()
-        binding.navigationDrawer.expandableLayoutTv.collapse()
-        binding.navigationDrawer.expandableLayoutCommunicate.expand()
-        binding.navigationDrawer.expandableLayoutSettings.collapse()
+        binding.navigationDrawer.apply {
+            expandableLayoutMovies.collapse()
+            expandableLayoutTv.collapse()
+            expandableLayoutCommunicate.expand()
+            expandableLayoutSettings.collapse()
+        }
 
         getDataFromDB()
 
@@ -168,8 +144,8 @@ class MainActivity : AppCompatActivity() {
     private fun getDataFromDB() {
         DatabaseQueries.getSavedItems(this) { watchlistData ->
             watchlistData?.let {
-                moviesListAdapter.updateWatchlist(it)
-                tvShowAdapter.updateWatchlist(it)
+                moviesListAdapter.watchlistList = it
+                tvShowAdapter.watchlistList = it
             }
         }
     }
@@ -177,13 +153,13 @@ class MainActivity : AppCompatActivity() {
     private fun observeViewModel() {
         viewModel.genresMovieData.observe(this, Observer { data ->
             data.genres?.let {
-                moviesListAdapter.appendGenres(it)
+                moviesListAdapter.genresList = it
             }
         })
 
         viewModel.genresTvShowData.observe(this, Observer { data ->
             data.genres?.let {
-                tvShowAdapter.appendGenres(it)
+                tvShowAdapter.genresList = it
             }
         })
 
@@ -192,9 +168,9 @@ class MainActivity : AppCompatActivity() {
                 binding.appBar.mainView.moviesList.show()
                 binding.appBar.mainView.tvShowList.gone()
                 if (listOfRetrievedPages.size == 1) {
-                    moviesListAdapter.updateData(it)
+                    moviesListAdapter.moviesListData = it
                 } else {
-                    moviesListAdapter.appendData(it)
+                    moviesListAdapter.newData = it
                 }
             }
         })
@@ -204,9 +180,9 @@ class MainActivity : AppCompatActivity() {
                 binding.appBar.mainView.moviesList.gone()
                 binding.appBar.mainView.tvShowList.show()
                 if (listOfRetrievedPages.size == 1) {
-                    tvShowAdapter.updateData(it)
+                    tvShowAdapter.tvShowListData = it
                 } else {
-                    tvShowAdapter.appendData(it)
+                    tvShowAdapter.newData = it
                 }
             }
         })
@@ -420,8 +396,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.navigationDrawer.navNotifications.setOnClickListener {
-            if (Prefs.with(applicationContext).readBoolean(IS_NOTIFICATION_ON, false)) {
-                Prefs.with(applicationContext).writeBoolean(IS_NOTIFICATION_ON, false)
+            if (Prefs.with(this).readBoolean(IS_NOTIFICATION_ON, false)) {
+                Prefs.with(this).writeBoolean(IS_NOTIFICATION_ON, false)
                 binding.navigationDrawer.navNotifications.apply {
                     isChecked = false
                     text = getString(R.string.notifications_are_off)
@@ -437,7 +413,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpNavigationDrawerWatchlistSwitch() {
-        if (Prefs.with(applicationContext).readBoolean(IS_SYNC_WATCHLIST_ON, false)) {
+        if (Prefs.with(this).readBoolean(IS_SYNC_WATCHLIST_ON, false)) {
             binding.navigationDrawer.navSyncWatchlist.apply {
                 isChecked = true
                 text = getString(R.string.sync_watchlist_is_on)
@@ -450,8 +426,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.navigationDrawer.navSyncWatchlist.setOnClickListener {
-            if (Prefs.with(applicationContext).readBoolean(IS_SYNC_WATCHLIST_ON, false)) {
-                Prefs.with(applicationContext).writeBoolean(IS_SYNC_WATCHLIST_ON, false)
+            if (Prefs.with(this).readBoolean(IS_SYNC_WATCHLIST_ON, false)) {
+                Prefs.with(this).writeBoolean(IS_SYNC_WATCHLIST_ON, false)
                 binding.navigationDrawer.navSyncWatchlist.apply {
                     isChecked = false
                     text = getString(R.string.sync_watchlist_is_off)
@@ -642,5 +618,21 @@ class MainActivity : AppCompatActivity() {
             result = false
         }
         return result
+    }
+
+    override fun navigateToMovie(itemId: Int) {
+        if (InternetStatus.getInstance(this).isOnline) {
+            startActivity(MovieActivity.createIntent(this, itemId))
+        } else {
+            TanTinToast.Warning(this).text(getString(R.string.no_internet)).typeface(typeface).show()
+        }
+    }
+
+    override fun navigateToTvShow(itemId: Int) {
+        if (InternetStatus.getInstance(this).isOnline) {
+            startActivity(TvShowActivity.createIntent(this, itemId))
+        } else {
+            TanTinToast.Warning(this).text(getString(R.string.no_internet)).typeface(typeface).show()
+        }
     }
 }

@@ -14,7 +14,7 @@ import com.evangelidis.t_tmoviesseries.room.DatabaseQueries
 import com.evangelidis.t_tmoviesseries.room.WatchlistData
 import java.lang.IllegalStateException
 
-class SearchAdapter(var callback: SearchCallback) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SearchAdapter(private var callback: SearchCallback) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     enum class SectionType(val sectionType: String, val sectionId: Int) {
         PERSON("person", 0),
