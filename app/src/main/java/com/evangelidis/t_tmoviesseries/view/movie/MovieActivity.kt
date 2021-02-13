@@ -2,10 +2,8 @@ package com.evangelidis.t_tmoviesseries.view.movie
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.evangelidis.t_tmoviesseries.R
@@ -48,15 +46,13 @@ class MovieActivity : AppCompatActivity() {
 
     private lateinit var movie: MovieDetailsResponse
 
-    private var typeface: Typeface? = null
+    private var typeface: Int = R.font.montserrat_regular
 
     private val binding: ActivityMovieBinding by lazy { ActivityMovieBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-        typeface = ResourcesCompat.getFont(this, R.font.montserrat_regular)
 
         val movieId = intent.getIntExtra(MOVIE_ID, 0)
 

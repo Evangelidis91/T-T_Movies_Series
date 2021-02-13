@@ -1,9 +1,7 @@
 package com.evangelidis.t_tmoviesseries.view.watchlist
 
-import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.databinding.ItemWatchlistBinding
@@ -20,6 +18,8 @@ import com.evangelidis.tantintoast.TanTinToast
 class WatchlistAdapter(var callback: WatchListItemCallback) : RecyclerView.Adapter<WatchlistAdapter.WatchlistViewHolder>() {
 
     private val watchList = mutableListOf<WatchlistData>()
+
+    private val typeface: Int = R.font.montserrat_regular
 
     fun appendWatchlistData(watchlist: List<WatchlistData>) {
         watchList.clear()
@@ -61,7 +61,6 @@ class WatchlistAdapter(var callback: WatchListItemCallback) : RecyclerView.Adapt
                             Movie -> callback.navigateToMovie(watchlist.itemId)
                         }
                     } else {
-                        val typeface: Typeface? = ResourcesCompat.getFont(root.context, R.font.montserrat_regular)
                         TanTinToast.Warning(root.context).text(root.context.getString(R.string.no_internet)).typeface(typeface).show()
                     }
                 }

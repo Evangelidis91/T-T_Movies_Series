@@ -2,12 +2,10 @@ package com.evangelidis.t_tmoviesseries.view.login
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.databinding.FragmentSignupBinding
@@ -36,7 +34,7 @@ class SignUpFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private lateinit var fragmentContext: Context
-    private var typeface: Typeface? = null
+    private var typeface: Int = R.font.montserrat_regular
 
     private val binding: FragmentSignupBinding by lazy { FragmentSignupBinding.inflate(layoutInflater) }
 
@@ -54,9 +52,6 @@ class SignUpFragment : Fragment() {
         }
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
-
-        typeface = ResourcesCompat.getFont(fragmentContext, R.font.montserrat_regular)
-
         return binding.root
     }
 

@@ -4,14 +4,12 @@ import android.annotation.SuppressLint
 import android.app.ActionBar
 import android.content.Context
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.databinding.EnterEmailLayoutBinding
@@ -30,7 +28,7 @@ class LoginFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private lateinit var fragmentContext: Context
-    private var typeface: Typeface? = null
+    private var typeface: Int = R.font.montserrat_regular
 
     private val binding: FragmentLoginBinding by lazy { FragmentLoginBinding.inflate(layoutInflater) }
 
@@ -43,8 +41,6 @@ class LoginFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
-
-        typeface = ResourcesCompat.getFont(fragmentContext, R.font.montserrat_regular)
 
         return binding.root
     }
