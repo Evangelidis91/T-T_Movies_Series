@@ -55,7 +55,7 @@ class WatchlistAdapter(var callback: WatchListItemCallback) : RecyclerView.Adapt
                 }
                 getGlideImage(root.context, IMAGE_SMALL_BASE_URL.plus(watchlist.posterPath), itemPoster)
                 root.setOnClickListener {
-                    if (InternetStatus.getInstance(root.context).isOnline) {
+                    if (InternetStatus.isConnected(root.context)) {
                         when (watchlist.category) {
                             TV -> callback.navigateToTvShow(watchlist.itemId)
                             Movie -> callback.navigateToMovie(watchlist.itemId)
