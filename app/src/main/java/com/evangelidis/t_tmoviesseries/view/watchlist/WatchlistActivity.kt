@@ -50,7 +50,7 @@ class WatchlistActivity : AppCompatActivity(), WatchListItemCallback {
         with(binding.toolbar) {
             toolbarTitle.text = getString(R.string.my_watchlist).underline()
             imageToMain.setOnClickListener {
-                startActivity(Intent(this@WatchlistActivity, MainActivity::class.java))
+                startActivity(MainActivity.createIntent(this@WatchlistActivity))
             }
             searchIcn.setOnClickListener {
                 startActivity(SearchActivity.createIntent(this@WatchlistActivity))

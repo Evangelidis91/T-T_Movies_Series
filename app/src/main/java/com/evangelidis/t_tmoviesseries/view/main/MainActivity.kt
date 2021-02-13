@@ -1,6 +1,7 @@
 package com.evangelidis.t_tmoviesseries.view.main
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -53,6 +54,11 @@ import java.util.*
 
 class MainActivity : AppCompatActivity(), MainCallback {
 
+    companion object {
+        fun createIntent(context: Context): Intent =
+            Intent(context, MainActivity::class.java)
+    }
+
     lateinit var viewModel: ViewModelMain
     private val moviesListAdapter = MoviesListAdapter(this)
     private val tvShowAdapter = TvShowAdapter(this)
@@ -103,7 +109,11 @@ class MainActivity : AppCompatActivity(), MainCallback {
         }
 
         binding.appBar.searchIcn.setOnClickListener {
-            startActivity(SearchActivity.createIntent(this))
+            if (InternetStatus.isConnected(this)) {
+                startActivity(SearchActivity.createIntent(this))
+            } else {
+                TanTinToast.Warning(this).text(getString(R.string.no_internet)).typeface(typeface).show()
+            }
         }
 
         observeViewModel()
@@ -346,7 +356,11 @@ class MainActivity : AppCompatActivity(), MainCallback {
         }
 
         binding.navigationDrawer.navWatchlist.setOnClickListener {
-            startActivity(WatchlistActivity.createIntent(this))
+            if (InternetStatus.isConnected(this)) {
+                startActivity(WatchlistActivity.createIntent(this))
+            } else {
+                TanTinToast.Warning(this).text(getString(R.string.no_internet)).typeface(typeface).show()
+            }
         }
 
         binding.navigationDrawer.navSend.setOnClickListener { submitMessage() }

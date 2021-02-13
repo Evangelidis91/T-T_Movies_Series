@@ -15,5 +15,4 @@ object InternetStatus {
         }
         return false
     }
-
 }
