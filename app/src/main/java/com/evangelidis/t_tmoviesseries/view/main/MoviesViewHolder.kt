@@ -30,8 +30,7 @@ class MoviesViewHolder(private val binding: ItemMovieBinding) : RecyclerView.Vie
             currentItem.itemId = movie.id
             currentItem.category = Constants.CATEGORY_MOVIE
 
-            val finder = watchlistList.find { it.itemId == movie.id && it.category == Constants.CATEGORY_MOVIE }
-            if (finder != null) {
+            if (watchlistList.find { it.itemId == movie.id && it.category == Constants.CATEGORY_MOVIE } != null) {
                 binding.itemMovieWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
             }
         }
@@ -53,8 +52,7 @@ class MoviesViewHolder(private val binding: ItemMovieBinding) : RecyclerView.Vie
                 watchlistList.add(watchItem)
                 binding.itemMovieWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
             } else {
-                val finder = watchlistList.find { it.itemId == movie.id && it.category == Constants.CATEGORY_MOVIE }
-                if (finder != null) {
+                if (watchlistList.find { it.itemId == movie.id && it.category == Constants.CATEGORY_MOVIE } != null) {
                     binding.itemMovieWatchlist.setImageResource(R.drawable.ic_disable_watchlist)
                     DatabaseQueries.removeItem(binding.root.context, watchItem.itemId)
                     watchlistList.remove(watchItem)

@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity(), MainCallback {
     private lateinit var myRef: DatabaseReference
     private var user: FirebaseUser? = null
 
-    var listOfRetrievedPages = arrayListOf(1)
+    private var listOfRetrievedPages = arrayListOf(1)
 
     private var typeface: Typeface? = null
 
@@ -128,8 +128,7 @@ class MainActivity : AppCompatActivity(), MainCallback {
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            val builder = AlertDialog.Builder(this@MainActivity, R.style.AlertDialogTheme)
-            builder.apply {
+            AlertDialog.Builder(this@MainActivity, R.style.AlertDialogTheme).apply {
                 setIcon(R.drawable.video_camera)
                 setTitle(R.string.app_name)
                 setMessage(R.string.close_popup_window_title)
@@ -219,18 +218,10 @@ class MainActivity : AppCompatActivity(), MainCallback {
                 if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
                     listOfRetrievedPages.add(listOfRetrievedPages.last() + 1)
                     when (sortBy) {
-                        POPULAR_MOVIES -> {
-                            viewModel.getPopularMovies(listOfRetrievedPages.last())
-                        }
-                        TOP_RATED_MOVIES -> {
-                            viewModel.getTopRatedMovies(listOfRetrievedPages.last())
-                        }
-                        PLAYING_NOW_MOVIES -> {
-                            viewModel.getPlayingNowMovies(listOfRetrievedPages.last())
-                        }
-                        UPCOMING_MOVIES -> {
-                            viewModel.getUpcomingMovies(listOfRetrievedPages.last())
-                        }
+                        POPULAR_MOVIES -> viewModel.getPopularMovies(listOfRetrievedPages.last())
+                        TOP_RATED_MOVIES -> viewModel.getTopRatedMovies(listOfRetrievedPages.last())
+                        PLAYING_NOW_MOVIES -> viewModel.getPlayingNowMovies(listOfRetrievedPages.last())
+                        UPCOMING_MOVIES -> viewModel.getUpcomingMovies(listOfRetrievedPages.last())
                     }
                 }
             }
@@ -246,18 +237,10 @@ class MainActivity : AppCompatActivity(), MainCallback {
                 if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
                     listOfRetrievedPages.add(listOfRetrievedPages.last() + 1)
                     when (sortBy) {
-                        POPULAR_TV -> {
-                            viewModel.getPopularTvShows(listOfRetrievedPages.last())
-                        }
-                        TOP_RATED_TV -> {
-                            viewModel.getTopRatedTvShows(listOfRetrievedPages.last())
-                        }
-                        ON_THE_AIR_TV -> {
-                            viewModel.getOnAirTvShows(listOfRetrievedPages.last())
-                        }
-                        AIRING_TODAY_TV -> {
-                            viewModel.getAiringTodayTvShows(listOfRetrievedPages.last())
-                        }
+                        POPULAR_TV -> viewModel.getPopularTvShows(listOfRetrievedPages.last())
+                        TOP_RATED_TV -> viewModel.getTopRatedTvShows(listOfRetrievedPages.last())
+                        ON_THE_AIR_TV -> viewModel.getOnAirTvShows(listOfRetrievedPages.last())
+                        AIRING_TODAY_TV -> viewModel.getAiringTodayTvShows(listOfRetrievedPages.last())
                     }
                 }
             }
@@ -265,15 +248,18 @@ class MainActivity : AppCompatActivity(), MainCallback {
     }
 
     private fun setupNavigationViewClickListeners() {
-        val toggle = ActionBarDrawerToggle(this, binding.drawerLayout, binding.appBar.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        binding.drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
+        ActionBarDrawerToggle(this, binding.drawerLayout, binding.appBar.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close).apply {
+            binding.drawerLayout.addDrawerListener(this)
+            this.syncState()
+        }
         binding.navView.itemTextColor = ColorStateList.valueOf(Color.WHITE)
 
-        binding.navigationDrawer.navMovies.setOnClickListener { expandMoviesLayout() }
-        binding.navigationDrawer.navTv.setOnClickListener { expandTvLayout() }
-        binding.navigationDrawer.navCommunicate.setOnClickListener { expandCommunicateLayout() }
-        binding.navigationDrawer.navSettings.setOnClickListener { expandSettings() }
+        binding.navigationDrawer.apply {
+            navMovies.setOnClickListener { expandMoviesLayout() }
+            navTv.setOnClickListener { expandTvLayout() }
+            navCommunicate.setOnClickListener { expandCommunicateLayout() }
+            navSettings.setOnClickListener { expandSettings() }
+        }
 
         binding.navigationDrawer.navPopularMovies.setOnClickListener {
             Tracking.trackListCategory(this, getString(R.string.popular_movies))
@@ -370,20 +356,21 @@ class MainActivity : AppCompatActivity(), MainCallback {
         binding.navigationDrawer.navSend.setOnClickListener { submitMessage() }
 
         binding.navigationDrawer.navActivateAccount.setOnClickListener {
-            val user = FirebaseAuth.getInstance().currentUser
-            if (user != null) {
-                if (user.isEmailVerified) {
-                    TanTinToast.Success(this).text("Your email is activated").typeface(typeface).show()
-                } else {
-                    LoginRegisterMethods.sendVerificationEmail(user)
+            FirebaseAuth.getInstance().currentUser.apply {
+                if (this != null) {
+                    if (this.isEmailVerified) {
+                        TanTinToast.Success(this@MainActivity).text("Your email is activated").typeface(typeface).show()
+                    } else {
+                        LoginRegisterMethods.sendVerificationEmail(this)
+                    }
+                    binding.navigationDrawer.navActivateAccount.gone()
                 }
-                binding.navigationDrawer.navActivateAccount.gone()
             }
         }
     }
 
     private fun setUpNavigationDrawerNotificationSwitch() {
-        if (Prefs.with(applicationContext).readBoolean(IS_NOTIFICATION_ON, false)) {
+        if (Prefs.with(this).readBoolean(IS_NOTIFICATION_ON, false)) {
             binding.navigationDrawer.navNotifications.apply {
                 isChecked = true
                 text = getString(R.string.notifications_are_on)
@@ -403,7 +390,7 @@ class MainActivity : AppCompatActivity(), MainCallback {
                     text = getString(R.string.notifications_are_off)
                 }
             } else {
-                Prefs.with(applicationContext).writeBoolean(IS_NOTIFICATION_ON, true)
+                Prefs.with(this).writeBoolean(IS_NOTIFICATION_ON, true)
                 binding.navigationDrawer.navNotifications.apply {
                     isChecked = true
                     text = getString(R.string.notifications_are_on)
@@ -433,7 +420,7 @@ class MainActivity : AppCompatActivity(), MainCallback {
                     text = getString(R.string.sync_watchlist_is_off)
                 }
             } else {
-                Prefs.with(applicationContext).writeBoolean(IS_SYNC_WATCHLIST_ON, true)
+                Prefs.with(this).writeBoolean(IS_SYNC_WATCHLIST_ON, true)
                 binding.navigationDrawer.navSyncWatchlist.apply {
                     isChecked = true
                     text = getString(R.string.sync_watchlist_is_on)
@@ -443,24 +430,23 @@ class MainActivity : AppCompatActivity(), MainCallback {
     }
 
     private fun setUpNavigationLoginUI() {
-        val user = FirebaseAuth.getInstance().currentUser
-
-        if (user == null) {
-            binding.navigationDrawer.navLogout.gone()
-        } else {
-            // nav_activate_account.showIf { !user.isEmailVerified }
-            user.email?.let {
-                binding.navigationDrawer.loginText.text = resources.getString(R.string.welcome_user).replace("{USERNAME}", it.substringBefore("@"))
-                binding.navigationDrawer.navLogout.show()
+        FirebaseAuth.getInstance().currentUser.apply {
+            if (this == null) {
+                binding.navigationDrawer.navLogout.gone()
+            } else {
+                // nav_activate_account.showIf { !user.isEmailVerified }
+                this.email?.let {
+                    binding.navigationDrawer.loginText.text = resources.getString(R.string.welcome_user).replace("{USERNAME}", it.substringBefore("@"))
+                    binding.navigationDrawer.navLogout.show()
+                }
             }
-        }
-
-        binding.navigationDrawer.loginText.setOnClickListener {
-            if (user == null) {
-                val intent = Intent(this@MainActivity, LoginActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                Prefs.with(applicationContext).writeBoolean(IS_LOGIN_SKIPPED, false)
-                startActivity(intent)
+            binding.navigationDrawer.loginText.setOnClickListener {
+                if (this == null) {
+                    val intent = Intent(this@MainActivity, LoginActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    Prefs.with(this@MainActivity).writeBoolean(IS_LOGIN_SKIPPED, false)
+                    startActivity(intent)
+                }
             }
         }
 
@@ -470,8 +456,7 @@ class MainActivity : AppCompatActivity(), MainCallback {
     }
 
     private fun displayPopWindowsForLogout() {
-        val builder = AlertDialog.Builder(this@MainActivity, R.style.AlertDialogTheme)
-        builder.apply {
+        AlertDialog.Builder(this@MainActivity, R.style.AlertDialogTheme).apply {
             setIcon(R.drawable.video_camera)
             setTitle(R.string.app_name)
             setMessage(R.string.logout_popup_window_title)
@@ -497,6 +482,14 @@ class MainActivity : AppCompatActivity(), MainCallback {
         }
 
         showKeyboard()
+        val userName = if (!item.profileEtName.text.isNullOrEmpty()) {
+            item.profileEtName.text.toString()
+        } else {
+            ""
+        }
+        val df = SimpleDateFormat(FIREBASE_DATABASE_DATE_FORMAT, Locale.UK)
+        val date = df.format(Calendar.getInstance().time)
+        val post = MessagePost(item.profileEtEmail.text.toString(), item.profileEtMessage.text.toString(), date, userName)
 
         user?.email?.let {
             item.profileEtEmail.setText(it)
@@ -506,68 +499,37 @@ class MainActivity : AppCompatActivity(), MainCallback {
         item.declineMessage.setOnClickListener { messageDialog.dismiss() }
 
         // When user press done in keyboard
-        item.profileEtMessage.setOnEditorActionListener { v, actionId, event ->
-            var handled = false
+        item.profileEtMessage.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_GO) {
-                if (isValidEmailAddress(item.profileEtEmail.text.toString()) && !item.profileEtMessage.text.isNullOrEmpty()) {
-                    val userName: String = if (item.profileEtName.text != null) {
-                        item.profileEtName.text.toString()
-                    } else {
-                        ""
-                    }
-                    val df = SimpleDateFormat(FIREBASE_DATABASE_DATE_FORMAT, Locale.UK)
-                    val date = df.format(Calendar.getInstance().time)
-                    val post = MessagePost(item.profileEtEmail.text.toString(), item.profileEtMessage.text.toString(), date, userName)
-                    myRef.child(FIREBASE_MESSAGES_DATABASE_PATH_CHILD).push()
-                        .setValue(post)
-                        .addOnSuccessListener {
-                            TanTinToast.Success(this).text(getString(R.string.message_success)).typeface(typeface).show()
-                            messageDialog.dismiss()
-                        }
-                        .addOnFailureListener {
-                            TanTinToast.Error(this).text(getString(R.string.message_fail)).typeface(typeface).show()
-                        }
-
-                    item.root.hideKeyboard()
-                } else {
-                    if (!isValidEmailAddress(item.profileEtEmail.text.toString())) {
-                        item.profileInputEmail.error = getString(R.string.mail_error)
-                    } else if (!item.profileEtMessage.text.isNullOrEmpty()) {
-                        item.profileInputMessage.error = getString(R.string.message_short)
-                    }
-                }
-                handled = true
+                sendMessage(post, item, messageDialog)
             }
-            handled
+            true
         }
 
+        // When user press UI button
         item.submitMessage.setOnClickListener {
-            if (isValidEmailAddress(item.profileEtEmail.text.toString()) && !item.profileEtMessage.text.isNullOrEmpty()) {
-                val userName: String = if (item.profileEtName.text.isNullOrEmpty()) {
-                    ""
-                } else {
-                    item.profileEtName.text.toString()
-                }
-                val df = SimpleDateFormat(FIREBASE_DATABASE_DATE_FORMAT, Locale.UK)
-                val date = df.format(Calendar.getInstance().time)
-                val post = MessagePost(item.profileEtEmail.text.toString(), item.profileEtMessage.text.toString(), date, userName)
-                myRef.child(FIREBASE_MESSAGES_DATABASE_PATH_CHILD).push()
-                    .setValue(post)
-                    .addOnSuccessListener {
-                        TanTinToast.Success(this).text(getString(R.string.message_success)).typeface(typeface).show()
-                        messageDialog.dismiss()
-                    }
-                    .addOnFailureListener {
-                        TanTinToast.Error(this).text(getString(R.string.message_fail)).typeface(typeface).show()
-                    }
+            sendMessage(post, item, messageDialog)
+        }
+    }
 
-                item.root.hideKeyboard()
-            } else {
-                if (!isValidEmailAddress(item.profileEtEmail.text.toString())) {
-                    item.profileInputEmail.error = getString(R.string.mail_error)
-                } else if (!item.profileEtMessage.text.isNullOrEmpty()) {
-                    item.profileInputMessage.error = getString(R.string.message_short)
+    private fun sendMessage(post: MessagePost, item: SubmitQuestionLayoutBinding, messageDialog: AlertDialog) {
+        if (isValidEmailAddress(item.profileEtEmail.text.toString()) && !item.profileEtMessage.text.isNullOrEmpty()) {
+            myRef.child(FIREBASE_MESSAGES_DATABASE_PATH_CHILD).push()
+                .setValue(post)
+                .addOnSuccessListener {
+                    TanTinToast.Success(this).text(getString(R.string.message_success)).typeface(typeface).show()
+                    messageDialog.dismiss()
                 }
+                .addOnFailureListener {
+                    TanTinToast.Error(this).text(getString(R.string.message_fail)).typeface(typeface).show()
+                }
+
+            item.root.hideKeyboard()
+        } else {
+            if (!isValidEmailAddress(item.profileEtEmail.text.toString())) {
+                item.profileInputEmail.error = getString(R.string.mail_error)
+            } else if (!item.profileEtMessage.text.isNullOrEmpty()) {
+                item.profileInputMessage.error = getString(R.string.message_short)
             }
         }
     }
@@ -612,13 +574,7 @@ class MainActivity : AppCompatActivity(), MainCallback {
         }
     }
 
-    private fun isValidEmailAddress(email: String): Boolean {
-        var result = true
-        if (!LoginRegisterMethods.isEmailValid(email)) {
-            result = false
-        }
-        return result
-    }
+    private fun isValidEmailAddress(email: String): Boolean = LoginRegisterMethods.isEmailValid(email)
 
     override fun navigateToMovie(itemId: Int) {
         if (InternetStatus.getInstance(this).isOnline) {

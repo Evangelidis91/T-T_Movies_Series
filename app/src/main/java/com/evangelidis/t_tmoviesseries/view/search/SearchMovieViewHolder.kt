@@ -3,7 +3,6 @@ package com.evangelidis.t_tmoviesseries.view.search
 import androidx.recyclerview.widget.RecyclerView
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.databinding.ItemMovieBinding
-import com.evangelidis.t_tmoviesseries.extensions.show
 import com.evangelidis.t_tmoviesseries.model.Genre
 import com.evangelidis.t_tmoviesseries.model.Multisearch
 import com.evangelidis.t_tmoviesseries.utils.Constants
@@ -16,10 +15,6 @@ class SearchMovieViewHolder(private val binding: ItemMovieBinding) : RecyclerVie
             itemMovieTitle.text = trend.title
             itemMovieReleaseDate.text = trend.releaseDate?.substringBefore("-")
             itemMovieRating.text = trend.voteAverage.toString()
-            searchCategory.apply {
-                text = Constants.CATEGORY_MOVIE
-                show()
-            }
 
             trend.genreIds?.let {
                 itemMovieGenre.text = ItemsManager.getGenres(it, moviesGenres as ArrayList<Genre>)

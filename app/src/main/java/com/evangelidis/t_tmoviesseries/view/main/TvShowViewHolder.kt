@@ -34,8 +34,7 @@ class TvShowViewHolder(private val binding: ItemTvBinding) : RecyclerView.ViewHo
             currentItem.itemId = tv.id
             currentItem.category = Constants.CATEGORY_TV
 
-            val finder = watchlistList.find { it.itemId == tv.id && it.category == Constants.CATEGORY_TV }
-            if (finder != null) {
+            if (watchlistList.find { it.itemId == tv.id && it.category == Constants.CATEGORY_TV } != null) {
                 binding.itemTvWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
             }
         }
@@ -57,8 +56,7 @@ class TvShowViewHolder(private val binding: ItemTvBinding) : RecyclerView.ViewHo
                 watchlistList.add(watchItem)
                 binding.itemTvWatchlist.setImageResource(R.drawable.ic_enable_watchlist)
             } else {
-                val finder = watchlistList.find { it.itemId == tv.id && it.category == Constants.CATEGORY_TV }
-                if (finder != null) {
+                if (watchlistList.find { it.itemId == tv.id && it.category == Constants.CATEGORY_TV } != null) {
                     binding.itemTvWatchlist.setImageResource(R.drawable.ic_disable_watchlist)
                     DatabaseQueries.removeItem(binding.root.context, watchItem.itemId)
                     watchlistList.remove(watchItem)

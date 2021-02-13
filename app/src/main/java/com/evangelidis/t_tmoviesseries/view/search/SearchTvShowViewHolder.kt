@@ -3,7 +3,6 @@ package com.evangelidis.t_tmoviesseries.view.search
 import androidx.recyclerview.widget.RecyclerView
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.databinding.ItemTvBinding
-import com.evangelidis.t_tmoviesseries.extensions.show
 import com.evangelidis.t_tmoviesseries.model.Genre
 import com.evangelidis.t_tmoviesseries.model.Multisearch
 import com.evangelidis.t_tmoviesseries.utils.Constants
@@ -16,10 +15,6 @@ class SearchTvShowViewHolder(private val binding: ItemTvBinding) : RecyclerView.
             itemTvTitle.text = trend.name
             itemTvReleaseDate.text = trend.firstAirDate
             itemTvRating.text = trend.voteAverage.toString()
-            searchCategory.apply {
-                text = Constants.CATEGORY_TV
-                show()
-            }
 
             trend.genreIds?.let {
                 itemTvGenre.text = ItemsManager.getGenres(it, tvShowGenres as ArrayList<Genre>)
