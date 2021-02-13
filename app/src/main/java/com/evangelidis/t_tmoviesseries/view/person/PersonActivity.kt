@@ -60,8 +60,7 @@ class PersonActivity : AppCompatActivity() {
     private fun setToolbar() {
         binding.toolbar.apply {
             imageToMain.setOnClickListener {
-                val intent = Intent(this@PersonActivity, MainActivity::class.java)
-                startActivity(intent)
+                startActivity(MainActivity.createIntent(this@PersonActivity))
             }
             searchIcn.setOnClickListener {
                 startActivity(SearchActivity.createIntent(this@PersonActivity))

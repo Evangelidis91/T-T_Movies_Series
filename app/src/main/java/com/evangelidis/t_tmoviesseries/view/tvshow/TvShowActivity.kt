@@ -99,8 +99,7 @@ class TvShowActivity : AppCompatActivity() {
     private fun setToolbar() {
         binding.toolbar.apply {
             imageToMain.setOnClickListener {
-                val intent = Intent(this@TvShowActivity, MainActivity::class.java)
-                startActivity(intent)
+                startActivity(MainActivity.createIntent(this@TvShowActivity))
             }
             searchIcn.setOnClickListener {
                 startActivity(SearchActivity.createIntent(this@TvShowActivity))

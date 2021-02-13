@@ -6,8 +6,10 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.evangelidis.t_tmoviesseries.R
 import com.evangelidis.t_tmoviesseries.databinding.ActivityBiographyBinding
+import com.evangelidis.t_tmoviesseries.utils.InternetStatus
 import com.evangelidis.t_tmoviesseries.view.main.MainActivity
 import com.evangelidis.t_tmoviesseries.view.search.SearchActivity
+import com.evangelidis.tantintoast.TanTinToast
 
 class BiographyActivity : AppCompatActivity() {
 
@@ -22,6 +24,7 @@ class BiographyActivity : AppCompatActivity() {
     }
 
     private val binding: ActivityBiographyBinding by lazy { ActivityBiographyBinding.inflate(layoutInflater) }
+    private var typeface: Int = R.font.montserrat_regular
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +42,14 @@ class BiographyActivity : AppCompatActivity() {
                 toolbarTitle.text = actorName
             }
             imageToMain.setOnClickListener {
-                startActivity(Intent(this@BiographyActivity, MainActivity::class.java))
+                startActivity(MainActivity.createIntent(this@BiographyActivity))
             }
             searchIcn.setOnClickListener {
-                startActivity(SearchActivity.createIntent(this@BiographyActivity))
+                if (InternetStatus.isConnected(this@BiographyActivity)) {
+                    startActivity(SearchActivity.createIntent(this@BiographyActivity))
+                } else {
+                    TanTinToast.Warning(this@BiographyActivity).text(getString(R.string.no_internet)).typeface(typeface).show()
+                }
             }
         }
     }

@@ -2,7 +2,6 @@ package com.evangelidis.t_tmoviesseries.view.login
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -55,7 +54,7 @@ class LoginActivity : AppCompatActivity() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
         if ((mAuth?.currentUser != null) || (Prefs.with(this).readBoolean(IS_LOGIN_SKIPPED, false))) {
-            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+            startActivity(MainActivity.createIntent(this))
             finish()
         }
     }

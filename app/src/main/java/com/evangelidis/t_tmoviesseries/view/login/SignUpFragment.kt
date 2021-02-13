@@ -1,7 +1,6 @@
 package com.evangelidis.t_tmoviesseries.view.login
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,11 +42,11 @@ class SignUpFragment : Fragment() {
         fragmentContext = context
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding.btnSignUp.setOnClickListener { performSignUp() }
         binding.btnSkip.setOnClickListener {
             Prefs.with(fragmentContext).writeBoolean(IS_LOGIN_SKIPPED, true)
-            startActivity(Intent(this.context, MainActivity::class.java))
+            startActivity(MainActivity.createIntent(fragmentContext))
             activity?.finish()
         }
         auth = FirebaseAuth.getInstance()
@@ -96,7 +95,7 @@ class SignUpFragment : Fragment() {
         val username: String = usernameFromEmail(email)
         writeNewUser(user?.uid, username, email)
         Prefs.with(fragmentContext).writeBoolean(IS_LOGGED_IN, true)
-        startActivity(Intent(fragmentContext, MainActivity::class.java))
+        startActivity(MainActivity.createIntent(fragmentContext))
         activity?.finish()
     }
 

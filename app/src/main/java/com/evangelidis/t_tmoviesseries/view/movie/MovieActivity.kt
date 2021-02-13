@@ -74,8 +74,7 @@ class MovieActivity : AppCompatActivity() {
     private fun setToolbar() {
         with(binding.toolbar) {
             imageToMain.setOnClickListener {
-                val intent = Intent(this@MovieActivity, MainActivity::class.java)
-                startActivity(intent)
+                startActivity(MainActivity.createIntent(this@MovieActivity))
             }
             searchIcn.setOnClickListener {
                 startActivity(SearchActivity.createIntent(this@MovieActivity))

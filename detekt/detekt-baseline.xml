@@ -2,6 +2,7 @@
 <SmellBaseline>
   <Blacklist></Blacklist>
   <Whitelist>
+    <ID>ComplexMethod:MainActivity.kt$MainActivity$setupNavigationViewClickListeners</ID>
     <ID>ComplexMethod:MovieActivity.kt$MovieActivity$setUpUI</ID>
     <ID>ComplexMethod:TvShowActivity.kt$TvShowActivity$setUpUI</ID>
     <ID>ConstructorParameterNaming:TvShowSeasonResponse.kt$TvShowSeasonResponse$@SerializedName("_id") val _id: String?</ID>

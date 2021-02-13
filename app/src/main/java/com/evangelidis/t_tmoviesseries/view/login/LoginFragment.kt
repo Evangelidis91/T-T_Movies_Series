@@ -3,7 +3,6 @@ package com.evangelidis.t_tmoviesseries.view.login
 import android.annotation.SuppressLint
 import android.app.ActionBar
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -69,8 +68,7 @@ class LoginFragment : Fragment() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     activity?.let {
-                        val intent = Intent(it, MainActivity::class.java)
-                        it.startActivity(intent)
+                        startActivity(MainActivity.createIntent(fragmentContext))
                         it.finish()
                     }
                 } else {
