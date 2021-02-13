@@ -10,7 +10,6 @@
     <ID>LongMethod:LoginButton.kt$LoginButton$startAnimation</ID>
     <ID>LongMethod:LoginButton.kt$LoginButton.&lt;no name provided&gt;$onAnimationEnd</ID>
     <ID>LongMethod:MainActivity.kt$MainActivity$setupNavigationViewClickListeners</ID>
-    <ID>LongMethod:MainActivity.kt$MainActivity$submitMessage</ID>
     <ID>LongMethod:TvShowActivity.kt$TvShowActivity$setUpUI</ID>
     <ID>LongParameterList:SearchAdapter.kt$SearchAdapter$(imageView: ImageView, id: Int, category: String, title: String?, posterPath: String?, releaseDate: String?, voteAverage: Double?)</ID>
     <ID>MagicNumber:LoginActivity.kt$LoginActivity$90f</ID>
