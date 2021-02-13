@@ -4,13 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -66,15 +64,13 @@ class MainActivity : AppCompatActivity(), MainCallback {
 
     private var listOfRetrievedPages = arrayListOf(1)
 
-    private var typeface: Typeface? = null
+    private var typeface: Int = R.font.montserrat_regular
 
     private val binding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-        typeface = ResourcesCompat.getFont(this, R.font.montserrat_regular)
 
         database = FirebaseDatabase.getInstance()
         myRef = database.getReference(FIREBASE_MESSAGES_DATABASE_PATH)
