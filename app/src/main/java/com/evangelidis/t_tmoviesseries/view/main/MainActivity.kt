@@ -573,7 +573,7 @@ class MainActivity : AppCompatActivity(), MainCallback {
     private fun isValidEmailAddress(email: String): Boolean = LoginRegisterMethods.isEmailValid(email)
 
     override fun navigateToMovie(itemId: Int) {
-        if (InternetStatus.getInstance(this).isOnline) {
+        if (InternetStatus.isConnected(this)) {
             startActivity(MovieActivity.createIntent(this, itemId))
         } else {
             TanTinToast.Warning(this).text(getString(R.string.no_internet)).typeface(typeface).show()
@@ -581,7 +581,7 @@ class MainActivity : AppCompatActivity(), MainCallback {
     }
 
     override fun navigateToTvShow(itemId: Int) {
-        if (InternetStatus.getInstance(this).isOnline) {
+        if (InternetStatus.isConnected(this)) {
             startActivity(TvShowActivity.createIntent(this, itemId))
         } else {
             TanTinToast.Warning(this).text(getString(R.string.no_internet)).typeface(typeface).show()

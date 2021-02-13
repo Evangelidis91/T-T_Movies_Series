@@ -83,11 +83,6 @@ class MovieActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        finish()
-    }
-
     private fun observeViewModel() {
         viewModel.movieDetails.observe(this, Observer { data ->
             data?.let {
